@@ -1,0 +1,359 @@
+:root {
+  --body-color: #f4f7ff;
+  --pri-color: #3f8cff;
+  --pri-light-color: rgba(63, 140, 255, 0.15);
+  --linear-color: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(50, 134, 189, 0.3) 100%
+  );
+  --linear-color2: linear-gradient(90deg, #32abb1 0%, #3286bd 100%);
+  --border-color: var(--gra-3, #4e71e7);
+  --bg-linear3: var(--gra-3, linear-gradient(90deg, #4e71e7 0%, #44a8e4 100%));
+  --bg-table: #fff;
+}
+body {
+  background-color: var(--body-color);
+}
+main {
+  padding: 34px 0px;
+  width: 100%;
+  overflow-x: hidden;
+}
+h1 {
+  margin: 0 0 15px 0;
+}
+.form-control {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #00000015;
+  border-radius: 10px;
+  font-size: 14px;
+  /* border-color: var(--pri-color); */
+  /* margin: 10px 0; */
+  /* background-color: #f4f9fd; */
+  background-color: #cecece15;
+}
+.form-control.textarea {
+  border-radius: 10px !important;
+}
+
+.form-control:focus-visible {
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: var(--pri-color);
+}
+.form-control:focus {
+  border-color: var(--pri-color);
+}
+
+.card .form-control {
+  background-color: var(--body-color);
+}
+.my-select {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-control .MuiOutlinedInput-input {
+  padding: 13px;
+}
+
+.form-control .MuiInputLabel-outlined {
+  color: #7d8592;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+}
+.MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+.form-control .MuiOutlinedInput-notchedOutline {
+  border-radius: 10px;
+  border: 1px solid transparent;
+  box-shadow: 0px 1px 2px 0px rgba(184, 200, 224, 0.22);
+}
+.select-label {
+  /* color: #7d8592; */
+  /* font-size: 14px; */
+  color: #00000060;
+  /* font-weight: 700; */
+  position: relative;
+  /* top: 4px; */
+}
+/* .my-select .MuiSelect-select {
+  padding: 0 !important;
+} */
+
+.btn-primary,
+.btn-secondray {
+  background: var(--bg-linear3);
+  padding: 10px 30px;
+  border: 1px solid transparent;
+  color: white;
+  font-size: 17px;
+
+  border-radius: 100px;
+  cursor: pointer;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.btn-delete {
+  background: #e33629;
+  padding: 7px 30px !important;
+  border: 1px solid transparent;
+  color: white;
+  font-size: 13px;
+
+  border-radius: 100px;
+  cursor: pointer;
+  /* width: 200px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  text-transform: capitalize;
+}
+.btn-delete:hover {
+  background: transparent;
+  color: #e33629;
+  border: 1px solid #e33629;
+}
+.btn-secondray {
+  background: transparent !important;
+}
+.btn-secondray:hover {
+  background: transparent !important;
+  color: var(--pri-color) !important;
+}
+.reset-button {
+  color: #737373 !important;
+  text-align: center !important;
+  font-size: 16px !important;
+  line-height: 30px !important;
+  -webkit-text-decoration-line: underline !important;
+  text-decoration-line: underline !important;
+  flex-wrap: wrap;
+  padding: 0px !important;
+  gap: 10px;
+}
+.btn-secondray {
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--pri-color);
+}
+.btn-secondray:hover {
+  background: var(--pri-color);
+  color: white;
+}
+.btn-primary:hover {
+  background: white;
+  color: var(--pri-color);
+  border: 1px solid var(--pri-color);
+}
+.btn-secondray.disabled {
+  opacity: 0.5;
+}
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+.header-title.MuiTypography-root {
+  font-weight: 600;
+  font-size: 30px;
+}
+/* calender */
+.react-date-picker .react-date-picker__wrapper {
+  border: none;
+  background: #fafafa;
+  padding: 15px;
+  border-radius: 100px;
+}
+.react-datetime-picker {
+  width: 100%;
+}
+.react-datetime-picker .react-datetime-picker__wrapper {
+  padding: 14px;
+  border: none;
+  border-radius: 100px;
+  background: #fafafa;
+}
+.react-datetime-picker .react-datetime-picker__clock {
+  display: none !important;
+}
+.react-calendar
+  button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar__month-view__days__day--weekend {
+  color: #000 !important;
+}
+.react-calendar
+  button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar__month-view__days__day--weekend.react-calendar__month-view__days__day--neighboringMonth {
+  color: #757575 !important;
+}
+.react-calendar
+  button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--range.react-calendar__tile--rangeStart.react-calendar__tile--rangeEnd.react-calendar__tile--rangeBothEnds.react-calendar__month-view__days__day.react-calendar__month-view__days__day--weekend {
+  color: white !important;
+}
+.react-timerange-picker .react-timerange-picker__wrapper {
+  padding: 14px;
+  border-radius: 100px;
+  background: #fafafa;
+  border: 1px solid var(--pri-color);
+}
+.react-timerange-picker {
+  width: 100%;
+}
+.react-timerange-picker .react-timerange-picker__button {
+  padding-block: 0px;
+}
+/* react quill */
+.quill {
+  background-color: var(--body-color);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.ql-toolbar.ql-snow {
+  border: none !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  padding: 13px !important;
+}
+
+.ql-container.ql-snow {
+  border: none !important;
+  height: 400px;
+}
+/* react quill */
+
+/* abdul */
+/* .header-title {
+  font-size: 30px;
+  font-weight: 700;
+} */
+.my-modal .my-modal-content {
+  border-radius: 24px;
+  box-shadow: 0px 6px 58px 0px rgba(196, 203, 214, 0.1);
+  border: none;
+  padding: 0;
+}
+.my-modal.user-modal .my-modal-content {
+  width: 68%;
+  height: 763px;
+}
+
+.my-modal .my-modal-content::-webkit-scrollbar {
+  width: 0px;
+}
+
+.my-modal .MuiBackdrop-root.MuiModal-backdrop {
+  background: linear-gradient(180deg, #4e77e661 0%, #44a7e47a 64.38%);
+}
+.modal-header {
+  background: var(--bg-linear3);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 18px 50px;
+  border-radius: 24px 24px 0 0;
+}
+
+.modal-header .icon {
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+  background: white;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+}
+.modal-header .icon img {
+  max-width: 100%;
+  height: auto;
+}
+
+.modal-header h2 {
+  font-size: 20px;
+  color: white;
+  font-weight: 500;
+}
+/* Date Calender */
+.react-calendar {
+  border-radius: 10px;
+  border: 1px solid var(--pri-color) !important;
+  background: #fff;
+  box-shadow: 0 2px 10px 0 var(--pri-color);
+}
+.react-calendar
+  button.react-calendar__navigation__arrow.react-calendar__navigation__prev2-button {
+  display: none;
+}
+.react-calendar
+  button.react-calendar__navigation__arrow.react-calendar__navigation__next2-button {
+  display: none;
+}
+.react-calendar .react-calendar__month-view__weekdays__weekday {
+  border-radius: 5.623px !important;
+  background: #f4f9fd !important;
+  color: #7d8592;
+  font-size: 11px;
+  padding: 2px 6px !important;
+}
+.react-calendar .react-calendar__month-view__weekdays {
+  padding: 0px 10px;
+  gap: 6px;
+  width: 90%;
+  margin-bottom: 10px;
+}
+.react-calendar .react-calendar__tile--now {
+  background: var(--pri-color);
+  color: white;
+  border-radius: 10px;
+}
+.react-calendar .react-calendar__tile--active {
+  background: var(--pri-color);
+  color: white;
+  border-radius: 10px;
+}
+.react-calendar .react-calendar__tile--now:hover {
+  background: #e6e6e6 !important;
+  color: #000;
+}
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: #e6e6e6;
+  border-radius: 10px;
+}
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: var(--pri-color) !important;
+}
+.react-calendar__navigation {
+  width: 70%;
+  margin: 20px auto;
+  height: 30px !important;
+  gap: 10px;
+}
+button.react-calendar__navigation__arrow {
+  font-size: 20px;
+  color: #fff;
+  background: var(--pri-color) !important;
+  border-radius: 10px;
+}
+button.react-calendar__navigation__label {
+  font-size: 16px;
+}
+.react-calendar__navigation button:enabled:hover {
+  border-radius: 10px;
+}
+/* abdul */

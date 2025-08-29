@@ -1,0 +1,402 @@
+{
+  "users": [
+    {
+      "id": "30ca",
+      "user_name": "xyjis",
+      "user_phone": "111111111111",
+      "user_password": "Pa$$w0rd!",
+      "user_email": "texy@mailinator.com",
+      "user_company": "Mcintosh and Hayes Plc",
+      "user_role": "user",
+      "user_status": "Inactive",
+      "user_department": "IT"
+    },
+    {
+      "id": "6ae9",
+      "user_name": "xuheneqet",
+      "user_password": "Pa$$w0rd!",
+      "user_email": "vywovur@mailinator.com",
+      "user_role": "user",
+      "user_status": "Active",
+      "activation_date": "1998-03-16",
+      "expiration_date": "2025-05-09",
+      "timezone": "UTC+5",
+      "language": "en"
+    },
+    {
+      "id": "3041",
+      "user_name": "wahab",
+      "user_phone": "12345654612",
+      "user_password": "12345678",
+      "user_email": "wahab@arcinventador.com",
+      "user_company": "arc",
+      "user_role": "admin",
+      "user_status": "Active",
+      "user_department": "IT"
+    },
+    {
+      "id": "ef53",
+      "user_name": "test",
+      "user_email": "test@gmail.com",
+      "user_password": "testPass",
+      "user_role": "Manager",
+      "user_department": "Sales",
+      "user_status": "Active",
+      "activation_date": "2025-08-27",
+      "expiration_date": "2026-08-27",
+      "timezone": "UTC+5",
+      "language": "en"
+    },
+    {
+      "id": "42f7",
+      "user_name": "mehroz bhai",
+      "user_email": "mehroz@arcinventador.com",
+      "user_password": "12345678",
+      "user_role": "test_role",
+      "user_department": "test_dpt",
+      "user_status": "Active",
+      "activation_date": "2025-08-28",
+      "expiration_date": "2026-08-28",
+      "timezone": "UTC+5",
+      "language": "en"
+    }
+  ],
+  "unibox_tickets": [
+    {
+      "ticket_data": [
+        {
+          "ticketId": "TK-001",
+          "Requester": "John Smith",
+          "Title": "Login Issue",
+          "Details": "Hi John, I can...",
+          "Status": "Open",
+          "Priority": "Low",
+          "Type": "Support",
+          "Department": "Technical",
+          "Assignee": "Sarah Wilson",
+          "Created": "01-07-25 09:30",
+          "LastReply": "15-01-25 09:30",
+          "imageUrl": "profileImg2.src",
+          "archived": false
+        },
+        {
+          "ticketId": "TK-002",
+          "Requester": "Jane Doe",
+          "Title": "Bug in Form",
+          "Details": "The form is not...",
+          "Status": "Closed",
+          "Priority": "High",
+          "Type": "Bug",
+          "Department": "Development",
+          "Assignee": "Michael Roe",
+          "Created": "02-07-25 11:00",
+          "LastReply": "15-01-25 12:30",
+          "imageUrl": "profileImg2.src",
+          "archived": true
+        },
+        {
+          "ticketId": "TK-003",
+          "Requester": "Bob Johnson",
+          "Title": "Feature Request",
+          "Details": "I want to...",
+          "Status": "Open",
+          "Priority": "Medium",
+          "Type": "Feature",
+          "Department": "Product",
+          "Assignee": "Emily Davis",
+          "Created": "03-07-25 14:15",
+          "LastReply": "15-01-25 15:45",
+          "imageUrl": "profileImg2.src",
+          "archived": false
+        },
+        {
+          "ticketId": "TK-004",
+          "Requester": "Alice Smith",
+          "Title": "Documentation Issue",
+          "Details": "The documentation...",
+          "Status": "Closed",
+          "Priority": "Urgent",
+          "Type": "Support",
+          "Department": "Documentation",
+          "Assignee": "David Wilson",
+          "Created": "04-07-25 16:30",
+          "LastReply": "15-01-25 17:00",
+          "imageUrl": "profileImg2.src",
+          "archived": false
+        },
+        {
+          "ticketId": "TK-036289",
+          "Requester": "Current User",
+          "Title": "ad",
+          "Details": "asdsd",
+          "Status": "Open",
+          "Priority": "Medium",
+          "Type": "Feature",
+          "Department": "Sales",
+          "Assignee": "wahab",
+          "Created": "8/29/2025",
+          "LastReply": "8/29/2025",
+          "archived": false
+        },
+        {
+          "ticketId": "TK-369576",
+          "Requester": "Current User",
+          "Title": "Labore maiores animi",
+          "Details": "Dolor veniam id seq",
+          "Status": "Open",
+          "Priority": "Low",
+          "Type": "Support",
+          "Department": "Support",
+          "Assignee": "xuheneqet",
+          "Created": "8/29/2025",
+          "LastReply": "8/29/2025",
+          "archived": false
+        }
+      ],
+      "id": "a4cd"
+    },
+    {
+      "activity_data": [
+        {
+          "id": "1",
+          "type": "TicketCreated",
+          "name": "John Smith",
+          "date": "2025-01-07 09:30 AM",
+          "imageUrl": "profileImg2.src"
+        },
+        {
+          "id": "2",
+          "type": "TicketAssigned",
+          "name": "Sarah Wilson",
+          "date": "2025-01-07 09:30 AM",
+          "imageUrl": "profileImg.src"
+        },
+        {
+          "id": "3",
+          "type": "FileAttached",
+          "name": "John Smith",
+          "date": "2025-01-07 09:30 AM",
+          "fileName": "loremipsum.jpg",
+          "imageUrl": "profileImg2.src"
+        },
+        {
+          "id": "4",
+          "type": "Customerreplied",
+          "name": "John Smith",
+          "date": "2025-01-07 09:30 AM",
+          "imageUrl": "profileImg.src"
+        },
+        {
+          "id": "5",
+          "type": "Agentreplied",
+          "name": "Sarah Wilson",
+          "date": "2025-01-07 09:30 AM",
+          "imageUrl": "profileImg2.src"
+        },
+        {
+          "id": "6",
+          "type": "Priorityupdated",
+          "name": "Sarah Wilson",
+          "date": "2025-01-07 09:30 AM",
+          "oldPriority": "Medium",
+          "newPriority": "High",
+          "imageUrl": "profileImg.src"
+        }
+      ],
+      "id": "de26"
+    },
+    {
+      "conversation_data": [
+        {
+          "id": "1",
+          "name": "John Smith",
+          "email": "john@example.com",
+          "message": "I'm unable to login to my account. Getting error 'Invalid credentials' even with correct password.",
+          "date": "2025-01-07 09:30 AM",
+          "imageUrl": "profileImg.src",
+          "attachment": "loremipsum.jpg"
+        },
+        {
+          "id": "2",
+          "name": "Sarah Wilson",
+          "email": "sarah@example.com",
+          "message": "Hi John, I can see the issue. Let me reset your password and send you new credentials.",
+          "date": "2025-01-07 09:30 AM",
+          "imageUrl": "profileImg2.src",
+          "attachment": ""
+        },
+        {
+          "id": "3",
+          "name": "John Smith",
+          "email": "john@example.com",
+          "message": "I'm unable to login to my account. Getting error 'Invalid credentials' even with correct password.",
+          "date": "2025-01-07 09:30 AM",
+          "imageUrl": "profileImg.src",
+          "attachment": ""
+        }
+      ],
+      "id": "6327"
+    },
+    {
+      "id": "b567",
+      "ticketId": "TK-177706",
+      "Requester": "Current User",
+      "Title": "test_ticket",
+      "Details": "test",
+      "Status": "In-progress",
+      "Priority": "Medium",
+      "Type": "Feature",
+      "Department": "test_dpt",
+      "Assignee": "mehroz bhai",
+      "Created": "8/29/2025",
+      "LastReply": "8/29/2025",
+      "archived": false
+    },
+    {
+      "id": "d767",
+      "ticketId": "TK-549496",
+      "Requester": "Current User",
+      "Title": "asdadad",
+      "Details": "asdadasd",
+      "Status": "Open",
+      "Priority": "Low",
+      "Type": "Support",
+      "Department": "Sales",
+      "Assignee": "mehroz bhai",
+      "Created": "8/29/2025",
+      "LastReply": "8/29/2025",
+      "archived": false
+    }
+  ],
+  "departments": [
+    {
+      "id": "1",
+      "number": "1",
+      "name": "Sales",
+      "description": "Manages all sales activities and client acquisition",
+      "assignedUsers": "5",
+      "status": "Active"
+    },
+    {
+      "id": "2",
+      "number": "2",
+      "name": "Support",
+      "description": "Handles customer support and technical issues",
+      "assignedUsers": "3",
+      "status": "Inactive"
+    },
+    {
+      "id": "1756391521858",
+      "number": "1",
+      "name": "test_dpt",
+      "description": "test",
+      "assignedUsers": "0",
+      "status": "Active"
+    },
+    {
+      "id": "1756391911283",
+      "number": "1",
+      "name": "test_new",
+      "description": "test",
+      "assignedUsers": "0",
+      "status": "Active"
+    }
+  ],
+  "profile": {
+    "item": {
+      "item": {
+        "user_email": "hello@gamil.com",
+        "language": "et - Estonian",
+        "timezone": "Africa/Asmara",
+        "date_time_format": "02.07.2025 11:37:44 AM"
+      },
+      "user_email": "autest@gamil.com",
+      "language": "et - Estonian",
+      "timezone": "Africa/Asmara",
+      "date_time_format": "02.07.2025 11:37:44 AM"
+    },
+    "user_email": "autest@gamil.com",
+    "language": "sv - Swedish",
+    "timezone": "Africa/El_Aaiun",
+    "date_time_format": "02.07.2025 11:37:44 AM"
+  },
+  "roles": [
+    {
+      "id": "1",
+      "roleName": "Admin",
+      "description": "Full Access to all system features and settings",
+      "permissions": [
+        "View Reports",
+        "Manage Users",
+        "Delete Records",
+        "Create Tickets"
+      ],
+      "status": "Inactive"
+    },
+    {
+      "id": "2",
+      "roleName": "Manager",
+      "description": "Manage team and view reports",
+      "permissions": [
+        "Manage Team",
+        "Create Tickets"
+      ],
+      "status": "Active"
+    },
+    {
+      "id": "3",
+      "roleName": "Agent",
+      "description": "Handle customer support tickets",
+      "permissions": [
+        "Create Tickets",
+        "Update Tickets"
+      ],
+      "status": "Active"
+    },
+    {
+      "id": "4",
+      "roleName": "Guest",
+      "description": "Limited access to view only",
+      "permissions": [
+        "Assign Roles",
+        "System Settings",
+        "Update Tickets"
+      ],
+      "status": "Active"
+    },
+    {
+      "id": "1756391540983",
+      "roleName": "test_role",
+      "description": "test",
+      "permissions": [
+        "View Reports",
+        "Manage Users",
+        "Manage Team"
+      ],
+      "status": "Active"
+    },
+    {
+      "id": "1756391948322",
+      "roleName": "test_new_role",
+      "description": "test",
+      "permissions": [
+        "Manage Users",
+        "Assign Roles",
+        "Manage Team",
+        "Delete Records",
+        "System Settings",
+        "Update Tickets"
+      ],
+      "status": "Active"
+    }
+  ],
+  "company_profile": [
+    {
+      "id": "1",
+      "company_name": "Arc Inventador ",
+      "company_address": "Arc Inventador karachi",
+      "company_email": "arc@arcinventador.com",
+      "company_phone": "+123456789"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+.date-picker-container {
+  display: inline-block;
+}
+
+.custom-calendar {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.react-datetime-picker__wrapper {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.react-datetime-picker__inputGroup {
+  font-size: 16px;
+}
+
+.react-calendar__tile--active {
+  background: #007bff;
+  color: white;
+}
+
+.react-calendar__tile--active:hover {
+  background: #0056b3;
+}
+
+.react-clock {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.react-clock__face {
+  background: #fff;
+}
+
+.react-clock__hand__body {
+  background: #007bff;
+}
+
+.react-clock__mark__body {
+  background: #ddd;
+}

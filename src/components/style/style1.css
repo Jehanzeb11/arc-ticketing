@@ -1,0 +1,1531 @@
+:root {
+  --navbg-color: var(--faafa, linear-gradient(90deg, #32abb1 0%, #3286bd 100%));
+}
+::-webkit-scrollbar {
+  border-radius: 100px;
+  width: 8px;
+  display: none;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--pri-color); /* Thumb color */
+  border-radius: 100px;
+}
+::-webkit-scrollbar-track {
+  background-color: rgba(237, 237, 237, 0.712); /* Track color */
+}
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.pri-border .form-control {
+  border: 1px solid var(--border-color);
+}
+.table-parent {
+  border-radius: 10px;
+  background: var(--bg-table);
+  padding: 22px 25px;
+}
+
+.table-filter-select {
+  border-radius: 10px;
+  border: 1px solid var(--Gradient, #32abb1);
+  background: #fff;
+}
+.table-filter-select .MuiInputBase-input {
+  padding: 11px 18px;
+  font-size: 15px;
+  font-weight: 500;
+}
+.action-icon {
+  display: inline-flex;
+  border: none;
+  background: transparent;
+  padding: 0;
+  height: 30px;
+  width: 30px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin: 0 3px;
+}
+.user-status {
+  border-radius: 18.374px;
+  background: #e8f6f6;
+  color: #32abb1;
+  width: 133.554px;
+  height: 38px;
+  width: 120px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
+  position: relative;
+}
+.user-status .dot {
+  background: var(--pri-color);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+}
+.MuiAutocomplete-popper,
+.MuiMenu-paper {
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.15);
+  margin-top: 8px;
+  z-index: 99999 !important;
+}
+.MuiAutocomplete-popper .Mui-selected {
+  background-color: #32aab121 !important;
+}
+.MuiAutocomplete-input {
+  padding: 15px !important;
+  color: #000000;
+  border-radius: 10px;
+}
+.MuiAutocomplete-input:focus {
+  border: 1px solid var(--border-color);
+}
+.my-select .MuiAutocomplete-popupIndicator {
+  background: url(/select-arrow.svg) center center no-repeat;
+}
+.my-select .MuiAutocomplete-popupIndicator svg {
+  opacity: 0;
+}
+.MuiSvgIcon-root.MuiSelect-icon path {
+  opacity: 0;
+}
+.MuiSelect-outlined {
+  padding: 14px !important;
+  border-radius: 10px;
+  background-color: #fafafa;
+}
+.MuiAutocomplete-inputRoot {
+  background: #cecece15;
+  border-radius: 10px !important;
+  padding: 0 !important;
+  /* overflow: hidden; */
+  border: 1px SOLID #00000015;
+}
+label {
+  color: #00000060;
+  font-size: 16px !important;
+}
+/* .bg-gray .form-control {
+  background: #FAFAFA;
+} */
+/* profile */
+.profile-page-tabs {
+  border-radius: 10px;
+  background: #fff;
+  padding: 33px 28px;
+  margin-top: 30px;
+}
+.profile-form .form-control {
+  border: none !important;
+  padding: 20px 35px !important;
+  background: #fff !important;
+  border: none !important;
+}
+.profile-form .MuiAutocomplete-inputRoot {
+  border: 1px solid var(--border-color);
+}
+.avatar-container {
+  width: 366px;
+  height: 310px;
+}
+.avatar-container img {
+  max-width: 100%;
+  height: auto;
+}
+.password-requirements {
+  margin-top: 70px;
+}
+.password-requirements li {
+  line-height: 42px;
+  color: #404040;
+}
+.password-requirements ul {
+  padding-left: 28px;
+}
+.password-requirements h3 {
+  margin-top: 0;
+  font-weight: 600;
+}
+/* profile */
+/* company page */
+form.company-form {
+  border-radius: 10px;
+  background: #fff;
+  padding: 30px 40px 50px 40px;
+  margin-top: 40px;
+}
+/* company page */
+/* table */
+.autocomplete-select .MuiAutocomplete-input {
+  width: auto !important;
+  border: 1px solid var(--border-color);
+}
+.table-dropdown-select .autocomplete-select .form-select {
+  margin: 0 !important;
+}
+/* table */
+
+/* dashboard popups */
+.Dashboard-tabs-container .tab-buttons button {
+  background: #e5f3fb;
+  border-radius: 50%;
+  width: 53px;
+  height: 53px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* .Dashboard-tabs-container {
+  position: fixed;
+  top: 76%;
+  right: 40px;
+  display: flex;
+  flex-direction: row-reverse;
+  z-index: 99999;
+} */
+
+.MuiPopover-root {
+  z-index: 99999;
+}
+
+.Dashboard-tabs-container .tab-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.Dashboard-tabs-container .tab-buttons button.active {
+  background: var(--pri-color);
+  color: white;
+}
+
+.Dashboard-tabs-container .tab-buttons button .icon {
+  width: 33px;
+  height: 33px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Dashboard-tabs-container .tab-content {
+  position: relative;
+  top: -480px;
+  right: 30px;
+
+  /* width: 460px;
+  height: 740px; */
+}
+.Dashboard-tabs-container .tab-content-child {
+  border-radius: 11px;
+  overflow: hidden;
+  background: white;
+  width: 400px;
+  height: 640px;
+}
+
+/* dailer */
+/* src/components/Dialer.css */
+
+.dialer-container {
+  border-radius: 15px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.dialer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px;
+  margin-bottom: 20px;
+  height: 83px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(50, 134, 189, 0.3) 100%
+  );
+}
+
+.dialer-header-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  width: 50px;
+  height: 50px;
+  background: white;
+  border-radius: 50%;
+}
+
+.dialer-close-button {
+  border: none;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  background: white;
+  border-radius: 50%;
+  color: #183c58;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialer-controls {
+  padding: 0px 35px 25px 35px;
+  /* height: 620px; */
+  overflow-y: auto;
+}
+.dialer-header-text {
+  font-size: 13px !important;
+  font-weight: 400;
+  color: white;
+}
+.country-code-selector fieldset {
+  border: none;
+}
+
+.country-code-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 10px;
+}
+.country-code-selector .country-item {
+  gap: 60px;
+  position: relative;
+}
+
+.country-code-selector .MuiSvgIcon-root.MuiSelect-icon {
+  left: 40px;
+}
+/* .country-code-selector .country-item::after {
+  height: 49px;
+  width: 1px;
+  background: var(--border-color);
+  content: "";
+  position: absolute;
+  right: 32px;
+} */
+.country-code-selector
+  .react-international-phone-input-container
+  .react-international-phone-input {
+  border: none;
+  font-size: 18px;
+  font-weight: 300;
+  /* 150% */
+}
+
+.country-code-selector
+  .react-international-phone-input-container
+  .react-international-phone-country-selector-button {
+  border: none;
+}
+
+.country-code-selector
+  .react-international-phone-country-selector-button__dropdown-arrow {
+  border: none;
+  background: url(/country-code-arrow.svg) center center no-repeat;
+  width: 23px;
+  height: 8px;
+}
+.select-country .MuiInputBase-input {
+  padding-right: 0 !important;
+}
+.dialer-flag {
+  margin-right: 5px;
+}
+.country-code-selector .number-input {
+  height: auto;
+  margin-bottom: 1px;
+  margin-left: -16px;
+}
+
+.dialer-container .dialpad-container {
+  width: auto;
+  box-shadow: unset;
+  padding: 0;
+  display: block;
+}
+.dialer-call-status {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.dialer-container .digit {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 88px;
+  justify-content: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--border-border-border, #e4e4e7);
+  padding: 40px 0;
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid var(--border-border-border, #e4e4e7);
+}
+
+.dialer-container .digit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0 auto 20px;
+  width: 100%;
+  grid-gap: 0;
+}
+.dialer-container .call-controls {
+  display: flex;
+  justify-content: center;
+  height: auto !important;
+}
+
+.dialer-container .call-start-end {
+  width: 100%;
+}
+.dialer-container .digit:hover:not(:disabled) {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.dialer-container .digit-number {
+  text-align: center;
+  font-size: 25px;
+  font-weight: 400;
+  color: var(--gray-800, #1f2a37);
+}
+
+.dialer-container .digit-letters {
+  color: var(--gray-500, #6b7280);
+  font-size: 14px;
+  font-weight: 400;
+}
+.dialer-container .dialer-clear-button {
+  cursor: pointer;
+  background: var(--linear-color2);
+  width: 40px;
+  height: 28px;
+  color: white;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.country-code-selector .number-input input::placeholder {
+  color: gray;
+}
+/* .dialer-keypad-main {
+  border-radius: 12px;
+  border: 1px solid var(--Gradient, #32abb1);
+  background: #fff;
+  padding: 16px 40px;
+} */
+.dialer-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* grid-gap: 10px;
+    gap: 10px; */
+  margin: 0 auto 20px;
+}
+
+.dialer-keypad-row {
+  display: contents;
+}
+
+.dialer-key {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 17px 0;
+}
+.dialer-keypad-row:last-child .dialer-key {
+  border-bottom: transparent;
+}
+.dialer-key-number {
+  text-align: center;
+  font-size: 25px;
+  font-weight: 400;
+  color: var(--gray-800, #1f2a37);
+}
+
+.dialer-key-letters {
+  color: var(--gray-500, #6b7280);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.dialer-key:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.dialer-key:hover:not(:disabled) {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.btn-primary.dialer-call-button {
+  width: 100%;
+  border-radius: 100px;
+  background: var(
+    --Gradient,
+    linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%)
+  );
+  position: relative;
+  padding: 9px;
+  font-size: 18px;
+}
+.btn-primary.dialer-call-button:hover {
+  background: var(
+    --Gradient,
+    linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%)
+  );
+  color: white;
+}
+.btn-primary.dialer-call-button img {
+  width: 18px;
+  margin-right: 5px;
+}
+.btn-primary.dialer-call-button .dialer-call-icon {
+  /* width: 30px;
+    height: 30px; */
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+.dialer-header h3 {
+  color: #183c58;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.dialer-call-button:hover {
+  background-color: #0088cc;
+}
+
+.dialer-input-area {
+  padding: 2px 10px;
+  margin-top: 18px;
+  border-radius: 7.375px;
+  border: 0.819px solid lightgray;
+  background: #fff;
+  box-shadow: 0px 3.278px 16.388px 0px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.dialer-input-area fieldset {
+  border: none;
+}
+.dialer-input-area .dialer-call-from {
+  color: #111111;
+  font-size: 14px;
+  width: 74px;
+  margin: 0;
+}
+.dialer-input-area
+  .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
+  padding: 10px 7px !important;
+  font-size: 12px;
+}
+.dialer-dropdown-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #00aaff;
+  cursor: pointer;
+}
+.dialer-dropdown-button svg {
+  width: 25px;
+  height: 25px;
+  background: url(/select-code-arrow.svg) center center no-repeat;
+  border-radius: 50%;
+}
+
+/* dailer end */
+/* outbound-call */
+.outbound-call-container {
+  background: white;
+}
+
+.dialer-header.second {
+  background: var(--Gradient, linear-gradient(90deg, #32abb1 0%, #3286bd 100%));
+  position: relative;
+  z-index: 99999;
+}
+.dialer-header.second .dialer-header-icon {
+  background: transparent;
+  height: auto;
+  width: auto;
+  padding: 0;
+}
+.dialer-header.second h3 {
+  color: white;
+  font-size: 20px;
+}
+.outbound-call-content {
+  position: relative;
+  z-index: 9999;
+}
+.outbound-call-content::before {
+  content: "";
+  background: url(/dashboardPopups/OutboundCall/bg1.svg);
+  position: absolute;
+  top: -210px;
+  left: -260px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 540px;
+  width: 650px;
+  z-index: -21;
+}
+.outbound-call-content::after {
+  content: "";
+  background: url(/dashboardPopups/OutboundCall/bg2.svg);
+  position: absolute;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 270px;
+  width: 280px;
+  right: 0px;
+  bottom: -100px;
+
+  filter: blur(30px);
+  z-index: -1;
+}
+
+.outbound-call-container .contact-info {
+  border-radius: 100px;
+  border: 0.5px solid var(--new, #32abb1);
+  background: #fff;
+  padding: 5px 17px;
+  display: flex;
+  gap: 8px;
+  color: #9d9d9d;
+}
+
+.outbound-call-container .call-status {
+  border-radius: 100px;
+  background: var(
+    --Gradient,
+    linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%)
+  );
+  width: 168px;
+  padding: 6px 10px;
+  color: white;
+  margin: 30px auto 40px auto;
+}
+.outbound-call-container .call-status p {
+  font-size: 15px;
+}
+.outbound-call-container.active-calls .call-status {
+  margin: 15px auto;
+}
+.outbound-call-container .call-running-time {
+  color: #45ffc3;
+  font-size: 14px;
+  font-weight: 700;
+  /* 157.143% */
+}
+
+.outbound-call-container .call-running-time .dot {
+  background: #38ffbf;
+  height: 12px;
+  width: 12px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 8px;
+  margin-top: 3px;
+}
+/* outbound-call */
+
+/* calling */
+.calling-container {
+  width: 498px;
+  height: 873px;
+  background: linear-gradient(90deg, #fff 0%, #aacce2 100%);
+  border-radius: 10px;
+  padding: 20px 38px 35px 47px;
+  position: relative;
+  bottom: 50px;
+}
+.calling-profile-pic img {
+  width: 138px;
+  height: 138px;
+}
+
+.calling-content {
+  text-align: center;
+  margin-top: 20px;
+}
+button.calling-end-call-button {
+  display: flex;
+  align-items: center;
+  width: 171px;
+  height: 73;
+  height: 73px;
+  justify-content: center;
+  background: white;
+  border: 1px solid #3286bd;
+  border-radius: 15px;
+  gap: 10px;
+  font-size: 18px;
+  line-height: 30px;
+  margin-top: 20px;
+}
+button.calling-end-call-button img {
+  width: 51px;
+  height: 51px;
+}
+
+.calling-controls {
+  border: 1px solid #3286bd;
+  background: white;
+  border-radius: 20px;
+  padding: 9px;
+  margin: 0px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.calling-close-btn {
+  position: absolute;
+  right: -20px;
+  top: -30px;
+  width: 50px;
+  height: 50px;
+}
+
+.calling-control-button .img {
+  border-radius: 50%;
+  background: #b7ecd94a;
+  margin-bottom: 10px;
+  display: flex;
+  width: 55px;
+  height: 55px;
+  padding: 13px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  /* opacity: 25%; */
+}
+
+.calling-control-button .img img {
+  height: auto;
+  max-width: 100%;
+}
+.calling-control-button span {
+  color: var(--gray-700, #374151);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.calling-control-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+}
+
+.calling-back-button {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  position: absolute;
+  left: 20px;
+  top: 37px;
+  color: var(--gray-500, #6b7280);
+  font-size: 19px;
+  font-weight: 500;
+  /* 84.211% */
+}
+
+.calling-content h3 {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 25px;
+  margin-top: 10px;
+}
+.calling-content p {
+  font-size: 19px;
+  line-height: 30px;
+  margin-bottom: 18px;
+}
+
+.calling-content .call-running-time {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0%;
+  text-align: center;
+  padding: 10px 30px;
+  background: var(--linear-color2);
+  border-radius: 100px;
+  color: white;
+}
+
+.calling-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 44px;
+}
+
+.calling-action-button {
+  border: 1px solid var(--border-color);
+  font-size: var(--pri-color);
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: white;
+  color: var(--pri-color);
+}
+/* poppus */
+.popup-overlay {
+  content: "";
+  border-radius: 15px;
+  opacity: 0.4;
+  background: var(
+    --Gradient,
+    linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%)
+  );
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 99999;
+}
+.calling-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 12px;
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
+  padding: 25px 20px;
+  z-index: 999999;
+  width: 330px;
+}
+.calling-popup h5 {
+  color: #000;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 20px;
+  margin-bottom: 16px;
+  margin-top: 0;
+}
+.speaker-popup-radio-btn {
+  display: flex;
+  padding: 15px 20px;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 12px;
+  border: 1px solid var(--Gradient, #32abb1);
+  background: #fff;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+.speaker-popup-radio-btn label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.speaker-popup-radio-btn label .MuiRadio-root {
+  color: var(--Gradient, #32abb1) !important;
+}
+button.calling-popup-btn {
+  width: 164px;
+  height: 54px;
+  border-radius: 100px;
+  background: var(
+    --Gradient,
+    linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%)
+  );
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
+.calling-popup .country-select {
+  width: 380px;
+}
+.calling-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 30px;
+}
+.calling-popup-header h5 {
+  margin-bottom: 0px;
+}
+.calling-popup-header button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  border: 1px solid #32abb1;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* .popup-overlay.speaker {
+  top: -51px;
+} */
+/* poppus */
+
+/* calling */
+/* messanger */
+.agent-list-container {
+  padding: 0px 20px;
+}
+.agents-list {
+  height: 416px;
+
+  overflow-y: auto;
+  padding-right: 8px !important;
+}
+.search-field {
+  border: 1px solid #d6d6d6 !important;
+  background: #fff;
+  border-radius: 10px;
+}
+
+.search-field .MuiOutlinedInput-input {
+  padding: 12px 10px 12px 0px;
+}
+.agent-list-container .filter-chips {
+  padding: 15px 0 !important;
+  border-bottom: 1px solid lightgray;
+  margin-bottom: 10px;
+}
+.agent-list-container .filter-chips .MuiChip-filled {
+  width: 33%;
+  padding: 21px 0;
+  cursor: pointer;
+  border-radius: 50px;
+}
+.agent-list-container .filter-chips .MuiChip-filled .MuiChip-label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.agent-list-container .filter-chips .MuiChip-filled .dot {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 5px;
+  border: 4px solid transparent;
+}
+
+.agent-list-container .filter-chips .MuiChip-filled .agent-count {
+  height: 24px;
+  width: 24px;
+  display: inline-flex;
+  background: white;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  margin-left: 3px;
+  font-size: 13px;
+  color: #000;
+}
+.chat-container .chat-messages {
+  height: 498px;
+}
+.chat-container .chat-messages::-webkit-scrollbar {
+  width: 0px;
+}
+.chat-container .chat-input {
+  display: flex;
+  align-items: center;
+  border-radius: 14px;
+  border: 1px solid #d8e0f0;
+  background: #fff;
+  box-shadow: 0px 1px 2px 0px rgba(184, 200, 224, 0.22);
+  margin: 10px;
+  height: 56px;
+}
+
+.chat-container .chat-input .MuiOutlinedInput-input {
+  padding: 10px;
+}
+/* messanger */
+/* transfer call */
+.transfer-tabs {
+  border-radius: 100px;
+  border: 1px solid var(--Gradient, #32abb1);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.05);
+  margin: 0 23px;
+}
+.transfer-call-footer {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+}
+.transfer-tabs .MuiTabs-list {
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.transfer-tabs .MuiTab-textColorPrimary {
+  color: #00000091;
+  font-size: 15px;
+  text-transform: capitalize;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+.transfer-tabs .MuiTab-textColorPrimary.Mui-selected {
+  background: var(--Gradient, linear-gradient(90deg, #32abb1 0%, #3286bd 100%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+.transfer-tabs .MuiTab-textColorPrimary.Mui-selected::before {
+  content: "";
+  height: 2px;
+  width: 54%;
+  position: absolute;
+  background: var(--Gradient, linear-gradient(90deg, #32abb1 0%, #3286bd 100%));
+  bottom: 8px;
+}
+.external-transfer {
+  border-radius: 15px;
+  border: 1px solid var(--Gradient, #32abb1);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 15px 11px;
+}
+
+.external-transfer .title {
+  font-size: 20px;
+  font-weight: 700;
+}
+.transfer-search-field {
+  border-radius: 100px !important;
+  border: 0.5px solid var(--new, #32abb1) !important;
+}
+.transfer-search-field:focus {
+  border: 2px solid var(--new, #32abb1) !important;
+}
+
+.transfer-search-field input {
+  border: none;
+  padding-right: 40px !important;
+}
+
+.transfer-search-field input:focus {
+  border: none;
+}
+
+.transfer-search-field .MuiInputAdornment-sizeMedium {
+  margin-right: 0 !important;
+  padding-left: 20px;
+}
+.transfer-input .form-control {
+  border-radius: 100px;
+  border: 0.5px solid var(--new, #32abb1);
+  background: #fff;
+}
+/* transfer call */
+
+/* unibox ticket */
+.ticket-button .btn.btn-secondray {
+  background: #eafdfe;
+}
+
+.ticket-button .btn.btn-secondray:hover {
+  background: #eafdfe;
+  color: var(--pri-color);
+}
+.table-parent.unibox-table {
+  border-radius: 10px;
+  filter: drop-shadow(0px 16.88px 59.079px rgba(86, 89, 146, 0.1));
+  background: var(--bg-table);
+  padding: 0px 10px 10px 10px;
+}
+/* .table-parent.unibox-table table {
+  margin-left: 6px !important;
+} */
+.my-modal .my-modal-content {
+  overflow: hidden;
+}
+.my-modal.create-ticket-modal .modal-body {
+  /* height: 80vh; */
+  overflow-y: auto;
+}
+.my-modal.archive-modal .my-modal-content {
+  width: 530px;
+}
+.my-modal.create-ticket-modal .my-modal-content {
+  width: 750px;
+}
+.my-modal.create-ticket-modal .modal-body {
+  padding: 22px 40px 40px;
+}
+.MuiAutocomplete-input {
+  cursor: pointer;
+  font-size: 14px !important;
+}
+.my-select .autocomplete-select .MuiAutocomplete-input {
+  color: #797979;
+}
+.my-select.pri-border .autocomplete-select .MuiAutocomplete-input {
+  border: 1px solid var(--pri-color) !important;
+  padding: 10px !important;
+}
+.my-select.br-transparent .autocomplete-select .MuiAutocomplete-input {
+  border-radius: 30px;
+  border: transparent;
+}
+.my-select.br-transparent .autocomplete-select .MuiAutocomplete-input:focus {
+  border: 1px solid var(--border-color);
+}
+/* unibox ticket */
+.MuiPopover-root {
+  z-index: 99999 !important;
+}
+
+/* dashboard popups */
+.default-menu .MuiMenu-paper,
+.custom-autocomplete-popper {
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: #fff;
+  padding: 6px;
+  z-index: 99999;
+  overflow-x: auto !important;
+  box-shadow: 0 2px 10px 0 var(--pri-color);
+}
+.custom-autocomplete-popper::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.custom-autocomplete-popper ul {
+  box-shadow: none;
+  border: none;
+}
+
+.custom-autocomplete-popper .MuiPaper-elevation {
+  box-shadow: none;
+  /* width: fit-content; */
+}
+.table-dropdown-select .MuiAutocomplete-input {
+  color: #797979;
+}
+
+.custom-autocomplete-popper .MuiAutocomplete-option.Mui-focused {
+  border-radius: 5px;
+  /* background: none !important; */
+}
+
+.custom-autocomplete-popper
+  li.MuiAutocomplete-option[aria-selected="true"]:first-child {
+  background: var(--pri-light-color) !important;
+  border-radius: 5px;
+  color: var(--pri-color);
+}
+
+/* status-filter */
+.status-filter ul li,
+.department-filter ul li,
+.assignee-filter ul li,
+.type-filter ul li {
+  border-bottom: 1px solid #e4e4e7;
+}
+.status-filter ul li[aria-selected="true"],
+.department-filter ul li[aria-selected="true"],
+.assignee-filter ul li[aria-selected="true"],
+.type-filter ul li[aria-selected="true"] {
+  background: #e2f3f3 !important;
+  border-radius: 5px;
+  color: #32abb1;
+}
+.status-filter ul li:first-child::before {
+  display: none;
+}
+
+.status-filter ul li::before {
+  content: "";
+  background: transparent;
+  height: 11px;
+  width: 11px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.status-filter ul li:nth-child(2) {
+  color: #f65160;
+}
+.status-filter ul li:nth-child(2)::before {
+  background: #f65160;
+}
+.status-filter ul li:nth-child(3) {
+  color: #c26616;
+}
+.status-filter ul li:nth-child(3)::before {
+  background: #c26616;
+}
+.status-filter ul li:nth-child(4) {
+  color: #32aab1;
+}
+.status-filter ul li:nth-child(4)::before {
+  background: #32aab1;
+}
+.status-filter ul li:nth-child(5) {
+  color: #afafaf;
+}
+.status-filter ul li:nth-child(5)::before {
+  background: #afafaf;
+}
+.status-filter ul li[aria-selected="true"]:nth-child(2) {
+  background: #f6515f54 !important;
+  color: #f65160;
+  border-bottom: unset;
+}
+.status-filter ul li[aria-selected="true"]:nth-child(3) {
+  background: #c266163f !important;
+  color: #c26616;
+  border-bottom: unset;
+}
+.status-filter ul li[aria-selected="true"]:nth-child(4) {
+  background: #32abb134 !important;
+  color: #32aab1;
+  border-bottom: unset;
+}
+.status-filter ul li[aria-selected="true"]:nth-child(5) {
+  background: #f4f4f4 !important;
+  color: #afafaf;
+  border-bottom: unset;
+}
+.status-filter ul li[aria-selected="true"]:nth-child(5) {
+  background: #f4f4f4 !important;
+  color: #afafaf;
+  border-bottom: unset;
+}
+/* status-filter */
+/* priority-filter */
+
+.priority-filter ul {
+  overflow: hidden;
+}
+.priority-filter ul li {
+  margin-bottom: 5px;
+  justify-content: center !important;
+}
+.priority-filter ul li:nth-child(2).Mui-focused {
+  background: #e7e6e6 !important;
+}
+.priority-filter ul li:nth-child(2)[aria-selected="true"] {
+  background: #e1dddd !important;
+}
+.priority-filter ul li:nth-child(2) {
+  background: #f4f4f4;
+  border-radius: 5px;
+  color: #888888;
+}
+.priority-filter ul li:nth-child(3).Mui-focused,
+.priority-filter ul li:nth-child(3)[aria-selected="true"] {
+  background: #efc12c57 !important;
+}
+.priority-filter ul li:nth-child(3) {
+  background: #fff7e4;
+  border-radius: 5px;
+  color: #d39503;
+}
+.priority-filter ul li:nth-child(4).Mui-focused,
+.priority-filter ul li:nth-child(4)[aria-selected="true"] {
+  background: #32b0c440 !important;
+}
+.priority-filter ul li:nth-child(4) {
+  background: #e0f2f3;
+  border-radius: 5px;
+  color: #32aab1;
+}
+.priority-filter ul li:nth-child(5).Mui-focused {
+  background: #e4362926 !important;
+}
+.priority-filter ul li:nth-child(5)[aria-selected="true"] {
+  background: #e436294f !important;
+}
+.priority-filter ul li:nth-child(5) {
+  background: #fbe1df;
+  border-radius: 5px;
+  color: #e33629;
+}
+
+/* priority-filter */
+/* department-filter */
+.department-filter ul li {
+  border-bottom: 1px solid #e4e4e7;
+}
+/* department-filter */
+
+.table-dropdown-select.view .autocomplete-select .MuiAutocomplete-input {
+  border: 1px solid var(--border-color);
+  background: white;
+  padding: 12px !important;
+}
+.ticket-button.MuiBox-root button {
+  height: 47px;
+  font-size: 16px;
+  padding-block: 0px !important;
+  padding-inline: 20px;
+}
+/* new */
+
+/* new2 */
+.icon-btn {
+  background: var(--Gradient, linear-gradient(90deg, #32abb1 0%, #3286bd 100%));
+  filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.05));
+}
+.icon-btn:hover {
+  background: var(--Gradient, linear-gradient(90deg, #32abb1 0%, #3286bd 50%));
+}
+.drop-call-menu .MuiMenu-paper {
+  border-radius: 15px;
+  background: #fff;
+  border: none;
+  /* 28 shadow */
+  box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.15);
+  padding: 0;
+  margin-left: -110px;
+}
+.drop-call-menu .MuiMenu-paper ul {
+  padding: 7px !important;
+}
+.conference-end-call:hover {
+  background: #ff0000c4 !important;
+  color: white !important;
+}
+.conference-grid {
+  border-radius: 15px;
+  background: #f4f7ff;
+  padding: 15px;
+}
+
+.conference-grid .form-control {
+  padding: 13px;
+  font-size: 14px;
+}
+
+.conference-grid .transfer-search-field input {
+  padding: 10px !important;
+}
+.conference-add-team-popper {
+  border-radius: 15px;
+  background: #fff;
+  padding: 10px;
+  z-index: 999999;
+}
+.transfer-search-field.add-team {
+  background-color: white;
+}
+.transfer-search-field.add-team input {
+  padding: 12px;
+}
+.dialer-select input {
+  padding: 5px !important;
+}
+
+/* new2 */
+
+/* conversation page */
+.coversation-tabs .MuiTab-root {
+  border-radius: 100px;
+  border: 1px solid #dbdbdb;
+  background: #fff;
+  text-transform: capitalize;
+  color: #797979;
+  height: 40px !important;
+  min-height: 40px !important;
+  line-height: 1;
+}
+.coversation-tabs .MuiTab-root.Mui-selected {
+  border-color: #5ecacf;
+  background: rgba(234, 255, 255, 1);
+  color: var(--pri-color);
+}
+.conversation-list {
+  height: 85%;
+  overflow-y: auto;
+}
+.conversation-list::-webkit-scrollbar {
+  width: 0px;
+}
+/* conversation page */
+
+/* new date picker  */
+.MuiPickerPopper-paper .MuiPickersLayout-root {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.MuiMultiSectionDigitalClock-root {
+  justify-content: space-evenly !important;
+}
+
+.MuiMultiSectionDigitalClockSection-item:hover {
+  background: #32aab159 !important;
+}
+.MuiPickersLayout-actionBar button {
+  color: var(--pri-color);
+}
+
+.MuiPickerPopper-paper {
+  border-radius: 10px;
+  border: 1px solid #32abb1;
+  background: #fff;
+  box-shadow: 0px 4px 20px 0px rgba(50, 171, 177, 0.5);
+  overflow: hidden;
+  padding: 6px;
+}
+/* new date picker  */
+
+/* contact modal */
+.delete-modal.delete-modal-contacts .my-modal-content {
+  width: 490px !important;
+}
+/* contact modal */
+.react-flow__node {
+  visibility: visible !important;
+}
+.checkbox-item-call-barring {
+  border: 1px solid var(--pri-color);
+  border-radius: 30px;
+  padding: 6px 24px;
+  display: inline-flex !important;
+}
+/* call-history */
+.call-activity-modal .input-parent label {
+  font-size: 15px;
+  color: #404040;
+  margin-bottom: -1px;
+}
+/* recording and transcription */
+.volume-control .MuiSlider-track {
+  border-radius: 100px;
+  background: #32abb1b3;
+  height: 9px;
+}
+
+.volume-control .MuiSlider-rail {
+  border-radius: 100px;
+  background: #dae9f3;
+  height: 9px;
+}
+
+.volume-control .MuiSlider-thumb {
+  background: #32abb1;
+  height: 16px;
+  width: 16px;
+}
+
+.volume-control .MuiSlider-root {
+  width: 220px;
+}
+
+.call-details .dots::after {
+  content: "";
+  background: rgba(30, 30, 30, 0.2);
+  position: absolute;
+  height: 1px;
+  width: 95%;
+  bottom: 19px;
+  z-index: -1;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.call-details .text-box {
+  border-radius: 10px;
+  background: #fafafa;
+  padding: 15px;
+  font-size: 15px;
+}
+.media-player-menu .MuiPaper-elevation {
+  box-shadow: none;
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  width: 310px;
+  margin-left: -88px;
+  margin-top: 4px;
+}
+
+.media-player-menu .MuiPaper-elevation .MuiIconButton-root {
+  padding: 0;
+}
+
+.media-player-menu .MuiPaper-elevation .MuiMenu-list {
+  padding: 0;
+}
+
+.media-player-menu .MuiPaper-elevation .MuiSlider-root {
+  width: 92px;
+}
+/* recording and transcription */
+/* graphs */
+.dashbaord-table-graph .dialer-header-text {
+  color: #183c58ad;
+}
+.dashbaord-table-graph .dialer-header h3 {
+  font-size: 16px;
+}
+
+/* graphs */
+.md-modal .my-modal-content.MuiBox-root {
+  width: 620px;
+}
+.md-modal .modal-body {
+  padding: 40px 50px !important;
+}
+
+.md-modal-btns {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.md-modal-btns .btn {
+  width: 169px;
+}
+/* call-history */
+
+.ticket-table-dropdown li {
+  font-size: 12px;
+}
+
+.ticket-table-dropdown ul {
+  padding: 0;
+}
+@media (max-width: 767px) {
+  .avatar-container img {
+    margin-top: 20px;
+  }
+}

@@ -1,0 +1,121 @@
+/* components/ReusableTable.module.css */
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  padding-top: 10px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  /* background: white; */
+  border-radius: 10px;
+  outline: 1px solid #b2e2e4;
+  background: #fff;
+  overflow: hidden;
+  width: 99%;
+  margin-left: 0.8%;
+}
+.table tr:hover td {
+  background: #f5f8fb !important;
+}
+.table thead tr {
+  height: 57px !important;
+  border-radius: 15px !important;
+  overflow: hidden !important;
+  border: none !important;
+  /* background: var(--pri-light-color) !important; */
+  background: rgba(63, 140, 255, 0.1) !important;
+}
+.table thead tr th {
+  text-align: start;
+  padding: 0px 20px;
+}
+.table thead tr th span {
+  font-size: 13px !important;
+}
+.table tr {
+  height: 74px;
+  border-bottom: 1px solid #c1dbeb !important;
+}
+
+.table td {
+  color: #797979;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  text-transform: capitalize;
+  padding: 0px 20px;
+}
+
+.sortable {
+  cursor: pointer;
+}
+
+.filterContainer {
+  padding: 10px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.filterInput {
+  border: 1px solid var(--border-color);
+  background: #fff;
+  padding: 10px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 400;
+}
+.filterInput:focus {
+  outline: none;
+  border-color: var(--pri-color);
+}
+.filterInput::placeholder {
+  color: #b2b2b2;
+}
+/* .actionBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+} */
+.pagination {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  margin-top: 10px;
+  border-radius: 14px;
+  background: #f5f8fb;
+  box-shadow: 0px 6px 58px 0px rgba(196, 203, 214, 0.1);
+}
+
+/* .paginationArrow {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #007bff; 
+  cursor: pointer;
+  padding: 0 8px;
+  margin: 0 10px;
+} */
+
+.paginationInfo {
+  color: #000;
+  margin: 0 10px;
+  font-size: 16px;
+  font-weight: 400;
+}
+.paginationArrow {
+  background-color: transparent;
+  border: none;
+  color: var(--pri-color);
+  cursor: pointer;
+}
+.paginationArrow:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
