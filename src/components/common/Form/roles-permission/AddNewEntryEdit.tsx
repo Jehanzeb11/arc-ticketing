@@ -1,21 +1,22 @@
 "use client";
 import { Box, Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import ButtonCustom from "@/components/common/Button/Button";
 import GlobalInput from "@/components/common/Input/GlobalInput";
 import FormSelect from "@/components/common/Select";
 import { useApiStore } from "@/lib/api/apiStore";
 import GlobalCheckBoxInput from "../../Input/GlobalCheckBoxInput";
+import { fetchRoleById, fetchRoles } from "@/lib/api/apiCalls";
 
 // interface AddNewModalProps {
 //   getall: (data: any) => void
 //   onCloseModal: () => void
 // }
 
-export default function AddNewEntry() {
+export default function AddNewEntryEdit() {
   // {
   // getall,
   // onCloseModal,
@@ -36,10 +37,31 @@ export default function AddNewEntry() {
     },
   });
 
+  const id = new URLSearchParams(window.location.search).get("id");
+
+  const {
+    data: roles,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["roles"],
+    queryFn: () =>
+      callApi(fetchRoleById, {
+        requestType: "getRoleById",
+        role_id: id,
+      }),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+    enabled: !!id,
+  });
+
   const mutation = useMutation({
     mutationFn: async (data: any) => {
       const roleData = {
-        requestType: "createRole",
+        requestType: "updateRole",
+        role_id: id,
         role_name: data.roleName,
         description: data.description,
         permissions: data.permissions,
@@ -48,10 +70,16 @@ export default function AddNewEntry() {
       return callApi(createRole, roleData);
     },
     onSuccess: (response, data) => {
-      toast.success("Role created successfully!");
+      toast.success("Role Updated successfully!");
       // getall(data)
       // onCloseModal()
-      reset();
+      refetch();
+      reset({
+        roleName: data.roleName,
+        description: data.description,
+        permissions: data.permissions,
+        status: data.status,
+      });
     },
     onError: (error) => toast.error(`Failed to create role: ${error.message}`),
   });
@@ -179,6 +207,30 @@ export default function AddNewEntry() {
       ],
     },
   ];
+
+  useEffect(() => {
+    if (roles) {
+      let permissionsParsed = [];
+
+      try {
+        permissionsParsed =
+          typeof roles.permissions === "string"
+            ? JSON.parse(roles.permissions)
+            : roles.permissions || [];
+      } catch (error) {
+        permissionsParsed = [];
+        console.error("Failed to parse permissions", error);
+      }
+
+      reset({
+        roleName: roles.role_name || "",
+        description: roles.description || "",
+        permissions: permissionsParsed,
+        status: roles.status || "Active",
+      });
+    }
+  }, [roles]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
@@ -245,7 +297,7 @@ export default function AddNewEntry() {
               validate: (value: string[]) =>
                 value.length > 0 || "At least one permission must be selected",
             }}
-            render={({ field: { onChange, value } }) => (
+            render={({ field }) => (
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 8, mt: 3 }}>
                 {permissionOptions.map(({ heading, data }) => (
                   <Box
@@ -279,8 +331,6 @@ export default function AddNewEntry() {
                       control={control}
                       options={data}
                       isMultiSelect={true}
-                      value={value}
-                      onChange={onChange}
                     />
                   </Box>
                 ))}

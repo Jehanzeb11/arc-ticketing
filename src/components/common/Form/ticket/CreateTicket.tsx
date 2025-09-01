@@ -56,7 +56,7 @@ const CreateTicket = ({ closeModal }) => {
 
   const { data: users } = useQuery({
     queryKey: ["users"],
-    queryFn: () => callApi(fetchUsers),
+  queryFn: () => callApi(fetchUsers, {}),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     staleTime: Infinity,

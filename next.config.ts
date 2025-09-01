@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   env: {
     LIVE_BASE_URL: process.env.LIVE_BASE_URL,
     LOCAL_BASE_URL: process.env.LOCAL_BASE_URL,
+    BACKEND_API_URL: process.env.BACKEND_API_URL,
   },
   async rewrites() {
     return [

@@ -8,7 +8,7 @@ import MyModal from "@/components/common/Modal";
 import addnewEntry from "@/assets/icons/modal/contacts/addnewEntry.svg";
 import editIcon from "@/assets/icons/table/edit.svg";
 import DeleteModalIcon from "@/assets/icons/modal/deleteModalIcon2.svg";
-import deleteModalDeleteIcon from "@/assets/icons/users/deleteIcon.svg";
+import deleteModalDeleteIcon from "@/assets/icons/users/delete-icon-2.png";
 import CustomButton from "@/components/common/Button/Button";
 import Search from "@/components/common/search";
 import TableSelectFilterMainNew from "@/components/common/Select/TableSelectFilterMainNew";
@@ -39,7 +39,10 @@ const DepartmentPage = () => {
     error,
   } = useQuery({
     queryKey: ["departments"],
-    queryFn: () => callApi(fetchDepartments),
+    queryFn: () =>
+      callApi(fetchDepartments, {
+        requestType: "getAllDepartments",
+      }),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
@@ -56,7 +59,11 @@ const DepartmentPage = () => {
   const handleSwitchChange = async (e, departmentId) => {
     const newStatus = e.target.checked ? "Active" : "Inactive";
     try {
-      await callApi(updateDepartment, departmentId, { status: newStatus });
+      await callApi(updateDepartment, {
+        requestType: "updateDepartment",
+        id: departmentId,
+        status: newStatus,
+      });
       queryClient.invalidateQueries({ queryKey: ["departments"] });
       toast.success("Department status updated successfully!");
     } catch (error) {
@@ -172,7 +179,14 @@ const DepartmentPage = () => {
   ];
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => callApi(deleteDepartment, id),
+    mutationFn: (id) => {
+      // @ts-ignore
+      console.log(id);
+      return callApi(deleteDepartment, {
+        requestType: "deleteDepartment",
+        id: id,
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["departments"] });
       toast.success("Department deleted successfully.");

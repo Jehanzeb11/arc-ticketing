@@ -51,7 +51,7 @@ export default function ArchiveTicketsPage() {
 
   const { data: users } = useQuery({
     queryKey: ["users"],
-    queryFn: () => callApi(fetchUsers),
+    queryFn: () => callApi(fetchUsers, {}),
   });
 
   // Unarchive mutation

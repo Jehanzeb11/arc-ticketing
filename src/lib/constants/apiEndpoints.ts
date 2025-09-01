@@ -1,7 +1,7 @@
 export const API_ENDPOINTS = {
   // Users
-  USERS: "/users",
-  USER_BY_ID: (id) => `/users/${id}`,
+  USERS: (type) => `/users/multi-purpose?requestType=${type}`,
+  USER_BY_ID: (id) => `/users/multi-purpose?requestType=${id}`,
   PROFILE: "/profile",
   LOGIN: "/auth/login",
   VERIFY_2FA: "/auth/verify-2fa",
@@ -11,15 +11,15 @@ export const API_ENDPOINTS = {
   UNIBOX_TICKET_BY_ID: (id) => `/unibox_tickets/${id}`,
 
   // departments
-  DEPARTMENTS: "/departments",
-  DEPARTMENT_BY_ID: (id) => `/departments/${id}`,
+  DEPARTMENTS: `/departments/multi-purpose`,
+  DEPARTMENT_BY_ID: (id) => `/departments/multi-purpose/${id}`,
 
   // roles
-  ROLES: "/roles",
-  ROLE_BY_ID: (id) => `/roles/${id}`,
+  ROLES: "/roles/multi-purpose",
+  ROLE_BY_ID: (id) => `/roles/multi-purpose/${id}`,
 
   // admin profile
-  ADMIN_PROFILE: "/users",
+  ADMIN_PROFILE: "roles/multi-purpose",
 
   // company profile
   COMPANY_PROFILE: "/company_profile",

@@ -34,7 +34,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/app/ticketing-system/roles-permission/create-permissions", "src/app/ticketing-system/roles-permission/update-permissions"  ],
   "exclude": [
     "node_modules"
   ]

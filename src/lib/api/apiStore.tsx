@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 import {
   getlive,
   postlive,
@@ -7,8 +7,9 @@ import {
   getlocal,
   postlocal,
   patchlocal,
-  dellocal
-} from './apiClient'
+  dellocal,
+  postbackend,
+} from "./apiClient";
 import {
   fetchUsers,
   fetchUserById,
@@ -34,10 +35,10 @@ import {
   deleteRole,
   fetchAdminProfile,
   fetchCompanyProfile,
-  updateCompanyProfile
-} from './apiCalls'
+  updateCompanyProfile,
+} from "./apiCalls";
 
-export const useApiStore = create(set => ({
+export const useApiStore = create((set) => ({
   api: {
     getlive,
     postlive,
@@ -46,7 +47,8 @@ export const useApiStore = create(set => ({
     getlocal,
     postlocal,
     patchlocal,
-    dellocal
+    dellocal,
+    postbackend,
   },
   // users
   fetchUsers,
@@ -89,14 +91,14 @@ export const useApiStore = create(set => ({
   error: null,
 
   callApi: async (fn, ...args) => {
-    set({ loading: true, error: null })
+    set({ loading: true, error: null });
     try {
-      const result = await fn(...args)
-      set({ loading: false })
-      return result
+      const result = await fn(...args);
+      set({ loading: false });
+      return result;
     } catch (error) {
-      set({ loading: false, error: error.message })
-      throw error
+      set({ loading: false, error: error.message });
+      throw error;
     }
-  }
-}))
+  },
+}));

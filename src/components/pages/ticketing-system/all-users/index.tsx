@@ -9,7 +9,7 @@ import addnewEntry from "@/assets/icons/all-users/newUserModalIcon.svg";
 import editnewEntry from "@/assets/icons/all-users/editUserModalIcon.svg";
 import editIcon from "@/assets/icons/table/edit.svg";
 import DeleteModalIcon from "@/assets/icons/modal/deleteModalIcon2.svg";
-import deleteModalDeleteIcon from "@/assets/icons/users/deleteIcon.svg";
+import deleteModalDeleteIcon from "@/assets/icons/users/delete-icon-2.png";
 import CustomButton from "@/components/common/Button/Button";
 import Search from "@/components/common/search";
 import TableSelectFilterMainNew from "@/components/common/Select/TableSelectFilterMainNew";
@@ -42,7 +42,7 @@ const AllUsers = () => {
     error,
   } = useQuery({
     queryKey: ["users"],
-    queryFn: () => callApi(fetchUsers),
+    queryFn: () => callApi(fetchUsers, { requestType: "getAllUsers" }),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     staleTime: Infinity,

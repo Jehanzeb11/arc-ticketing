@@ -11,7 +11,7 @@ import addnewEntry from "@/assets/icons/all-users/newUserModalIcon.svg";
 import editnewEntry from "@/assets/icons/all-users/editUserModalIcon.svg";
 import editIcon from "@/assets/icons/table/edit.svg";
 import DeleteModalIcon from "@/assets/icons/modal/deleteModalIcon2.svg";
-import deleteModalDeleteIcon from "@/assets/icons/users/deleteIcon.svg";
+import deleteModalDeleteIcon from "@/assets/icons/users/delete-icon-2.png";
 
 // Component imports
 import ReusableTable from "@/components/common/Table/ReusableTable";
@@ -29,8 +29,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
+import { useRouter } from "next/navigation";
 
 const RolesAndPermission = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { callApi, fetchRoles, deleteRole, updateRole }: any = useApiStore();
   const [addNewModalOpen, setAddNewModalOpen] = useState(false);
@@ -46,7 +48,10 @@ const RolesAndPermission = () => {
     error,
   } = useQuery({
     queryKey: ["roles"],
-    queryFn: () => callApi(fetchRoles),
+    queryFn: () =>
+      callApi(fetchRoles, {
+        requestType: "getAllRoles",
+      }),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
@@ -66,16 +71,27 @@ const RolesAndPermission = () => {
   // Handle permission removal
   const handleCancelPermission = async (e, roleId) => {
     const permission = e.currentTarget.getAttribute("data-permission");
+    const role = roles.find((r) => r.role_id === roleId); // Make sure to use role_id here if roles use that key
+
     try {
-      const role = roles.find((r) => r.id === roleId);
       if (role) {
-        const updatedPermissions = role.permissions.filter(
+        // Parse permissions if it's a string
+        const permissionsArray =
+          typeof role.permissions === "string"
+            ? JSON.parse(role.permissions)
+            : role.permissions;
+
+        // Filter out the permission to be removed
+        const updatedPermissions = permissionsArray.filter(
           (p) => p !== permission
         );
-        await callApi(updateRole, roleId, {
-          ...role,
+
+        await callApi(updateRole, {
+          requestType: "updateRole",
+          role_id: roleId,
           permissions: updatedPermissions,
         });
+
         queryClient.invalidateQueries({ queryKey: ["roles"] });
         toast.success("Permission removed successfully");
       }
@@ -88,7 +104,11 @@ const RolesAndPermission = () => {
   const handleSwitchChange = async (e, roleId) => {
     const newStatus = e.target.checked ? "Active" : "Inactive";
     try {
-      await callApi(updateRole, roleId, { status: newStatus });
+      await callApi(updateRole, {
+        requestType: "updateRole",
+        role_id: roleId,
+        status: newStatus,
+      });
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       toast.success("Status updated successfully");
     } catch (error) {
@@ -137,10 +157,14 @@ const RolesAndPermission = () => {
   const data = useMemo(
     () =>
       roles?.map((role) => ({
-        id: role.id,
-        roleName: role.roleName || "--",
+        id: role.role_id,
+        role_id: role.role_id,
+        roleName: role.role_name || "--",
         description: role.description || "--",
-        assignedPermissions: renderPermissions(role.permissions, role.id),
+        assignedPermissions: renderPermissions(
+          JSON.parse(role.permissions),
+          role.role_id
+        ),
         status: (
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Typography
@@ -158,7 +182,7 @@ const RolesAndPermission = () => {
             </Typography>
             <IOSSwitch
               checked={role.status === "Active"}
-              onChange={(e) => handleSwitchChange(e, role.id)}
+              onChange={(e) => handleSwitchChange(e, role.role_id)}
             />
           </Box>
         ),
@@ -209,18 +233,9 @@ const RolesAndPermission = () => {
     {
       icon: editIcon,
       onClick: (row) => {
-        if (row && row.id) {
-          const role = roles.find((r) => r.id === row.id);
-          if (role) {
-            setSelectedId(row.id);
-            setSelectedRole(role);
-            setEditNewModalOpen(true);
-          } else {
-            toast.error("Role data not found");
-          }
-        } else {
-          toast.error("Invalid row or missing id");
-        }
+        router.push(
+          `/ticketing-system/roles-permission/update-permissions?id=${row.id}`
+        );
       },
       className: "action-icon",
       tooltip: "Edit Role",
@@ -244,7 +259,11 @@ const RolesAndPermission = () => {
   ];
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => callApi(deleteRole, id),
+    mutationFn: (id) =>
+      callApi(deleteRole, {
+        requestType: "deleteRole",
+        role_id: id,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       toast.success("Role deleted successfully.");
@@ -330,7 +349,11 @@ const RolesAndPermission = () => {
         </Typography>
         <CustomButton
           text="Add New"
-          onClick={() => setAddNewModalOpen(true)}
+          onClick={() =>
+            router.push(
+              "/ticketing-system/roles-permission/create-permissions.tsx"
+            )
+          }
           libIcon={<AddCircleIcon />}
         />
       </Box>
@@ -392,7 +415,7 @@ const RolesAndPermission = () => {
         />
       </div>
 
-      <MyModal
+      {/* <MyModal
         open={addNewModalOpen}
         setOpen={setAddNewModalOpen}
         customStyle="add-new-extension-modal"
@@ -405,7 +428,7 @@ const RolesAndPermission = () => {
           getall={() => queryClient.invalidateQueries({ queryKey: ["roles"] })}
           onCloseModal={() => setAddNewModalOpen(false)}
         />
-      </MyModal>
+      </MyModal> */}
 
       <MyModal
         open={editNewModalOpen}
