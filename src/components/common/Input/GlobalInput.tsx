@@ -50,6 +50,13 @@ const GlobalInput = React.forwardRef<HTMLInputElement, any>(
               placeholder={placeholder}
               readOnly={readOnly}
               accept={accept}
+              onChange={(e) => {
+                if (type === "file") {
+                  rest.onChange?.(e.target.files); // send FileList to react-hook-form
+                } else {
+                  rest.onChange?.(e.target.value); // normal inputs
+                }
+              }}
               {...rest} // Spread the rest of the props like value, onChange, etc.
             />
           )}

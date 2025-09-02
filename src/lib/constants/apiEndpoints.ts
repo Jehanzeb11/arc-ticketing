@@ -6,6 +6,8 @@ export const API_ENDPOINTS = {
   LOGIN: "/auth/login",
   VERIFY_2FA: "/auth/verify-2fa",
 
+  USER_MODULES: (type) => `/usermodules/multi-purpose${type}`,
+
   // Unibox tickets
   UNIBOX_TICKETS: "/unibox_tickets",
   UNIBOX_TICKET_BY_ID: (id) => `/unibox_tickets/${id}`,

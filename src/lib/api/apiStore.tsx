@@ -36,6 +36,9 @@ import {
   fetchAdminProfile,
   fetchCompanyProfile,
   updateCompanyProfile,
+  createModules,
+  getUserModules,
+  updateUserModule,
 } from "./apiCalls";
 
 export const useApiStore = create((set) => ({
@@ -60,6 +63,11 @@ export const useApiStore = create((set) => ({
   deleteUser,
   loginUser,
 
+  // modules
+
+  createModules,
+  getUserModules,
+  updateUserModule,
   // Unibox tickets
   fetchUniboxTickets,
   fetchUniboxTicketById,

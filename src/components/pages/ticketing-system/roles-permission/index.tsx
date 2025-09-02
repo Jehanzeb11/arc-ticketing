@@ -350,9 +350,7 @@ const RolesAndPermission = () => {
         <CustomButton
           text="Add New"
           onClick={() =>
-            router.push(
-              "/ticketing-system/roles-permission/create-permissions.tsx"
-            )
+            router.push("/ticketing-system/roles-permission/create-permissions")
           }
           libIcon={<AddCircleIcon />}
         />

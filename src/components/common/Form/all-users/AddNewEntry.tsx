@@ -1,235 +1,310 @@
-'use client'
-import { Box, Grid, Typography } from '@mui/material'
-import React from 'react'
-import { useForm, Controller } from 'react-hook-form'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import toast from 'react-hot-toast'
-import ButtonCustom from '@/components/common/Button/Button'
-import GlobalInput from '@/components/common/Input/GlobalInput'
-import GlobalPasswordInput from '@/components/common/Input/GlobalPasswordInput'
-import FormSelect from '@/components/common/Select'
-import { useApiStore } from '@/lib/api/apiStore'
+"use client";
+import { Box, Grid, Typography, LinearProgress } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import ButtonCustom from "@/components/common/Button/Button";
+import GlobalInput from "@/components/common/Input/GlobalInput";
+import GlobalPasswordInput from "@/components/common/Input/GlobalPasswordInput";
+import FormSelect from "@/components/common/Select";
+import { useApiStore } from "@/lib/api/apiStore";
 
-export default function AddNewEntry ({ getall, onCloseModal }: any) {
-  const { callApi, createUser, fetchRoles, fetchDepartments }: any = useApiStore()
-  
+export default function AddNewEntry({ getall, onCloseModal }: any) {
+  const { callApi, createUser, fetchRoles, fetchDepartments }: any =
+    useApiStore();
+
+  // 🔹 Local state for password strength
+  const [strength, setStrength] = useState<"Weak" | "Medium" | "Strong">(
+    "Weak"
+  );
+  const [strengthScore, setStrengthScore] = useState(0);
+
   // Fetch roles and departments
   const { data: roles } = useQuery({
-    queryKey: ['roles'],
-    queryFn: () => callApi(fetchRoles),
-  })
-  
-  const { data: departments } = useQuery({
-    queryKey: ['departments'],
-    queryFn: () => callApi(fetchDepartments),
-  })
+    queryKey: ["roles"],
+    queryFn: () => callApi(fetchRoles, { requestType: "getAllRoles" }),
+  });
+
+  // const { data: departments } = useQuery({
+  //   queryKey: ["departments"],
+  //   queryFn: () =>
+  //     callApi(fetchDepartments, { requestType: "getAllDepartments" }),
+  // });
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-    reset
+    reset,
+    watch,
   } = useForm({
     defaultValues: {
-      fullName: '',
-      email: '',
-      password: '',
-      role: '',
-      department: '',
-      status: ''
-    }
-  })
+      fullName: "",
+      phone: "",
+      email: "",
+      password: "",
+      role: "",
+      picture: null,
+      status: "",
+    },
+  });
 
   const mutation = useMutation({
     mutationFn: async (data: any) => {
-      // Prepare user data according to the db.json structure
-      const userData = {
-        user_name: data.fullName,
-        user_email: data.email,
-        user_password: data.password,
-        user_role: data.role,
-        user_department: data.department,
-        user_status: data.status,
-        // Add default values for other required fields
-        activation_date: new Date().toISOString().split('T')[0],
-        expiration_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
-          .toISOString()
-          .split('T')[0], // 1 year from now
-        timezone: 'UTC+5',
-        language: 'en'
+      const formData = new FormData();
+      formData.append("full_name", data.fullName);
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      formData.append("phone", data.phone);
+      formData.append("role", data.role);
+      formData.append("status", data.status);
+      formData.append("requestType", "createUser");
+
+      if (data.picture?.[0]) {
+        formData.append("picture", data.picture[0]); // must match multer field
       }
-      return callApi(createUser, userData)
+
+      return callApi(createUser, formData);
     },
-    onSuccess: (response, data) => {
-      toast.success('User created successfully!')
-      getall() // Refresh the user list
-      onCloseModal()
-      reset()
+    onSuccess: () => {
+      toast.success("User created successfully!");
+      getall();
+      onCloseModal();
+      reset();
     },
-    onError: error => toast.error(`Failed to create user: ${error.message}`)
-  })
+    onError: (error) => toast.error(`Failed to create user: ${error.message}`),
+  });
 
-  const onSubmit = (data: any) => mutation.mutate(data)
+  const onSubmit = (data: any) => mutation.mutate(data);
 
-  // Dynamic options from API
-  const roleOptions = roles?.map(role => ({
-    label: role.roleName,
-    value: role.roleName
-  })) || []
+  // 🔹 Password strength calculation
+  const password = watch("password");
+  useEffect(() => {
+    const calcStrength = (value: string) => {
+      let score = 0;
+      if (!value) return { text: "Weak", score: 0 };
 
-  const departmentOptions = departments?.map(dept => ({
-    label: dept.name,
-    value: dept.name
-  })) || []
+      if (value.length >= 8) score++;
+      if (/[A-Z]/.test(value)) score++;
+      if (/[0-9]/.test(value)) score++;
+      if (/[^A-Za-z0-9]/.test(value)) score++;
+
+      if (score <= 1) return { text: "Weak", score: 33 };
+      if (score === 2) return { text: "Medium", score: 66 };
+      return { text: "Strong", score: 100 };
+    };
+
+    const result = calcStrength(password);
+    setStrength(result.text as "Weak" | "Medium" | "Strong");
+    setStrengthScore(result.score);
+  }, [password]);
+
+  // Options
+  const roleOptions =
+    roles?.map((role) => ({
+      label: role.role_name,
+      value: role.role_id,
+    })) || [];
+
+  // const departmentOptions =
+  //   departments?.map((dept) => ({
+  //     label: dept.name,
+  //     value: dept.id,
+  //   })) || [];
 
   const statusOptions = [
-    { label: 'Active', value: 'Active' },
-    { label: 'Inactive', value: 'Inactive' }
-  ]
+    { label: "Active", value: "Active" },
+    { label: "Inactive", value: "Inactive" },
+  ];
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
+        {/* Full Name */}
         <Grid size={{ xs: 12 }}>
           <GlobalInput
-            type='text'
-            label='Full Name'
-            {...register('fullName', { required: 'Full Name is required' })}
+            type="text"
+            label="Full Name"
+            {...register("fullName", { required: "Full Name is required" })}
           />
           {errors.fullName && (
-            <Typography variant='caption' color='error' sx={{ mt: -1, ml: 1 }}>
+            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
               {errors.fullName.message}
             </Typography>
           )}
         </Grid>
+
+        {/* Email */}
         <Grid size={{ xs: 12 }}>
           <GlobalInput
-            type='email'
-            label='Email'
-            {...register('email', {
-              required: 'Email is required',
+            type="email"
+            label="Email"
+            {...register("email", {
+              required: "Email is required",
               pattern: {
                 value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: 'Invalid email address'
-              }
+                message: "Invalid email address",
+              },
             })}
           />
           {errors.email && (
-            <Typography variant='caption' color='error' sx={{ mt: -1, ml: 1 }}>
+            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
               {errors.email.message}
             </Typography>
           )}
         </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <GlobalInput
+            type="tel"
+            label="Phone"
+            {...register("phone", { required: "Phone is required" })}
+          />
+          {errors.phone && (
+            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
+              {errors.phone.message}
+            </Typography>
+          )}
+        </Grid>
+
+        {/* Password */}
         <Grid size={{ xs: 12 }}>
           <GlobalPasswordInput
-            name='password'
-            label='Password'
-            {...register('password', {
-              required: 'Password is required',
+            name="password"
+            label="Password"
+            {...register("password", {
+              required: "Password is required",
               minLength: {
                 value: 8,
-                message: 'Password must be at least 8 characters'
-              }
+                message: "Password must be at least 8 characters",
+              },
             })}
           />
           {errors.password && (
-            <Typography variant='caption' color='error' sx={{ mt: -1, ml: 1 }}>
+            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
               {errors.password.message}
             </Typography>
           )}
         </Grid>
-        <Typography
-          variant='body1'
-          color='initial'
-          sx={{
-            color: '#555',
-            fontSize: '15px',
-            fontWeight: 500,
-            lineHeight: '20px' // 133.333
-          }}
-        >
-          Strength: Weak
-        </Typography>
+
+        {/* 🔹 Password Strength Indicator */}
+        {password && (
+          <Grid size={{ xs: 12 }}>
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: "15px",
+                fontWeight: 500,
+                color:
+                  strength === "Weak"
+                    ? "red"
+                    : strength === "Medium"
+                    ? "orange"
+                    : "green",
+              }}
+            >
+              Strength: {strength}
+            </Typography>
+            <LinearProgress
+              variant="determinate"
+              value={strengthScore}
+              sx={{
+                height: 6,
+                borderRadius: 2,
+                mt: 0.5,
+                "& .MuiLinearProgress-bar": {
+                  backgroundColor:
+                    strength === "Weak"
+                      ? "red"
+                      : strength === "Medium"
+                      ? "orange"
+                      : "green",
+                },
+              }}
+            />
+          </Grid>
+        )}
+
+        {/* Role */}
         <Grid size={{ xs: 12 }}>
           <Controller
-            name='role'
+            name="role"
             control={control}
-            rules={{ required: 'Role is required' }}
+            rules={{ required: "Role is required" }}
             render={({ field }) => (
               <FormSelect
-                label='Role'
-                name='role'
-                defaultText='Select Role'
-                value={field.value || ''}
-                onChange={e => field.onChange(e.target.value)}
+                label="Role"
+                name="role"
+                defaultText="Select Role"
+                value={field.value || ""}
+                onChange={(e) => field.onChange(e.target.value)}
                 options={roleOptions}
               />
             )}
           />
           {errors.role && (
-            <Typography variant='caption' color='error' sx={{ mt: -1, ml: 1 }}>
+            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
               {errors.role.message}
             </Typography>
           )}
         </Grid>
+
+        {/* Status */}
         <Grid size={{ xs: 12 }}>
           <Controller
-            name='department'
+            name="status"
             control={control}
-            rules={{ required: 'Department is required' }}
+            rules={{ required: "Status is required" }}
             render={({ field }) => (
               <FormSelect
-                label='Department'
-                name='department'
-                defaultText='Select Department'
-                value={field.value || ''}
-                onChange={e => field.onChange(e.target.value)}
-                options={departmentOptions}
-              />
-            )}
-          />
-          {errors.department && (
-            <Typography variant='caption' color='error' sx={{ mt: -1, ml: 1 }}>
-              {errors.department.message}
-            </Typography>
-          )}
-        </Grid>
-        <Grid size={{ xs: 12 }}>
-          <Controller
-            name='status'
-            control={control}
-            rules={{ required: 'Status is required' }}
-            render={({ field }) => (
-              <FormSelect
-                label='Status'
-                name='status'
-                defaultText='Select Status'
-                value={field.value || ''}
-                onChange={e => field.onChange(e.target.value)}
+                label="Status"
+                name="status"
+                defaultText="Select Status"
+                value={field.value || ""}
+                onChange={(e) => field.onChange(e.target.value)}
                 options={statusOptions}
               />
             )}
           />
           {errors.status && (
-            <Typography variant='caption' color='error' sx={{ mt: -1, ml: 1 }}>
+            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
               {errors.status.message}
+            </Typography>
+          )}
+        </Grid>
+
+        {/* Profile Pic */}
+        <Grid size={{ xs: 12 }}>
+          <GlobalInput
+            type="file"
+            label="Profile Picture"
+            {...register("picture", {
+              required: "Profile Picture is required",
+            })}
+          />
+          {errors.picture && (
+            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
+              {errors.picture.message as string}
             </Typography>
           )}
         </Grid>
       </Grid>
 
-      <Box sx={{ display: 'flex', gap: '15px', mt: '35px' }}>
+      {/* Footer Buttons */}
+      <Box sx={{ display: "flex", gap: "15px", mt: "35px" }}>
         <ButtonCustom
-          text='Cancel'
+          text="Cancel"
           btntrasnparent={true}
           onClick={onCloseModal}
         />
         <ButtonCustom
-          text={isSubmitting ? 'Saving...' : 'Save'}
-          type='submit'
+          text={isSubmitting ? "Saving..." : "Save"}
+          type="submit"
           disabled={isSubmitting}
         />
       </Box>
     </form>
-  )
+  );
 }

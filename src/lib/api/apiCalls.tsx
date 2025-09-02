@@ -25,10 +25,20 @@ export const fetchUsers = (data) => {
 export const fetchUserById = (data) =>
   postbackend(`${API_ENDPOINTS.USER_BY_ID(data.id)}`, data);
 export const fetchProfile = () => postbackend(`${API_ENDPOINTS.PROFILE}`);
-export const createUser = (data) => postbackend(`${API_ENDPOINTS.USERS}`, data);
-export const updateUser = (id, data) =>
-  postbackend(`${API_ENDPOINTS.USER_BY_ID(id)}`, data);
+export const createUser = (data) =>
+  postbackend(`${API_ENDPOINTS.USERS(data?.get("requestType"))}`, data);
+export const updateUser = (data) =>
+  postbackend(`${API_ENDPOINTS.USERS(data?.get("requestType"))}`, data);
 export const updateProfile = (data) => postbackend(API_ENDPOINTS.PROFILE, data);
+
+// USER_MODULES
+export const createModules = (data) =>
+  postbackend(`${API_ENDPOINTS.USER_MODULES(data?.requestType)}`, data);
+export const getUserModules = (data) =>
+  postbackend(`${API_ENDPOINTS.USER_MODULES(data?.requestType)}`, data);
+
+export const updateUserModule = (data) =>
+  postbackend(`${API_ENDPOINTS.USER_MODULES(data?.requestType)}`, data);
 
 // export const fetchUsers = () => getlocal(API_ENDPOINTS.USERS);
 // export const fetchUserById = (id) => getlocal(API_ENDPOINTS.USER_BY_ID(id));
@@ -37,7 +47,8 @@ export const updateProfile = (data) => postbackend(API_ENDPOINTS.PROFILE, data);
 // export const updateUser = (id, data) =>
 //   patchlocal(API_ENDPOINTS.USER_BY_ID(id), data);
 // export const updateProfile = (data) => patchlocal(API_ENDPOINTS.PROFILE, data);
-export const deleteUser = (id) => dellocal(API_ENDPOINTS.USER_BY_ID(id));
+export const deleteUser = (data) =>
+  postbackend(API_ENDPOINTS.USERS(data?.requestType), data);
 
 export const loginUser = (data) => postlocal(API_ENDPOINTS.LOGIN, data);
 

@@ -25,6 +25,7 @@ import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
 import EditUser from "@/components/common/Form/all-users/EditUser";
+import AddNewEntryAssignmentModule from "@/components/common/Form/modules/AddNew";
 
 const AllUsers = () => {
   const queryClient = useQueryClient();
@@ -32,6 +33,7 @@ const AllUsers = () => {
   const [addNewModalOpen, setAddNewModalOpen] = useState(false);
   const [editNewModalOpen, setEditNewModalOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [assignModal, setAssignModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [selectedName, setSelectedName] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
@@ -53,7 +55,7 @@ const AllUsers = () => {
     { key: "fullName", title: "Full Name", filterable: false },
     { key: "email", title: "Email", filterable: false },
     { key: "role", title: "Role", filterable: false },
-    { key: "department", title: "Department", filterable: false },
+    { key: "phone", title: "Phone", filterable: false },
     { key: "status", title: "Status", filterable: false },
   ];
 
@@ -61,7 +63,7 @@ const AllUsers = () => {
   const data = useMemo(
     () =>
       users?.map((user) => ({
-        id: user.id,
+        user_id: user.user_id,
         profile: (
           <Box
             sx={{
@@ -75,31 +77,41 @@ const AllUsers = () => {
               justifyContent: "center",
             }}
           >
-            <Image src={AssigneeIcon} alt="Assignee" width={45} height={45} />
+            <Image
+              src={
+                user.picture
+                  ? "http://192.168.10.40:5050/uploads/profile/" + user.picture
+                  : AssigneeIcon
+              }
+              alt="Assignee"
+              width={45}
+              height={45}
+              unoptimized
+            />
           </Box>
         ),
-        fullName: user.user_name || "--",
-        email: user.user_email || "--",
-        role: user.user_role || "--",
-        department: user.user_department || "--",
+        fullName: user.full_name || "--",
+        email: user.email || "--",
+        role: user.role || "--",
+        department: user.phone || "--",
         status: (
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Typography
               sx={{
-                color: user.user_status === "Active" ? "#3286BD" : "#000",
+                color: user.status === "Active" ? "#3286BD" : "#000",
                 fontSize: "15px",
                 lineHeight: "20px",
                 padding: "4px 12px",
                 background:
-                  user.user_status === "Active" ? "#3286BD15" : "#24242415",
+                  user.status === "Active" ? "#3286BD15" : "#24242415",
                 borderRadius: "100px",
               }}
             >
-              {user.user_status}
+              {user.status}
             </Typography>
             <IOSSwitch
-              checked={user.user_status === "Active"}
-              onChange={(e) => handleSwitchChange(e, user.id)}
+              checked={user.status === "Active"}
+              onChange={(e) => handleSwitchChange(e, user.user_id)}
             />
           </Box>
         ),
@@ -176,7 +188,11 @@ const AllUsers = () => {
     const newStatus = e.target.checked ? "Active" : "Inactive";
 
     try {
-      await callApi(updateUser, id, { user_status: newStatus });
+      const formData = new FormData();
+      formData.append("requestType", `updateUser&user_id=${id}`);
+      formData.append("status", newStatus);
+
+      await callApi(updateUser, formData, true);
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success("User status updated successfully!");
     } catch (error) {
@@ -188,10 +204,10 @@ const AllUsers = () => {
     {
       icon: editIcon,
       onClick: (row) => {
-        if (row && row.id) {
-          const user = users.find((u) => u.id === row.id);
+        if (row && row.user_id) {
+          const user = users.find((u) => u.user_id === row.user_id);
           if (user) {
-            setSelectedId(row.id);
+            setSelectedId(row.user_id);
             setSelectedUser(user);
             setEditNewModalOpen(true);
           } else {
@@ -207,10 +223,10 @@ const AllUsers = () => {
     {
       icon: DeleteIcon,
       onClick: (row) => {
-        if (row && row.id) {
-          setSelectedId(row.id);
-          const user = users.find((u) => u.id === row.id);
-          const name = user?.user_name || user?.user_email || "User";
+        if (row && row.user_id) {
+          setSelectedId(row.user_id);
+          const user = users.find((u) => u.user_id === row.user_id);
+          const name = user?.full_name || user?.email || "User";
           setSelectedName(name);
           setDeleteModal(true);
         } else {
@@ -220,10 +236,31 @@ const AllUsers = () => {
       className: "action-icon",
       tooltip: "Delete User",
     },
+    {
+      icon: DeleteIcon,
+      onClick: (row) => {
+        if (row && row.user_id) {
+          setSelectedId(row.user_id);
+          const user = users.find((u) => u.user_id === row.user_id);
+          const name = user?.full_name || user?.email || "User";
+          setSelectedName(name);
+          setAssignModal(true);
+
+          if (user) {
+            setSelectedUser(user);
+          }
+        } else {
+          toast.error("Cannot delete: User data is invalid.");
+        }
+      },
+      className: "action-icon",
+      tooltip: "Assign Module",
+    },
   ];
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => callApi(deleteUser, id),
+    mutationFn: (id) =>
+      callApi(deleteUser, { requestType: `deleteUser&user_id=${id}` }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success("User deleted successfully.");
@@ -391,6 +428,24 @@ const AllUsers = () => {
         />
       </div>
 
+      <MyModal
+        open={assignModal}
+        setOpen={setAssignModal}
+        customStyle="add-new-extension-modal"
+        modalHeader="true"
+        modalTitle="Add New User"
+        modalText="Enter the details for the new user."
+        iconSrc={addnewEntry}
+      >
+        <AddNewEntryAssignmentModule
+          userData={selectedUser}
+          getall={() => queryClient.invalidateQueries({ queryKey: ["users"] })}
+          onCloseModal={() => {
+            setAddNewModalOpen(false);
+            setSelectedUser(null);
+          }}
+        />
+      </MyModal>
       <MyModal
         open={addNewModalOpen}
         setOpen={setAddNewModalOpen}

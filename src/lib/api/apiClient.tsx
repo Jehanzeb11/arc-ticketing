@@ -41,13 +41,17 @@ const applyInterceptors = (instance) => {
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-      // const userData = JSON.parse(Cookies.get('userData') || '{}')
-      // if (userData.token) {
-      //   config.headers.Authorization = `Bearer ${userData.token}`
-      // }
+
+      // ✅ Fix for FormData
+      if (config.data instanceof FormData) {
+        delete config.headers["Content-Type"];
+        // Axios will set it properly with boundary
+      }
+
       if (config.customHeaders) {
         config.headers = { ...config.headers, ...config.customHeaders };
       }
+
       console.log("Request:", config.url, config.method, config.data);
       return config;
     },
