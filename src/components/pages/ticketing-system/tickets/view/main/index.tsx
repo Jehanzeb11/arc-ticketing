@@ -1,24 +1,24 @@
-import React, { useState } from 'react'
-import TicketCard from './TicketCard'
-import { Alert, AlertTitle, Box, Grid, Typography } from '@mui/material'
-import Search from '@/components/common/search'
-import ReplyForm from './ReplyForm'
-import ActivityLog from './ActivityLog'
-import TicketConversation from './TicketConversation'
-import profileImg from '@/assets/images/profile/small-profile.png'
+import React, { useState } from "react";
+import TicketCard from "./TicketCard";
+import { Alert, AlertTitle, Box, Grid, Typography } from "@mui/material";
+import Search from "@/components/common/search";
+import ReplyForm from "./ReplyForm";
+import ActivityLog from "./ActivityLog";
+import TicketConversation from "./TicketConversation";
+import profileImg from "@/assets/images/profile/small-profile.png";
 
-export default function MainContent ({
+export default function MainContent({
   ticketData,
   activityData,
   searchQuery,
   handleSearch,
-  conversationData
+  conversationData,
 }: any) {
   return (
     <Grid container spacing={2} sx={{ mt: 5 }}>
       <Grid
         size={{ lg: 3, xs: 12 }}
-        sx={{ position: 'sticky', top: '20px', height: 'fit-content' }}
+        sx={{ position: "sticky", top: "20px", height: "fit-content" }}
       >
         <Box>
           <Box sx={{ mb: 2 }}>
@@ -45,25 +45,25 @@ export default function MainContent ({
       </Grid>
       <Grid
         size={{ lg: 6, xs: 12 }}
-        sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
+        sx={{ display: "flex", flexDirection: "column", gap: "20px" }}
       >
-        <ReplyForm ticketId={ticketData[0]?.ticketId} />
+        <ReplyForm ticketId={ticketData.id} />
         <Alert
-          severity='error'
-          sx={{ borderRadius: '10px', border: '1px solid #FF4242' }}
+          severity="error"
+          sx={{ borderRadius: "10px", border: "1px solid #FF4242" }}
         >
           <AlertTitle>Auto-resolve scheduled</AlertTitle>
           This ticket will be automatically resolved on 2025-01-10 10:15 if no
           activity occurs.
         </Alert>
-        <TicketConversation conversationData={conversationData} />
+        {/* <TicketConversation conversationData={conversationData} /> */}
       </Grid>
       <Grid
         size={{ lg: 3, xs: 12 }}
-        sx={{ position: 'sticky', top: '20px', height: 'fit-content' }}
+        sx={{ position: "sticky", top: "20px", height: "fit-content" }}
       >
-        <ActivityLog activityData={activityData} />
+        {/* <ActivityLog activityData={activityData} /> */}
       </Grid>
     </Grid>
-  )
+  );
 }

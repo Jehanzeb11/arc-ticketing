@@ -33,44 +33,44 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
 
   console.log(ticketId, "ticketId");
 
-  const activityData =
-    (uniboxTickets &&
-      uniboxTickets[1]?.activity_data?.map((ticket) => ({
-        id: ticket.id,
-        type: ticket.type,
-        name: ticket.name,
-        date: ticket.date,
-        imageUrl: ticket.imageUrl,
-      }))) ||
-    [];
-  const ticketData =
-    (uniboxTickets &&
-      uniboxTickets[0]?.ticket_data?.map((ticket) => ({
-        ticketId: ticket.ticketId,
-        Requester: ticket.Requester,
-        Title: ticket.Title,
-        Details: ticket.Details,
-        Status: ticket.Status,
-        Priority: ticket.Priority,
-        Type: ticket.Type,
-        Department: ticket.Department,
-        Assignee: ticket.Assignee,
-        Created: ticket.Created,
-        LastReply: ticket.LastReply,
-      }))) ||
-    [];
-  const conversationData =
-    (uniboxTickets &&
-      uniboxTickets[2]?.conversation_data?.map((ticket) => ({
-        id: ticket.id,
-        name: ticket.name,
-        email: ticket.email,
-        message: ticket.message,
-        date: ticket.date,
-        imageUrl: ticket.imageUrl,
-        attachment: ticket.attachment,
-      }))) ||
-    [];
+  // const activityData =
+  //   (uniboxTickets &&
+  //     uniboxTickets?.map((ticket) => ({
+  //       id: ticket.id,
+  //       type: ticket.type,
+  //       name: ticket.name,
+  //       date: ticket.date,
+  //       imageUrl: ticket.imageUrl,
+  //     }))) ||
+  //   [];
+  // const ticketData =
+  //   (uniboxTickets &&
+  //     uniboxTickets?.map((ticket) => ({
+  //       ticketId: ticket.ticketId,
+  //       Requester: ticket.Requester,
+  //       Title: ticket.Title,
+  //       Details: ticket.Details,
+  //       Status: ticket.Status,
+  //       Priority: ticket.Priority,
+  //       Type: ticket.Type,
+  //       Department: ticket.Department,
+  //       Assignee: ticket.Assignee,
+  //       Created: ticket.Created,
+  //       LastReply: ticket.LastReply,
+  //     }))) ||
+  //   [];
+  // const conversationData =
+  //   (uniboxTickets &&
+  //     uniboxTickets?.map((ticket) => ({
+  //       id: ticket.id,
+  //       name: ticket.subject,
+  //       email: ticket.email,
+  //       message: ticket.message,
+  //       date: ticket.date,
+  //       imageUrl: ticket.imageUrl,
+  //       attachment: ticket.attachment,
+  //     }))) ||
+  //   [];
 
   if (isLoading) {
     return (
@@ -124,11 +124,11 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
     console.log("Applying filters:", filterValues);
     // Add your filtering logic here (e.g., filter a table or make an API call)
   };
-  const filteredTicketData = ticketData.filter((ticket) =>
-    Object.values(ticket).some((value) =>
-      value?.toString().toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  );
+  // const filteredTicketData = ticketData.filter((ticket) =>
+  //   Object.values(ticket).some((value) =>
+  //     value?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+  //   )
+  // );
   const handleSearch = (event: any) => {
     setSearchQuery(event.target.value);
   };
@@ -142,11 +142,11 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
       />
       <MainContent
         ticketId={ticketId}
-        ticketData={filteredTicketData}
+        ticketData={uniboxTickets}
         searchQuery={searchQuery}
         handleSearch={handleSearch}
-        activityData={activityData}
-        conversationData={conversationData}
+        activityData={uniboxTickets}
+        conversationData={uniboxTickets}
       />
     </div>
   );
