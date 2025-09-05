@@ -24,7 +24,10 @@ const liveApi = axios.create({
 });
 const backendApi = axios.create({
   baseURL: backendUrl,
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${Cookies.get("access_token")}`,
+  },
 });
 
 const localApi = axios.create({
@@ -37,22 +40,26 @@ const localApi = axios.create({
 const applyInterceptors = (instance) => {
   instance.interceptors.request.use(
     (config: any) => {
-      const token = JSON.parse(Cookies.get("access_token") || "{}");
+      const token = Cookies.get("access_token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
 
-      // ✅ Fix for FormData
       if (config.data instanceof FormData) {
         delete config.headers["Content-Type"];
-        // Axios will set it properly with boundary
       }
 
       if (config.customHeaders) {
         config.headers = { ...config.headers, ...config.customHeaders };
       }
 
-      console.log("Request:", config.url, config.method, config.data);
+      console.log(
+        "Request:",
+        config.url,
+        config.method,
+        config.data,
+        config.headers
+      );
       return config;
     },
     (error) => Promise.reject(error)

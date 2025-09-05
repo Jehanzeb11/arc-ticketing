@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    domains: ["localhost", "127.0.0.1", "192.168.10.40"],
+  },
   env: {
     LIVE_BASE_URL: process.env.LIVE_BASE_URL,
     LOCAL_BASE_URL: process.env.LOCAL_BASE_URL,

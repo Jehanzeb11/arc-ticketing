@@ -38,6 +38,7 @@ import styles from "@/components/style/ReuseableDatePicker.module.css";
 import resetIcon from "@/assets/icons/unibox/ticket/hugeicons_filter-reset.svg";
 import DashboardHeader from "../../DashboardHeader";
 import TicketsCards from "./TicketsCards";
+import toast from "react-hot-toast";
 
 export default function UniBoxTickets() {
   const {
@@ -46,6 +47,7 @@ export default function UniBoxTickets() {
     updateUniboxTicket,
     fetchDepartments,
     fetchUsers,
+    getAllTickets,
   }: any = useApiStore();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -55,11 +57,11 @@ export default function UniBoxTickets() {
   const [archivedTickets, setArchivedTickets] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [filterValues, setFilterValues] = useState({
-    department: "AllDepartments",
-    type: "AllTypes",
-    assignee: "AllAssignees",
-    priority: "AllPriority",
-    status: "AllStatus",
+    department_id: "",
+    type: "",
+    assignee: "",
+    priority: "",
+    status: "",
   });
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -69,42 +71,55 @@ export default function UniBoxTickets() {
     error,
   } = useQuery({
     queryKey: ["uniboxTickets"],
-    queryFn: () => callApi(fetchUniboxTickets),
+    queryFn: () => callApi(getAllTickets, { requestType: "getAllTickets" }),
   });
 
   const { data: departments } = useQuery({
     queryKey: ["departments"],
-    queryFn: () => callApi(fetchDepartments),
+    queryFn: () =>
+      callApi(fetchDepartments, {
+        requestType: "getAllDepartments",
+      }),
   });
 
   const { data: users } = useQuery({
     queryKey: ["users"],
-    queryFn: () => callApi(fetchUsers),
+    queryFn: () =>
+      callApi(fetchUsers, {
+        requestType: "getAllUsers",
+      }),
   });
 
   const updateTicketMutation = useMutation({
     mutationFn: ({ ticketId, field, value }: any) => {
-      const ticketData = uniboxTickets?.[0]?.ticket_data?.find(
-        (t: any) => t.ticketId === ticketId
-      );
+      console.log(ticketId, "ticketId");
+
+      const ticketData = uniboxTickets?.find((t: any) => t.id === ticketId);
       if (!ticketData) throw new Error("Ticket not found");
 
-      const updatedTicket = { ...ticketData, [field]: value };
-      return callApi(updateUniboxTicket, ticketId, updatedTicket);
+      const updatedTicket = {
+        requestType: "updateTicketField",
+        id: ticketId,
+        field: field,
+        value: value,
+      };
+      return callApi(updateUniboxTicket, updatedTicket);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["uniboxTickets"] });
+      setArchiveModal(false);
+      toast.success("Ticket updated successfully!");
     },
     onError: (error) => {
       console.error("Failed to update ticket:", error);
     },
   });
 
+  console.log(uniboxTickets, "uniboxTickets");
+
   const archiveTicketMutation = useMutation({
     mutationFn: ({ ticketId, archived }: any) => {
-      const ticketData = uniboxTickets?.[0]?.ticket_data?.find(
-        (t: any) => t.ticketId === ticketId
-      );
+      const ticketData = uniboxTickets?.find((t: any) => t.id === ticketId);
       if (!ticketData) throw new Error("Ticket not found");
 
       const updatedTicket = { ...ticketData, archived };
@@ -146,11 +161,7 @@ export default function UniBoxTickets() {
     { key: "LastReply", title: "Last Reply", filterable: false },
   ];
 
-  const handleFieldUpdate = (
-    ticketId: string,
-    field: string,
-    value: string
-  ) => {
+  const handleFieldUpdate = (ticketId: string, field: string, value: any) => {
     updateTicketMutation.mutate({ ticketId, field, value });
   };
 
@@ -170,17 +181,18 @@ export default function UniBoxTickets() {
 
   const data =
     (uniboxTickets &&
-      uniboxTickets[0]?.ticket_data?.map((ticket: any) => ({
-        ticketId: ticket.ticketId || "N/A",
-        Requester: ticket.Requester || "N/A",
-        Title: ticket.Title || "N/A",
-        Details: ticket.Details || "N/A",
+      uniboxTickets?.map((ticket: any) => ({
+        id: ticket.id,
+        ticketId: ticket.ticket_reference || "N/A",
+        Requester: ticket.customer_name || "N/A",
+        Title: ticket.subject.slice(0, 15) + "..." || "N/A",
+        Details: ticket.details || "N/A",
         Status: (
           <div onClick={(e) => e.stopPropagation()}>
             <TableSelectFilterMainNew
               sx={sx}
               popperClassName="ticket-table-dropdown"
-              value={ticket.Status || "Open"}
+              value={ticket.status || "Open"}
               name="Status"
               options={[
                 { value: "Open", label: "Open" },
@@ -189,7 +201,7 @@ export default function UniBoxTickets() {
                 { value: "Closed", label: "Closed" },
               ]}
               onChange={(e: any) =>
-                handleFieldUpdate(ticket.ticketId, "Status", e.target.value)
+                handleFieldUpdate(ticket.id, "status", e.target.value)
               }
               className="table-dropdown-select"
             />
@@ -200,7 +212,7 @@ export default function UniBoxTickets() {
             <TableSelectFilterMainNew
               sx={sx}
               popperClassName="ticket-table-dropdown"
-              value={ticket.Priority || "Low"}
+              value={ticket.priority || "Low"}
               name="Priority"
               options={[
                 { value: "Low", label: "Low" },
@@ -209,7 +221,7 @@ export default function UniBoxTickets() {
                 { value: "Urgent", label: "Urgent" },
               ]}
               onChange={(e: any) =>
-                handleFieldUpdate(ticket.ticketId, "Priority", e.target.value)
+                handleFieldUpdate(ticket.id, "priority", e.target.value)
               }
               className="table-dropdown-select"
             />
@@ -220,7 +232,7 @@ export default function UniBoxTickets() {
             <TableSelectFilterMainNew
               sx={sx}
               popperClassName="ticket-table-dropdown"
-              value={ticket.Type || "Support"}
+              value={ticket.type || "Support"}
               name="Type"
               options={[
                 { value: "Support", label: "Support" },
@@ -229,7 +241,7 @@ export default function UniBoxTickets() {
                 { value: "Question", label: "Question" },
               ]}
               onChange={(e: any) =>
-                handleFieldUpdate(ticket.ticketId, "Type", e.target.value)
+                handleFieldUpdate(ticket.id, "type", e.target.value)
               }
               className="table-dropdown-select"
             />
@@ -240,16 +252,16 @@ export default function UniBoxTickets() {
             <TableSelectFilterMainNew
               sx={sx}
               popperClassName="ticket-table-dropdown"
-              value={ticket.Department || "Technical"}
+              value={ticket.department_id || "Technical"}
               name="Department"
               options={
                 departments?.map((dept: any) => ({
-                  value: dept.name,
+                  value: dept.id,
                   label: dept.name,
                 })) || []
               }
               onChange={(e: any) =>
-                handleFieldUpdate(ticket.ticketId, "Department", e.target.value)
+                handleFieldUpdate(ticket.id, "department_id", e.target.value)
               }
               className="table-dropdown-select"
             />
@@ -260,23 +272,23 @@ export default function UniBoxTickets() {
             <TableSelectFilterMainNew
               sx={sx}
               popperClassName="ticket-table-dropdown"
-              value={ticket.Assignee || "Unassigned"}
+              value={ticket.assignee || "Unassigned"}
               name="Assignee"
               options={
                 users?.map((user: any) => ({
-                  value: user.user_name,
-                  label: user.user_name,
+                  value: user.user_id,
+                  label: user.full_name,
                   icon: AssigneeIcon,
                 })) || []
               }
               onChange={(e: any) =>
-                handleFieldUpdate(ticket.ticketId, "Assignee", e.target.value)
+                handleFieldUpdate(ticket.id, "assignee", e.target.value)
               }
               className="table-dropdown-select"
             />
           </div>
         ),
-        Created: ticket.Created || "N/A",
+        Created: ticket.created_at || "N/A",
         LastReply: ticket.LastReply || "N/A",
       }))) ||
     [];
@@ -291,14 +303,14 @@ export default function UniBoxTickets() {
       });
     }
   };
-
   const actions = [
     {
       className: "action-icon",
-      icon2: (row: any) =>
-        archivedTickets.includes(row.ticketId) ? unarchiveIcon : archiveIcon,
+      icon2: (row: any) => {
+        return archivedTickets.includes(row.id) ? unarchiveIcon : archiveIcon;
+      },
       onClick: (row: any) => {
-        if (row && row.ticketId) {
+        if (row && row.id) {
           setSelectedTicket(row);
           setArchiveModal(true);
         } else {
@@ -306,14 +318,14 @@ export default function UniBoxTickets() {
         }
       },
       tooltip: (row: any) =>
-        archivedTickets.includes(row.ticketId)
+        archivedTickets.includes(row.id)
           ? "Unarchive Ticket"
           : "Archive Ticket",
     },
   ];
 
   const handleRowClick = (row: any) => {
-    router.push(`/tickets/${row.ticketId}`);
+    router.push(`/ticketing-system/tickets/${row.id}`);
     setSelectedTicket(row);
   };
 
@@ -323,7 +335,7 @@ export default function UniBoxTickets() {
       value: filterValues.status,
       className: "status-filter",
       filterOptions: [
-        { value: "AllStatus", label: "All Status" },
+        { value: "", label: "All Status" },
         { value: "Open", label: "Open" },
         { value: "In-progress", label: "In-progress" },
         { value: "Resolved", label: "Resolved" },
@@ -335,7 +347,7 @@ export default function UniBoxTickets() {
       value: filterValues.priority,
       className: "priority-filter",
       filterOptions: [
-        { value: "AllPriority", label: "All Priority" },
+        { value: "", label: "All Priority" },
         { value: "Low", label: "Low" },
         { value: "Medium", label: " Medium" },
         { value: "High", label: " High" },
@@ -343,13 +355,13 @@ export default function UniBoxTickets() {
       ],
     },
     {
-      name: "department",
-      value: filterValues.department,
+      name: "department_id",
+      value: filterValues.department_id,
       className: "department-filter",
       filterOptions: [
-        { value: "AllDepartments", label: "All Departments" },
+        { value: "", label: "All Departments" },
         ...(departments?.map((dept: any) => ({
-          value: dept.name,
+          value: dept.id,
           label: dept.name,
         })) || []),
       ],
@@ -359,7 +371,7 @@ export default function UniBoxTickets() {
       value: filterValues.type,
       className: "type-filter",
       filterOptions: [
-        { value: "AllTypes", label: "All Types" },
+        { value: "", label: "All Types" },
         { value: "Support", label: "Support" },
         { value: "Feature", label: "Feature" },
         { value: "Bug", label: "Bug" },
@@ -371,10 +383,10 @@ export default function UniBoxTickets() {
       value: filterValues.assignee,
       className: "assignee-filter",
       filterOptions: [
-        { value: "AllAssignees", label: "All Assignees" },
+        { value: "", label: "All Assignees" },
         ...(users?.map((user: any) => ({
-          value: user.user_name,
-          label: user.user_name,
+          value: user.full_name,
+          label: user.user_id,
           icon: AssigneeIcon,
         })) || []),
       ],
@@ -400,11 +412,11 @@ export default function UniBoxTickets() {
 
   const handleResetFilter = () => {
     setFilterValues({
-      status: "AllStatus",
-      priority: "AllPriority",
-      department: "AllDepartments",
-      type: "AllTypes",
-      assignee: "AllAssignees",
+      status: "",
+      priority: "",
+      department_id: "",
+      type: "",
+      assignee: "",
     });
   };
 
@@ -430,7 +442,7 @@ export default function UniBoxTickets() {
       <TicketsCards />
       <TicketHeader
         onClickAddTicket={() => setAddModal(true)}
-        onClickArchive={() => router.push("/tickets/archive")}
+        onClickArchive={() => router.push("/ticketing-system/tickets/archive")}
         handleSearch={handleSearch}
         searchQuery={searchQuery}
       />
@@ -469,7 +481,11 @@ export default function UniBoxTickets() {
         />
         <Grid size={{ lg: 3, xs: 12 }}>
           <Box sx={{ display: "flex", gap: "10px" }} className="ticket-button">
-            <CustomButton text="Apply filter" onClick={handleApplyFilter} />
+            <CustomButton
+              customClass={"btn-outlined"}
+              text="Apply filter"
+              onClick={handleApplyFilter}
+            />
             <Button className="reset-button" onClick={handleResetFilter}>
               <Image src={resetIcon} alt="reset-icon" />
               Reset Filter
@@ -480,6 +496,7 @@ export default function UniBoxTickets() {
 
       <div className="table-parent unibox-table">
         <ReusableTable
+          maxContentWidth="max-content !important"
           columns={columns}
           data={filteredTicketData}
           actions={actions}
@@ -536,11 +553,13 @@ export default function UniBoxTickets() {
           <CustomButton
             style={{ padding: "10px 36px", width: "unset" }}
             text={
-              archivedTickets.includes(selectedTicket?.ticketId)
+              archivedTickets.includes(selectedTicket?.id)
                 ? "Unarchive"
                 : "Archive"
             }
-            onClick={handleArchiveTicket}
+            onClick={() =>
+              handleFieldUpdate(selectedTicket?.id, "is_archive", true)
+            }
           />
         </Box>
       </MyModal>

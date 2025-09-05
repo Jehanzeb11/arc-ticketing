@@ -1,49 +1,49 @@
-'use client'
-import { Autocomplete, TextField, Box, Popper, MenuItem } from '@mui/material'
-import React from 'react'
-import Image from 'next/image'
+"use client";
+import { Autocomplete, TextField, Box, Popper, MenuItem } from "@mui/material";
+import React from "react";
+import Image from "next/image";
 
 interface Option {
-  value: string
-  label: string
-  icon?: string
+  value: string;
+  label: string;
+  icon?: string;
 }
 
-export default function TableSelectFilterMainNew ({
+export default function TableSelectFilterMainNew({
   onChange,
-  value = '',
-  name = '',
+  value = "",
+  name = "",
   options = [],
-  className = '',
-  defaultText = 'Select an option',
+  className = "",
+  defaultText = "Select an option",
   menuItemSx,
   sx,
-  popperClassName
+  popperClassName,
 }: any) {
   const selectedOption =
-    value !== ''
-      ? options?.find(option => option.value === value) || null
-      : null
-  const [open, setOpen] = React.useState(true)
+    value !== ""
+      ? options?.find((option) => option.value === value) || null
+      : null;
+  const [open, setOpen] = React.useState(true);
   const CustomPopper = (props: any) => {
     return (
       <Popper
         {...props}
-        className={`custom-autocomplete-popper ${popperClassName || ''}`}
+        className={`custom-autocomplete-popper ${popperClassName || ""}`}
         // sx={{
         //   '& .MuiAutocomplete-listbox': {
         //     maxHeight: '200px'
         //   }
         // }}
       />
-    )
-  }
+    );
+  };
 
   return (
-    <Box className={`my-select ${className ? className : ''}`} sx={{ ...sx }}>
+    <Box className={`my-select ${className ? className : ""}`} sx={{ ...sx }}>
       <Autocomplete
         options={options || []}
-        getOptionLabel={option => option.label || defaultText}
+        getOptionLabel={(option) => option.label || defaultText}
         value={selectedOption}
         PopperComponent={CustomPopper}
         // open={open}
@@ -52,30 +52,30 @@ export default function TableSelectFilterMainNew ({
           onChange({
             target: {
               name,
-              value: newValue ? newValue.value : ''
-            }
-          })
+              value: newValue ? newValue.value : "",
+            },
+          });
         }}
-        renderInput={params => (
+        renderInput={(params) => (
           <TextField
             {...params}
             placeholder={defaultText}
-            variant='outlined'
-            className='form-select'
+            variant="outlined"
+            className="form-select"
             fullWidth
-            margin='normal'
+            margin="normal"
             InputProps={{
               ...params.InputProps,
               startAdornment: selectedOption?.icon ? (
-                <Box sx={{ display: 'flex', alignItems: 'center', ml: 1 }}>
+                <Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
                   <Image
                     src={selectedOption.icon}
                     alt={`${selectedOption.label} icon`}
-                    style={{ objectFit: 'contain' }}
+                    style={{ objectFit: "contain" }}
                   />
                 </Box>
               ) : null,
-              endAdornment: params.InputProps.endAdornment
+              endAdornment: params.InputProps.endAdornment,
             }}
           />
         )}
@@ -84,10 +84,10 @@ export default function TableSelectFilterMainNew ({
             {...props}
             key={option.value}
             sx={{
-              display: 'flex',
-              alignItems: 'center',
+              display: "flex",
+              alignItems: "center",
               gap: 1,
-              ...menuItemSx
+              ...menuItemSx,
             }}
           >
             {option.icon && (
@@ -96,15 +96,15 @@ export default function TableSelectFilterMainNew ({
                 alt={`${option.label} icon`}
                 width={20}
                 height={20}
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit: "contain" }}
               />
             )}
             {option.label}
           </MenuItem>
         )}
         isOptionEqualToValue={(option, val) => option.value === val.value}
-        className='autocomplete-select'
+        className="autocomplete-select"
       />
     </Box>
-  )
+  );
 }

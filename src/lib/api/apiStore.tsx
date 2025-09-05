@@ -17,7 +17,7 @@ import {
   updateUser,
   deleteUser,
   loginUser,
-  fetchUniboxTickets,
+  fetchSingleTicket,
   fetchUniboxTicketById,
   createUniboxTicket,
   updateUniboxTicket,
@@ -27,6 +27,7 @@ import {
   updateDepartment,
   deleteDepartment,
   updateProfile,
+  departmentUser,
   fetchProfile,
   fetchRoles,
   fetchRoleById,
@@ -39,6 +40,7 @@ import {
   createModules,
   getUserModules,
   updateUserModule,
+  getAllTickets,
 } from "./apiCalls";
 
 export const useApiStore = create((set) => ({
@@ -59,9 +61,10 @@ export const useApiStore = create((set) => ({
   fetchProfile,
   createUser,
   updateUser,
-
+  departmentUser,
   deleteUser,
   loginUser,
+  updateProfile,
 
   // modules
 
@@ -69,7 +72,7 @@ export const useApiStore = create((set) => ({
   getUserModules,
   updateUserModule,
   // Unibox tickets
-  fetchUniboxTickets,
+  fetchSingleTicket,
   fetchUniboxTicketById,
   createUniboxTicket,
   updateUniboxTicket,
@@ -90,6 +93,7 @@ export const useApiStore = create((set) => ({
 
   // admin proile
   fetchAdminProfile,
+  getAllTickets,
 
   // company profile
   fetchCompanyProfile,

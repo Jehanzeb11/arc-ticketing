@@ -8,6 +8,9 @@ export const API_ENDPOINTS = {
 
   USER_MODULES: (type) => `/usermodules/multi-purpose${type}`,
 
+  // tickets
+  TICKETS: `/ticket/multi-purpose`,
+
   // Unibox tickets
   UNIBOX_TICKETS: "/unibox_tickets",
   UNIBOX_TICKET_BY_ID: (id) => `/unibox_tickets/${id}`,
@@ -21,7 +24,7 @@ export const API_ENDPOINTS = {
   ROLE_BY_ID: (id) => `/roles/multi-purpose/${id}`,
 
   // admin profile
-  ADMIN_PROFILE: "roles/multi-purpose",
+  ADMIN_PROFILE: "auth/me",
 
   // company profile
   COMPANY_PROFILE: "/company_profile",

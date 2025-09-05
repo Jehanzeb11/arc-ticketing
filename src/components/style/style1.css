@@ -1,26 +1,34 @@
 :root {
   --navbg-color: var(--faafa, linear-gradient(90deg, #32abb1 0%, #3286bd 100%));
 }
+
 ::-webkit-scrollbar {
   border-radius: 100px;
   width: 8px;
   display: none;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: var(--pri-color); /* Thumb color */
+  background: var(--pri-color);
+  /* Thumb color */
   border-radius: 100px;
 }
+
 ::-webkit-scrollbar-track {
-  background-color: rgba(237, 237, 237, 0.712); /* Track color */
+  background-color: rgba(237, 237, 237, 0.712);
+  /* Track color */
 }
+
 button {
   background: none;
   border: none;
   cursor: pointer;
 }
+
 .pri-border .form-control {
   border: 1px solid var(--border-color);
 }
+
 .table-parent {
   border-radius: 10px;
   background: var(--bg-table);
@@ -32,11 +40,13 @@ button {
   border: 1px solid var(--Gradient, #32abb1);
   background: #fff;
 }
+
 .table-filter-select .MuiInputBase-input {
   padding: 11px 18px;
   font-size: 15px;
   font-weight: 500;
 }
+
 .action-icon {
   display: inline-flex;
   border: none;
@@ -49,6 +59,7 @@ button {
   cursor: pointer;
   margin: 0 3px;
 }
+
 .user-status {
   border-radius: 18.374px;
   background: #e8f6f6;
@@ -63,6 +74,7 @@ button {
   font-weight: 500;
   position: relative;
 }
+
 .user-status .dot {
   background: var(--pri-color);
   width: 7px;
@@ -71,6 +83,7 @@ button {
   display: inline-block;
   margin-right: 10px;
 }
+
 .MuiAutocomplete-popper,
 .MuiMenu-paper {
   border-radius: 10px;
@@ -79,42 +92,52 @@ button {
   margin-top: 8px;
   z-index: 99999 !important;
 }
+
 .MuiAutocomplete-popper .Mui-selected {
   background-color: #32aab121 !important;
 }
+
 .MuiAutocomplete-input {
   padding: 15px !important;
   color: #000000;
-  border-radius: 10px;
+  border-radius: 20px;
 }
+
 .MuiAutocomplete-input:focus {
   border: 1px solid var(--border-color);
 }
+
 .my-select .MuiAutocomplete-popupIndicator {
   background: url(/select-arrow.svg) center center no-repeat;
 }
+
 .my-select .MuiAutocomplete-popupIndicator svg {
   opacity: 0;
 }
+
 .MuiSvgIcon-root.MuiSelect-icon path {
   opacity: 0;
 }
+
 .MuiSelect-outlined {
   padding: 14px !important;
   border-radius: 10px;
   background-color: #fafafa;
 }
+
 .MuiAutocomplete-inputRoot {
   background: #cecece15;
   border-radius: 10px !important;
   padding: 0 !important;
   /* overflow: hidden; */
-  border: 1px SOLID #00000015;
+  /* border: 1px SOLID #00000015; */
 }
+
 label {
   color: #00000060;
   font-size: 16px !important;
 }
+
 /* .bg-gray .form-control {
   background: #FAFAFA;
 } */
@@ -125,37 +148,46 @@ label {
   padding: 33px 28px;
   margin-top: 30px;
 }
+
 .profile-form .form-control {
   border: none !important;
   padding: 20px 35px !important;
   background: #fff !important;
   border: none !important;
 }
+
 .profile-form .MuiAutocomplete-inputRoot {
   border: 1px solid var(--border-color);
 }
+
 .avatar-container {
   width: 366px;
   height: 310px;
 }
+
 .avatar-container img {
   max-width: 100%;
   height: auto;
 }
+
 .password-requirements {
   margin-top: 70px;
 }
+
 .password-requirements li {
   line-height: 42px;
   color: #404040;
 }
+
 .password-requirements ul {
   padding-left: 28px;
 }
+
 .password-requirements h3 {
   margin-top: 0;
   font-weight: 600;
 }
+
 /* profile */
 /* company page */
 form.company-form {
@@ -164,15 +196,22 @@ form.company-form {
   padding: 30px 40px 50px 40px;
   margin-top: 40px;
 }
+
 /* company page */
 /* table */
 .autocomplete-select .MuiAutocomplete-input {
   width: auto !important;
   border: 1px solid var(--border-color);
 }
+
 .table-dropdown-select .autocomplete-select .form-select {
   margin: 0 !important;
 }
+
+.css-1tlcqt-MuiAutocomplete-root .MuiOutlinedInput-root {
+  border-radius: 30px !important;
+}
+
 /* table */
 
 /* dashboard popups */
@@ -228,6 +267,7 @@ form.company-form {
   /* width: 460px;
   height: 740px; */
 }
+
 .Dashboard-tabs-container .tab-content-child {
   border-radius: 11px;
   overflow: hidden;
@@ -252,11 +292,9 @@ form.company-form {
   padding: 25px;
   margin-bottom: 20px;
   height: 83px;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.3) 0%,
-    rgba(50, 134, 189, 0.3) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(50, 134, 189, 0.3) 100%);
 }
 
 .dialer-header-icon {
@@ -288,11 +326,13 @@ form.company-form {
   /* height: 620px; */
   overflow-y: auto;
 }
+
 .dialer-header-text {
   font-size: 13px !important;
   font-weight: 400;
   color: white;
 }
+
 .country-code-selector fieldset {
   border: none;
 }
@@ -305,6 +345,7 @@ form.company-form {
   border-bottom: 1px solid lightgray;
   padding-bottom: 10px;
 }
+
 .country-code-selector .country-item {
   gap: 60px;
   position: relative;
@@ -313,6 +354,7 @@ form.company-form {
 .country-code-selector .MuiSvgIcon-root.MuiSelect-icon {
   left: 40px;
 }
+
 /* .country-code-selector .country-item::after {
   height: 49px;
   width: 1px;
@@ -321,34 +363,32 @@ form.company-form {
   position: absolute;
   right: 32px;
 } */
-.country-code-selector
-  .react-international-phone-input-container
-  .react-international-phone-input {
+.country-code-selector .react-international-phone-input-container .react-international-phone-input {
   border: none;
   font-size: 18px;
   font-weight: 300;
   /* 150% */
 }
 
-.country-code-selector
-  .react-international-phone-input-container
-  .react-international-phone-country-selector-button {
+.country-code-selector .react-international-phone-input-container .react-international-phone-country-selector-button {
   border: none;
 }
 
-.country-code-selector
-  .react-international-phone-country-selector-button__dropdown-arrow {
+.country-code-selector .react-international-phone-country-selector-button__dropdown-arrow {
   border: none;
   background: url(/country-code-arrow.svg) center center no-repeat;
   width: 23px;
   height: 8px;
 }
+
 .select-country .MuiInputBase-input {
   padding-right: 0 !important;
 }
+
 .dialer-flag {
   margin-right: 5px;
 }
+
 .country-code-selector .number-input {
   height: auto;
   margin-bottom: 1px;
@@ -361,10 +401,12 @@ form.company-form {
   padding: 0;
   display: block;
 }
+
 .dialer-call-status {
   text-align: center;
   margin-bottom: 10px;
 }
+
 .dialer-container .digit {
   display: flex;
   align-items: center;
@@ -387,6 +429,7 @@ form.company-form {
   width: 100%;
   grid-gap: 0;
 }
+
 .dialer-container .call-controls {
   display: flex;
   justify-content: center;
@@ -396,6 +439,7 @@ form.company-form {
 .dialer-container .call-start-end {
   width: 100%;
 }
+
 .dialer-container .digit:hover:not(:disabled) {
   background-color: #f0f0f0;
   border-radius: 5px;
@@ -413,6 +457,7 @@ form.company-form {
   font-size: 14px;
   font-weight: 400;
 }
+
 .dialer-container .dialer-clear-button {
   cursor: pointer;
   background: var(--linear-color2);
@@ -424,9 +469,11 @@ form.company-form {
   align-items: center;
   justify-content: center;
 }
+
 .country-code-selector .number-input input::placeholder {
   color: gray;
 }
+
 /* .dialer-keypad-main {
   border-radius: 12px;
   border: 1px solid var(--Gradient, #32abb1);
@@ -453,9 +500,11 @@ form.company-form {
   gap: 3px;
   padding: 17px 0;
 }
+
 .dialer-keypad-row:last-child .dialer-key {
   border-bottom: transparent;
 }
+
 .dialer-key-number {
   text-align: center;
   font-size: 25px;
@@ -482,25 +531,24 @@ form.company-form {
 .btn-primary.dialer-call-button {
   width: 100%;
   border-radius: 100px;
-  background: var(
-    --Gradient,
-    linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%)
-  );
+  background: var(--Gradient,
+      linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%));
   position: relative;
   padding: 9px;
   font-size: 18px;
 }
+
 .btn-primary.dialer-call-button:hover {
-  background: var(
-    --Gradient,
-    linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%)
-  );
+  background: var(--Gradient,
+      linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%));
   color: white;
 }
+
 .btn-primary.dialer-call-button img {
   width: 18px;
   margin-right: 5px;
 }
+
 .btn-primary.dialer-call-button .dialer-call-icon {
   /* width: 30px;
     height: 30px; */
@@ -508,6 +556,7 @@ form.company-form {
   left: 10px;
   top: 10px;
 }
+
 .dialer-header h3 {
   color: #183c58;
   font-size: 24px;
@@ -532,17 +581,19 @@ form.company-form {
 .dialer-input-area fieldset {
   border: none;
 }
+
 .dialer-input-area .dialer-call-from {
   color: #111111;
   font-size: 14px;
   width: 74px;
   margin: 0;
 }
-.dialer-input-area
-  .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
+
+.dialer-input-area .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
   padding: 10px 7px !important;
   font-size: 12px;
 }
+
 .dialer-dropdown-button {
   background: none;
   border: none;
@@ -550,6 +601,7 @@ form.company-form {
   color: #00aaff;
   cursor: pointer;
 }
+
 .dialer-dropdown-button svg {
   width: 25px;
   height: 25px;
@@ -568,20 +620,24 @@ form.company-form {
   position: relative;
   z-index: 99999;
 }
+
 .dialer-header.second .dialer-header-icon {
   background: transparent;
   height: auto;
   width: auto;
   padding: 0;
 }
+
 .dialer-header.second h3 {
   color: white;
   font-size: 20px;
 }
+
 .outbound-call-content {
   position: relative;
   z-index: 9999;
 }
+
 .outbound-call-content::before {
   content: "";
   background: url(/dashboardPopups/OutboundCall/bg1.svg);
@@ -594,6 +650,7 @@ form.company-form {
   width: 650px;
   z-index: -21;
 }
+
 .outbound-call-content::after {
   content: "";
   background: url(/dashboardPopups/OutboundCall/bg2.svg);
@@ -621,21 +678,22 @@ form.company-form {
 
 .outbound-call-container .call-status {
   border-radius: 100px;
-  background: var(
-    --Gradient,
-    linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%)
-  );
+  background: var(--Gradient,
+      linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%));
   width: 168px;
   padding: 6px 10px;
   color: white;
   margin: 30px auto 40px auto;
 }
+
 .outbound-call-container .call-status p {
   font-size: 15px;
 }
+
 .outbound-call-container.active-calls .call-status {
   margin: 15px auto;
 }
+
 .outbound-call-container .call-running-time {
   color: #45ffc3;
   font-size: 14px;
@@ -652,6 +710,7 @@ form.company-form {
   margin-right: 8px;
   margin-top: 3px;
 }
+
 /* outbound-call */
 
 /* calling */
@@ -664,6 +723,7 @@ form.company-form {
   position: relative;
   bottom: 50px;
 }
+
 .calling-profile-pic img {
   width: 138px;
   height: 138px;
@@ -673,6 +733,7 @@ form.company-form {
   text-align: center;
   margin-top: 20px;
 }
+
 button.calling-end-call-button {
   display: flex;
   align-items: center;
@@ -688,6 +749,7 @@ button.calling-end-call-button {
   line-height: 30px;
   margin-top: 20px;
 }
+
 button.calling-end-call-button img {
   width: 51px;
   height: 51px;
@@ -731,6 +793,7 @@ button.calling-end-call-button img {
   height: auto;
   max-width: 100%;
 }
+
 .calling-control-button span {
   color: var(--gray-700, #374151);
   font-size: 14px;
@@ -763,6 +826,7 @@ button.calling-end-call-button img {
   line-height: 25px;
   margin-top: 10px;
 }
+
 .calling-content p {
   font-size: 19px;
   line-height: 30px;
@@ -797,15 +861,14 @@ button.calling-end-call-button img {
   background: white;
   color: var(--pri-color);
 }
+
 /* poppus */
 .popup-overlay {
   content: "";
   border-radius: 15px;
   opacity: 0.4;
-  background: var(
-    --Gradient,
-    linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%)
-  );
+  background: var(--Gradient,
+      linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%));
   position: absolute;
   height: 100%;
   width: 100%;
@@ -813,6 +876,7 @@ button.calling-end-call-button img {
   top: 0;
   z-index: 99999;
 }
+
 .calling-popup {
   position: absolute;
   top: 50%;
@@ -826,6 +890,7 @@ button.calling-end-call-button img {
   z-index: 999999;
   width: 330px;
 }
+
 .calling-popup h5 {
   color: #000;
   font-size: 18px;
@@ -834,6 +899,7 @@ button.calling-end-call-button img {
   margin-bottom: 16px;
   margin-top: 0;
 }
+
 .speaker-popup-radio-btn {
   display: flex;
   padding: 15px 20px;
@@ -847,39 +913,44 @@ button.calling-end-call-button img {
   margin-bottom: 15px;
   cursor: pointer;
 }
+
 .speaker-popup-radio-btn label {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 }
+
 .speaker-popup-radio-btn label .MuiRadio-root {
   color: var(--Gradient, #32abb1) !important;
 }
+
 button.calling-popup-btn {
   width: 164px;
   height: 54px;
   border-radius: 100px;
-  background: var(
-    --Gradient,
-    linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%)
-  );
+  background: var(--Gradient,
+      linear-gradient(273deg, #32abb1 0.11%, #3286bd 92.74%));
   color: #fff;
   font-size: 18px;
   font-weight: 600;
 }
+
 .calling-popup .country-select {
   width: 380px;
 }
+
 .calling-popup-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0px 30px;
 }
+
 .calling-popup-header h5 {
   margin-bottom: 0px;
 }
+
 .calling-popup-header button {
   background-color: transparent;
   border: none;
@@ -892,6 +963,7 @@ button.calling-popup-btn {
   justify-content: center;
   align-items: center;
 }
+
 /* .popup-overlay.speaker {
   top: -51px;
 } */
@@ -902,12 +974,14 @@ button.calling-popup-btn {
 .agent-list-container {
   padding: 0px 20px;
 }
+
 .agents-list {
   height: 416px;
 
   overflow-y: auto;
   padding-right: 8px !important;
 }
+
 .search-field {
   border: 1px solid #d6d6d6 !important;
   background: #fff;
@@ -917,17 +991,20 @@ button.calling-popup-btn {
 .search-field .MuiOutlinedInput-input {
   padding: 12px 10px 12px 0px;
 }
+
 .agent-list-container .filter-chips {
   padding: 15px 0 !important;
   border-bottom: 1px solid lightgray;
   margin-bottom: 10px;
 }
+
 .agent-list-container .filter-chips .MuiChip-filled {
   width: 33%;
   padding: 21px 0;
   cursor: pointer;
   border-radius: 50px;
 }
+
 .agent-list-container .filter-chips .MuiChip-filled .MuiChip-label {
   display: flex;
   align-items: center;
@@ -955,12 +1032,15 @@ button.calling-popup-btn {
   font-size: 13px;
   color: #000;
 }
+
 .chat-container .chat-messages {
   height: 498px;
 }
+
 .chat-container .chat-messages::-webkit-scrollbar {
   width: 0px;
 }
+
 .chat-container .chat-input {
   display: flex;
   align-items: center;
@@ -975,6 +1055,7 @@ button.calling-popup-btn {
 .chat-container .chat-input .MuiOutlinedInput-input {
   padding: 10px;
 }
+
 /* messanger */
 /* transfer call */
 .transfer-tabs {
@@ -984,11 +1065,13 @@ button.calling-popup-btn {
   box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.05);
   margin: 0 23px;
 }
+
 .transfer-call-footer {
   position: absolute;
   bottom: 20px;
   width: 100%;
 }
+
 .transfer-tabs .MuiTabs-list {
   justify-content: space-between;
   padding: 0 20px;
@@ -1009,6 +1092,7 @@ button.calling-popup-btn {
   -webkit-text-fill-color: transparent;
   font-weight: 700;
 }
+
 .transfer-tabs .MuiTab-textColorPrimary.Mui-selected::before {
   content: "";
   height: 2px;
@@ -1017,6 +1101,7 @@ button.calling-popup-btn {
   background: var(--Gradient, linear-gradient(90deg, #32abb1 0%, #3286bd 100%));
   bottom: 8px;
 }
+
 .external-transfer {
   border-radius: 15px;
   border: 1px solid var(--Gradient, #32abb1);
@@ -1028,10 +1113,12 @@ button.calling-popup-btn {
   font-size: 20px;
   font-weight: 700;
 }
+
 .transfer-search-field {
   border-radius: 100px !important;
   border: 0.5px solid var(--new, #32abb1) !important;
 }
+
 .transfer-search-field:focus {
   border: 2px solid var(--new, #32abb1) !important;
 }
@@ -1049,11 +1136,13 @@ button.calling-popup-btn {
   margin-right: 0 !important;
   padding-left: 20px;
 }
+
 .transfer-input .form-control {
   border-radius: 100px;
   border: 0.5px solid var(--new, #32abb1);
   background: #fff;
 }
+
 /* transfer call */
 
 /* unibox ticket */
@@ -1065,49 +1154,61 @@ button.calling-popup-btn {
   background: #eafdfe;
   color: var(--pri-color);
 }
+
 .table-parent.unibox-table {
   border-radius: 10px;
   filter: drop-shadow(0px 16.88px 59.079px rgba(86, 89, 146, 0.1));
   background: var(--bg-table);
   padding: 0px 10px 10px 10px;
 }
+
 /* .table-parent.unibox-table table {
   margin-left: 6px !important;
 } */
 .my-modal .my-modal-content {
   overflow: hidden;
 }
+
 .my-modal.create-ticket-modal .modal-body {
   /* height: 80vh; */
   overflow-y: auto;
 }
+
 .my-modal.archive-modal .my-modal-content {
   width: 530px;
 }
+
 .my-modal.create-ticket-modal .my-modal-content {
   width: 750px;
 }
+
 .my-modal.create-ticket-modal .modal-body {
   padding: 22px 40px 40px;
 }
+
 .MuiAutocomplete-input {
   cursor: pointer;
   font-size: 14px !important;
 }
+
 .my-select .autocomplete-select .MuiAutocomplete-input {
   color: #797979;
 }
+
 .my-select.pri-border .autocomplete-select .MuiAutocomplete-input {
   border: 1px solid var(--pri-color) !important;
   padding: 10px !important;
 }
+
 .my-select.br-transparent .autocomplete-select .MuiAutocomplete-input {
   border-radius: 30px;
   border: transparent;
 }
+
 .my-select.br-transparent .autocomplete-select .MuiAutocomplete-input:focus {
   border: 1px solid var(--border-color);
 }
+
 /* unibox ticket */
 .MuiPopover-root {
   z-index: 99999 !important;
@@ -1124,6 +1225,7 @@ button.calling-popup-btn {
   overflow-x: auto !important;
   box-shadow: 0 2px 10px 0 var(--pri-color);
 }
+
 .custom-autocomplete-popper::-webkit-scrollbar {
   width: 7px;
   height: 7px;
@@ -1138,6 +1240,7 @@ button.calling-popup-btn {
   box-shadow: none;
   /* width: fit-content; */
 }
+
 .table-dropdown-select .MuiAutocomplete-input {
   color: #797979;
 }
@@ -1147,8 +1250,7 @@ button.calling-popup-btn {
   /* background: none !important; */
 }
 
-.custom-autocomplete-popper
-  li.MuiAutocomplete-option[aria-selected="true"]:first-child {
+.custom-autocomplete-popper li.MuiAutocomplete-option[aria-selected="true"]:first-child {
   background: var(--pri-light-color) !important;
   border-radius: 5px;
   color: var(--pri-color);
@@ -1161,6 +1263,7 @@ button.calling-popup-btn {
 .type-filter ul li {
   border-bottom: 1px solid #e4e4e7;
 }
+
 .status-filter ul li[aria-selected="true"],
 .department-filter ul li[aria-selected="true"],
 .assignee-filter ul li[aria-selected="true"],
@@ -1169,6 +1272,7 @@ button.calling-popup-btn {
   border-radius: 5px;
   color: #32abb1;
 }
+
 .status-filter ul li:first-child::before {
   display: none;
 }
@@ -1181,100 +1285,125 @@ button.calling-popup-btn {
   border-radius: 50%;
   margin-right: 10px;
 }
+
 .status-filter ul li:nth-child(2) {
   color: #f65160;
 }
+
 .status-filter ul li:nth-child(2)::before {
   background: #f65160;
 }
+
 .status-filter ul li:nth-child(3) {
   color: #c26616;
 }
+
 .status-filter ul li:nth-child(3)::before {
   background: #c26616;
 }
+
 .status-filter ul li:nth-child(4) {
   color: #32aab1;
 }
+
 .status-filter ul li:nth-child(4)::before {
   background: #32aab1;
 }
+
 .status-filter ul li:nth-child(5) {
   color: #afafaf;
 }
+
 .status-filter ul li:nth-child(5)::before {
   background: #afafaf;
 }
+
 .status-filter ul li[aria-selected="true"]:nth-child(2) {
   background: #f6515f54 !important;
   color: #f65160;
   border-bottom: unset;
 }
+
 .status-filter ul li[aria-selected="true"]:nth-child(3) {
   background: #c266163f !important;
   color: #c26616;
   border-bottom: unset;
 }
+
 .status-filter ul li[aria-selected="true"]:nth-child(4) {
   background: #32abb134 !important;
   color: #32aab1;
   border-bottom: unset;
 }
+
 .status-filter ul li[aria-selected="true"]:nth-child(5) {
   background: #f4f4f4 !important;
   color: #afafaf;
   border-bottom: unset;
 }
+
 .status-filter ul li[aria-selected="true"]:nth-child(5) {
   background: #f4f4f4 !important;
   color: #afafaf;
   border-bottom: unset;
 }
+
 /* status-filter */
 /* priority-filter */
 
 .priority-filter ul {
   overflow: hidden;
 }
+
 .priority-filter ul li {
   margin-bottom: 5px;
   justify-content: center !important;
 }
+
 .priority-filter ul li:nth-child(2).Mui-focused {
   background: #e7e6e6 !important;
 }
+
 .priority-filter ul li:nth-child(2)[aria-selected="true"] {
   background: #e1dddd !important;
 }
+
 .priority-filter ul li:nth-child(2) {
   background: #f4f4f4;
   border-radius: 5px;
   color: #888888;
 }
+
 .priority-filter ul li:nth-child(3).Mui-focused,
 .priority-filter ul li:nth-child(3)[aria-selected="true"] {
   background: #efc12c57 !important;
 }
+
 .priority-filter ul li:nth-child(3) {
   background: #fff7e4;
   border-radius: 5px;
   color: #d39503;
 }
+
 .priority-filter ul li:nth-child(4).Mui-focused,
 .priority-filter ul li:nth-child(4)[aria-selected="true"] {
   background: #32b0c440 !important;
 }
+
 .priority-filter ul li:nth-child(4) {
   background: #e0f2f3;
   border-radius: 5px;
   color: #32aab1;
 }
+
 .priority-filter ul li:nth-child(5).Mui-focused {
   background: #e4362926 !important;
 }
+
 .priority-filter ul li:nth-child(5)[aria-selected="true"] {
   background: #e436294f !important;
 }
+
 .priority-filter ul li:nth-child(5) {
   background: #fbe1df;
   border-radius: 5px;
@@ -1286,6 +1415,7 @@ button.calling-popup-btn {
 .department-filter ul li {
   border-bottom: 1px solid #e4e4e7;
 }
+
 /* department-filter */
 
 .table-dropdown-select.view .autocomplete-select .MuiAutocomplete-input {
@@ -1293,12 +1423,14 @@ button.calling-popup-btn {
   background: white;
   padding: 12px !important;
 }
+
 .ticket-button.MuiBox-root button {
   height: 47px;
   font-size: 16px;
   padding-block: 0px !important;
   padding-inline: 20px;
 }
+
 /* new */
 
 /* new2 */
@@ -1306,9 +1438,11 @@ button.calling-popup-btn {
   background: var(--Gradient, linear-gradient(90deg, #32abb1 0%, #3286bd 100%));
   filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.05));
 }
+
 .icon-btn:hover {
   background: var(--Gradient, linear-gradient(90deg, #32abb1 0%, #3286bd 50%));
 }
+
 .drop-call-menu .MuiMenu-paper {
   border-radius: 15px;
   background: #fff;
@@ -1318,13 +1452,16 @@ button.calling-popup-btn {
   padding: 0;
   margin-left: -110px;
 }
+
 .drop-call-menu .MuiMenu-paper ul {
   padding: 7px !important;
 }
+
 .conference-end-call:hover {
   background: #ff0000c4 !important;
   color: white !important;
 }
+
 .conference-grid {
   border-radius: 15px;
   background: #f4f7ff;
@@ -1339,18 +1476,22 @@ button.calling-popup-btn {
 .conference-grid .transfer-search-field input {
   padding: 10px !important;
 }
+
 .conference-add-team-popper {
   border-radius: 15px;
   background: #fff;
   padding: 10px;
   z-index: 999999;
 }
+
 .transfer-search-field.add-team {
   background-color: white;
 }
+
 .transfer-search-field.add-team input {
   padding: 12px;
 }
+
 .dialer-select input {
   padding: 5px !important;
 }
@@ -1368,18 +1509,22 @@ button.calling-popup-btn {
   min-height: 40px !important;
   line-height: 1;
 }
+
 .coversation-tabs .MuiTab-root.Mui-selected {
   border-color: #5ecacf;
   background: rgba(234, 255, 255, 1);
   color: var(--pri-color);
 }
+
 .conversation-list {
   height: 85%;
   overflow-y: auto;
 }
+
 .conversation-list::-webkit-scrollbar {
   width: 0px;
 }
+
 /* conversation page */
 
 /* new date picker  */
@@ -1395,6 +1540,7 @@ button.calling-popup-btn {
 .MuiMultiSectionDigitalClockSection-item:hover {
   background: #32aab159 !important;
 }
+
 .MuiPickersLayout-actionBar button {
   color: var(--pri-color);
 }
@@ -1407,28 +1553,33 @@ button.calling-popup-btn {
   overflow: hidden;
   padding: 6px;
 }
+
 /* new date picker  */
 
 /* contact modal */
 .delete-modal.delete-modal-contacts .my-modal-content {
   width: 490px !important;
 }
+
 /* contact modal */
 .react-flow__node {
   visibility: visible !important;
 }
+
 .checkbox-item-call-barring {
   border: 1px solid var(--pri-color);
   border-radius: 30px;
   padding: 6px 24px;
   display: inline-flex !important;
 }
+
 /* call-history */
 .call-activity-modal .input-parent label {
   font-size: 15px;
   color: #404040;
   margin-bottom: -1px;
 }
+
 /* recording and transcription */
 .volume-control .MuiSlider-track {
   border-radius: 100px;
@@ -1463,12 +1614,14 @@ button.calling-popup-btn {
   left: 50%;
   transform: translateX(-50%);
 }
+
 .call-details .text-box {
   border-radius: 10px;
   background: #fafafa;
   padding: 15px;
   font-size: 15px;
 }
+
 .media-player-menu .MuiPaper-elevation {
   box-shadow: none;
   border: 1px solid var(--border-color);
@@ -1489,11 +1642,13 @@ button.calling-popup-btn {
 .media-player-menu .MuiPaper-elevation .MuiSlider-root {
   width: 92px;
 }
+
 /* recording and transcription */
 /* graphs */
 .dashbaord-table-graph .dialer-header-text {
   color: #183c58ad;
 }
+
 .dashbaord-table-graph .dialer-header h3 {
   font-size: 16px;
 }
@@ -1502,6 +1657,7 @@ button.calling-popup-btn {
 .md-modal .my-modal-content.MuiBox-root {
   width: 620px;
 }
+
 .md-modal .modal-body {
   padding: 40px 50px !important;
 }
@@ -1515,6 +1671,7 @@ button.calling-popup-btn {
 .md-modal-btns .btn {
   width: 169px;
 }
+
 /* call-history */
 
 .ticket-table-dropdown li {
@@ -1524,6 +1681,7 @@ button.calling-popup-btn {
 .ticket-table-dropdown ul {
   padding: 0;
 }
+
 @media (max-width: 767px) {
   .avatar-container img {
     margin-top: 20px;

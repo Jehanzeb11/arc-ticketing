@@ -29,6 +29,7 @@ import createModalIcon from "@/assets/icons/unibox/ticket/create-modal.svg";
 import unarchiveIcon from "@/assets/icons/unibox/ticket/listpage/unarchive.svg";
 import AssigneeIcon from "@/assets/icons/unibox/ticket/unibox-ticket-assignee-img.svg";
 import deleteIcon from "@/assets/icons/deleteicon-agents.svg";
+import restoreIcon from "@/assets/images/tickets/restore.png";
 import deleteModalDeleteIcon from "@/assets/icons/users/delete-icon-2.png";
 import DeleteModalIcon from "@/assets/icons/modal/deleteModalIcon2.svg";
 
@@ -43,7 +44,7 @@ import DashboardHeader from "../../DashboardHeader";
 import TicketsCards from "./TicketsCards";
 import toast from "react-hot-toast";
 
-export default function UniBoxTickets() {
+export default function DeletedUniBoxTickets() {
   const {
     callApi,
     fetchUniboxTickets,
@@ -76,7 +77,7 @@ export default function UniBoxTickets() {
   } = useQuery({
     queryKey: ["uniboxTickets"],
     queryFn: () =>
-      callApi(getAllTickets, { requestType: "getTicketList", type: "archive" }),
+      callApi(getAllTickets, { requestType: "getTicketList", type: "deleted" }),
   });
 
   const { data: departments } = useQuery({
@@ -195,7 +196,7 @@ export default function UniBoxTickets() {
     updateTicketMutation.mutate({ ticketId, field, value });
   };
   const handleFieldDelete = (ticketId: string, value: any) => {
-    deleteTicketMutation.mutate({ ticketId, action: "delete", user: value });
+    deleteTicketMutation.mutate({ ticketId, action: "restore", user: value });
   };
 
   const sx = {
@@ -337,27 +338,27 @@ export default function UniBoxTickets() {
     }
   };
   const actions = [
+    // {
+    //   className: "action-icon",
+    //   icon2: (row: any) => {
+    //     return archivedTickets.includes(row.id) ? unarchiveIcon : archiveIcon;
+    //   },
+    //   onClick: (row: any) => {
+    //     if (row && row.id) {
+    //       setSelectedTicket(row);
+    //       setArchiveModal(true);
+    //     } else {
+    //       console.error("Invalid row or missing id:", row);
+    //     }
+    //   },
+    //   tooltip: (row: any) =>
+    //     archivedTickets.includes(row.id)
+    //       ? "Unarchive Ticket"
+    //       : "Archive Ticket",
+    // },
     {
       className: "action-icon",
-      icon2: (row: any) => {
-        return archivedTickets.includes(row.id) ? unarchiveIcon : archiveIcon;
-      },
-      onClick: (row: any) => {
-        if (row && row.id) {
-          setSelectedTicket(row);
-          setArchiveModal(true);
-        } else {
-          console.error("Invalid row or missing id:", row);
-        }
-      },
-      tooltip: (row: any) =>
-        archivedTickets.includes(row.id)
-          ? "Unarchive Ticket"
-          : "Archive Ticket",
-    },
-    {
-      className: "action-icon",
-      icon: deleteIcon,
+      icon: restoreIcon,
       onClick: (row: any) => {
         if (row && row.id) {
           setSelectedTicket(row);
@@ -482,11 +483,11 @@ export default function UniBoxTickets() {
   return (
     <div>
       <DashboardHeader
-        title="Archived Tickets"
-        text="Manage archived customer support tickets"
+        title="Tickets"
+        text="Manege customer support tickets with real-time KPIs"
       />
       <TicketHeader
-        archive={true}
+        isdelete={true}
         handleSearch={handleSearch}
         searchQuery={searchQuery}
       />

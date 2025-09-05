@@ -26,6 +26,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
 import EditUser from "@/components/common/Form/all-users/EditUser";
 import AddNewEntryAssignmentModule from "@/components/common/Form/modules/AddNew";
+import { imageUrl } from "@/lib/constants/variables";
 
 const AllUsers = () => {
   const queryClient = useQueryClient();
@@ -78,11 +79,7 @@ const AllUsers = () => {
             }}
           >
             <Image
-              src={
-                user.picture
-                  ? "http://192.168.10.40:5050/uploads/profile/" + user.picture
-                  : AssigneeIcon
-              }
+              src={user.picture ? imageUrl + user.picture : AssigneeIcon}
               alt="Assignee"
               width={45}
               height={45}

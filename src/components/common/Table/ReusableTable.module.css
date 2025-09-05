@@ -18,9 +18,11 @@
   width: 99%;
   margin-left: 0.8%;
 }
+
 .table tr:hover td {
   background: #f5f8fb !important;
 }
+
 .table thead tr {
   height: 57px !important;
   border-radius: 15px !important;
@@ -29,13 +31,16 @@
   /* background: var(--pri-light-color) !important; */
   background: rgba(63, 140, 255, 0.1) !important;
 }
+
 .table thead tr th {
   text-align: start;
-  padding: 0px 20px;
+  padding: 0px 5px;
 }
+
 .table thead tr th span {
   font-size: 13px !important;
 }
+
 .table tr {
   height: 74px;
   border-bottom: 1px solid #c1dbeb !important;
@@ -47,7 +52,7 @@
   font-weight: 300;
   line-height: 20px;
   text-transform: capitalize;
-  padding: 0px 20px;
+  padding: 0px 10px;
 }
 
 .sortable {
@@ -62,6 +67,7 @@
   align-items: center;
   margin-bottom: 20px;
 }
+
 .filterInput {
   border: 1px solid var(--border-color);
   background: #fff;
@@ -70,13 +76,16 @@
   font-size: 15px;
   font-weight: 400;
 }
+
 .filterInput:focus {
   outline: none;
   border-color: var(--pri-color);
 }
+
 .filterInput::placeholder {
   color: #b2b2b2;
 }
+
 /* .actionBtn {
   display: flex;
   align-items: center;
@@ -109,12 +118,14 @@
   font-size: 16px;
   font-weight: 400;
 }
+
 .paginationArrow {
   background-color: transparent;
   border: none;
   color: var(--pri-color);
   cursor: pointer;
 }
+
 .paginationArrow:disabled {
   color: #ccc;
   cursor: not-allowed;

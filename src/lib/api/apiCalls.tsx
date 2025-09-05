@@ -29,7 +29,10 @@ export const createUser = (data) =>
   postbackend(`${API_ENDPOINTS.USERS(data?.get("requestType"))}`, data);
 export const updateUser = (data) =>
   postbackend(`${API_ENDPOINTS.USERS(data?.get("requestType"))}`, data);
-export const updateProfile = (data) => postbackend(API_ENDPOINTS.PROFILE, data);
+export const departmentUser = (data) =>
+  postbackend(`${API_ENDPOINTS.USERS(data?.requestType)}`, data);
+export const updateProfile = (data) =>
+  postbackend(API_ENDPOINTS.USERS(data?.requestType), data);
 
 // USER_MODULES
 export const createModules = (data) =>
@@ -50,16 +53,19 @@ export const updateUserModule = (data) =>
 export const deleteUser = (data) =>
   postbackend(API_ENDPOINTS.USERS(data?.requestType), data);
 
-export const loginUser = (data) => postlocal(API_ENDPOINTS.LOGIN, data);
-
 // unibox_tickets
-export const fetchUniboxTickets = () => getlocal(API_ENDPOINTS.UNIBOX_TICKETS);
+export const fetchSingleTicket = (data) =>
+  postbackend(API_ENDPOINTS.TICKETS, data);
 export const fetchUniboxTicketById = (id) =>
   getlocal(API_ENDPOINTS.UNIBOX_TICKET_BY_ID(id));
 export const createUniboxTicket = (data) =>
-  postlocal(API_ENDPOINTS.UNIBOX_TICKETS, data);
-export const updateUniboxTicket = (id, data) =>
-  patchlocal(API_ENDPOINTS.UNIBOX_TICKET_BY_ID(id), data);
+  postbackend(API_ENDPOINTS.TICKETS, data);
+export const updateUniboxTicket = (data) =>
+  postbackend(API_ENDPOINTS.TICKETS, data);
+
+export const getAllTickets = (data) => postbackend(API_ENDPOINTS.TICKETS, data);
+export const loginUser = (data) => postbackend(API_ENDPOINTS.LOGIN, data);
+
 export const deleteUniboxTicket = (id) =>
   dellocal(API_ENDPOINTS.UNIBOX_TICKET_BY_ID(id));
 export const fetchArchivedTickets = () =>
@@ -93,7 +99,7 @@ export const updateRole = (data) => postbackend(API_ENDPOINTS.ROLES, data);
 export const deleteRole = (data) => postbackend(API_ENDPOINTS.ROLES, data);
 
 //  admin profile
-export const fetchAdminProfile = () => getlocal(API_ENDPOINTS.ADMIN_PROFILE);
+export const fetchAdminProfile = () => getbackend(API_ENDPOINTS.ADMIN_PROFILE);
 
 // company profile
 export const fetchCompanyProfile = () =>

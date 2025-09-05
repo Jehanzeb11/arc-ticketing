@@ -25,16 +25,23 @@ import replyIcon from "@/assets/icons/unibox/ticket/viewpage/reply.svg";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
 import toast from "react-hot-toast";
+import { v4 as uuidv4 } from "uuid";
 
 const CreateTicket = ({ closeModal }) => {
   const {
     callApi,
     createUniboxTicket,
     updateUniboxTicket,
-    fetchUniboxTickets,
+    departmentUser,
     fetchDepartments,
     fetchUsers,
-  } = useApiStore();
+  }: any = useApiStore();
+
+  const generateTicketId = () => {
+    return "TK-" + uuidv4().replace(/-/g, "").slice(-12).toUpperCase();
+    // 👉 change to numeric only if you prefer
+  };
+
   const queryClient = useQueryClient();
 
   const {
@@ -43,38 +50,62 @@ const CreateTicket = ({ closeModal }) => {
     watch,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      TicketId: generateTicketId(),
+      Department: "",
+      Name: "",
+      Assignedto: "",
+      Title: "",
+      message: "",
+      Priority: "Low",
+      Status: "Open",
+      Type: "Support",
+    },
+  });
 
   // Fetch departments and users
   const { data: departments } = useQuery({
     queryKey: ["departments"],
-    queryFn: () => callApi(fetchDepartments),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    queryFn: () =>
+      callApi(fetchDepartments, {
+        requestType: "getAllDepartments",
+      }),
   });
 
+  const selectedDepartment = watch("Department");
+
   const { data: users } = useQuery({
-    queryKey: ["users"],
-  queryFn: () => callApi(fetchUsers, {}),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    queryKey: ["users", selectedDepartment],
+    queryFn: () =>
+      callApi(departmentUser, {
+        requestType: "getAllUsersByDepartment",
+        departmentId: selectedDepartment,
+      }),
+    enabled: !!selectedDepartment,
   });
 
   const createTicketMutation = useMutation({
     mutationFn: async (ticketData: any) => {
       // Get existing tickets first
-      const existingTickets = await callApi(fetchUniboxTickets);
-      const ticketDataArray = existingTickets[0]?.ticket_data || [];
+      // const existingTickets = await callApi(fetchUniboxTickets);
+      // const ticketDataArray = existingTickets[0]?.ticket_data || [];
 
-      // Add new ticket to the array
-      const updatedTicketData = [...ticketDataArray, ticketData];
+      // // Add new ticket to the array
+      // const updatedTicketData = [...ticketDataArray, ticketData];
 
       // Update the first ticket object with new ticket_data
-      return callApi(updateUniboxTicket, existingTickets[0]?.id || "a4cd", {
-        ...existingTickets[0],
-        ticket_data: updatedTicketData,
+      return callApi(createUniboxTicket, {
+        requestType: "createTicket",
+        subject: ticketData.Title,
+        details: ticketData.Details,
+        status: ticketData.Status,
+        priority: ticketData.Priority,
+        department_id: ticketData.Department,
+        customer_name: ticketData.Name,
+        type: ticketData.Type,
+        assignee: ticketData.Assignee,
+        ticket_reference: ticketData.ticketId,
       });
     },
     onSuccess: () => {
@@ -89,8 +120,8 @@ const CreateTicket = ({ closeModal }) => {
 
   const onSubmit = (data: any) => {
     const ticketData = {
-      ticketId: "TK-" + Date.now().toString().slice(-6),
-      Requester: "Current User",
+      ticketId: data.TicketId,
+      Name: data.Name,
       Title: data.Title,
       Details: data.message,
       Status: data.Status,
@@ -108,7 +139,34 @@ const CreateTicket = ({ closeModal }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
+          <GlobalInput
+            type="text"
+            disabled
+            label="Ticket ID – Auto Gen"
+            {...register("TicketId", { required: "Ticket Id is required" })}
+            sx={{ width: "100%" }}
+          />
+          {errors.TicketId && (
+            <p style={{ color: "#B80505", margin: "0px" }}>
+              {errors.TicketId.message as any}
+            </p>
+          )}
+        </Grid>
+        <Grid size={{ xs: 6 }}>
+          <GlobalInput
+            type="text"
+            label="Requester Name"
+            {...register("Name", { required: "Name is required" })}
+            sx={{ width: "100%" }}
+          />
+          {errors.Name && (
+            <p style={{ color: "#B80505", margin: "0px" }}>
+              {errors.Name.message as any}
+            </p>
+          )}
+        </Grid>
+        <Grid size={{ xs: 6 }}>
           <GlobalInput
             type="text"
             label="Title"
@@ -121,10 +179,10 @@ const CreateTicket = ({ closeModal }) => {
             </p>
           )}
         </Grid>
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <GlobalTextarea
             label="Details"
-            rows={6}
+            rows={1}
             cols={30}
             {...register("message", { required: "Message is required" })}
           />
@@ -145,7 +203,7 @@ const CreateTicket = ({ closeModal }) => {
               { label: "Select Department", value: "" },
               ...(departments?.map((dept: any) => ({
                 label: dept.name,
-                value: dept.name,
+                value: dept.id,
               })) || []),
             ]}
             {...register("Department", { required: "Department is required" })}
@@ -230,8 +288,8 @@ const CreateTicket = ({ closeModal }) => {
             options={[
               { label: "Select Assignee", value: "" },
               ...(users?.map((user: any) => ({
-                label: user.user_name,
-                value: user.user_name,
+                label: user.full_name,
+                value: user.user_id,
               })) || []),
             ]}
             {...register("Assignedto", {

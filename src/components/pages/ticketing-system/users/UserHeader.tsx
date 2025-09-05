@@ -20,7 +20,11 @@ export default function UserHeader({ userCount, onClickModal }: any) {
           alignItems: "center",
         }}
       >
-        <Button text="Add New" onClick={onClickModal} libIcon={<AddIcon />} />
+        <Button
+          text="Add New User"
+          onClick={onClickModal}
+          libIcon={<AddIcon />}
+        />
         {/* <Button type="button" text='Add New' onClick={onClickModal} icon={AddIcon} /> */}
       </Grid>
     </Grid>

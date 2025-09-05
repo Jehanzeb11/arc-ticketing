@@ -78,7 +78,10 @@ export default function AddNewEntry() {
     {
       heading: "Ticket Management Module",
       data: [
-        { label: "View Tickets ", value: "View Tickets " },
+        { label: "All Tickets", value: "All Tickets" },
+        { label: "My Tickets", value: "My Tickets" },
+        { label: "View Tickets", value: "View Tickets" },
+        { label: "Assign Tickets", value: "Assign Tickets" },
         { label: "Search & Filter Tickets", value: "Search & Filter Tickets" },
         { label: "Create Ticket", value: "Create Ticket" },
         { label: "Reply to Ticket", value: "Reply to Ticket" },

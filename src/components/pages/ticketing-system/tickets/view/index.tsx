@@ -8,7 +8,7 @@ import { useApiStore } from "@/lib/api/apiStore";
 import { useQuery } from "@tanstack/react-query";
 import { Alert, Box, CircularProgress } from "@mui/material";
 export default function ViewUniBoxTicket({ ticketId }: any) {
-  const { callApi, fetchUniboxTickets }: any = useApiStore();
+  const { callApi, fetchSingleTicket }: any = useApiStore();
   const [searchQuery, setSearchQuery] = useState("");
   // State to manage filter values
   const [filterValues, setFilterValues] = useState({
@@ -23,9 +23,16 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["uniboxTickets", ticketId],
-    queryFn: () => callApi(fetchUniboxTickets),
+    queryKey: ["ticketDetail", ticketId],
+    queryFn: () =>
+      callApi(fetchSingleTicket, {
+        requestType: "ticketDetail",
+        ticketId: JSON.parse(ticketId.value)?.id,
+      }),
   });
+
+  console.log(ticketId, "ticketId");
+
   const activityData =
     (uniboxTickets &&
       uniboxTickets[1]?.activity_data?.map((ticket) => ({

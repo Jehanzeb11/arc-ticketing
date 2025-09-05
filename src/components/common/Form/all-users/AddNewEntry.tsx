@@ -123,7 +123,7 @@ export default function AddNewEntry({ getall, onCloseModal }: any) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
         {/* Full Name */}
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <GlobalInput
             type="text"
             label="Full Name"
@@ -137,7 +137,7 @@ export default function AddNewEntry({ getall, onCloseModal }: any) {
         </Grid>
 
         {/* Email */}
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <GlobalInput
             type="email"
             label="Email"
@@ -156,7 +156,7 @@ export default function AddNewEntry({ getall, onCloseModal }: any) {
           )}
         </Grid>
 
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <GlobalInput
             type="tel"
             label="Phone"
@@ -170,7 +170,7 @@ export default function AddNewEntry({ getall, onCloseModal }: any) {
         </Grid>
 
         {/* Password */}
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <GlobalPasswordInput
             name="password"
             label="Password"

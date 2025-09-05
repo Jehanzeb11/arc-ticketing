@@ -29,6 +29,7 @@ export default function EditUser({ getall, onCloseModal, userData }: any) {
     defaultValues: {
       fullName: userData?.full_name || "",
       email: userData?.email || "",
+      phone: userData?.phone || "",
       role: userData?.roleId || "",
       status: userData?.status || "",
       picture: userData?.picture || null,

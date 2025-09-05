@@ -17,6 +17,7 @@ import React, { act, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ExpandMore, ExpandLess } from "@mui/icons-material";
+import KeyboardArrowRightSharpIcon from "@mui/icons-material/KeyboardArrowRightSharp";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import "@/lib/i18n";
@@ -25,7 +26,7 @@ import icon2 from "@/assets/icons/navigation/icon2.svg";
 import icon3 from "@/assets/icons/navigation/icon3.svg";
 import icon4 from "@/assets/icons/navigation/icon4.svg";
 import icon5 from "@/assets/icons/navigation/icon5.svg";
-import activeicon1 from "@/assets/icons/navigation/active/icon1.svg";
+import activeicon1 from "@/assets/icons/navigation/active-tickets.png";
 import activeicon2 from "@/assets/icons/navigation/active/icon2.svg";
 import activeicon3 from "@/assets/icons/navigation/active/icon3.svg";
 import activeicon4 from "@/assets/icons/navigation/active/icon4.svg";
@@ -59,6 +60,11 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
           i18nKey: "Archived Tickets",
           href: "/ticketing-system/tickets/archive",
           pathname: "/ticketing-system/tickets/archive",
+        },
+        {
+          i18nKey: "Deleted Tickets",
+          href: "/ticketing-system/tickets/delete",
+          pathname: "/ticketing-system/tickets/delete",
         },
       ],
     },
@@ -135,7 +141,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                     display: "block",
                     position: "relative",
                     background: isActivePath(pathname, data.pathname)
-                      ? "var(--pri-light-color)"
+                      ? "linear-gradient(90deg, #794AEE 0%, #39C6E2 100%)"
                       : "",
                     borderRadius: open ? "100px" : "10px",
                     "& :hover": { borderRadius: open ? "100px" : "" },
@@ -188,10 +194,15 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                         // openMenus[data.i18nKey] ||
                         isActivePath(pathname, data.pathname) ||
                         data.subItems.some((sub) => pathname === sub.pathname)
-                          ? "var(--pri-light-color)"
+                          ? "linear-gradient(90deg, #794AEE 0%, #39C6E2 100%)"
                           : "",
-                      borderRadius: open ? "10px" : "10px",
+                      borderRadius: open ? "30px" : "10px",
                       "& :hover": { borderRadius: open ? "10px" : "" },
+                      color:
+                        isActivePath(pathname, data.pathname) ||
+                        data.subItems.some((sub) => pathname === sub.pathname)
+                          ? "white"
+                          : "#797979",
 
                       // mb: 1,
                       // overflow: 'hidden'
@@ -204,7 +215,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                         color:
                           isActivePath(pathname, data.pathname) ||
                           data.subItems.some((sub) => pathname === sub.pathname)
-                            ? "var(--pri-color)"
+                            ? "white"
                             : "#797979",
                       }}
                     >
@@ -296,19 +307,19 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                                     data.subItems.some(
                                       (sub) => pathname === sub.pathname
                                     )
-                                      ? "var(--pri-color)"
+                                      ? "white"
                                       : "",
                                 }}
                               />
                             ) : (
-                              <ExpandMore
+                              <KeyboardArrowRightSharpIcon
                                 sx={{
                                   color:
                                     isActivePath(pathname, data.pathname) ||
                                     data.subItems.some(
                                       (sub) => pathname === sub.pathname
                                     )
-                                      ? "var(--pri-color)"
+                                      ? "white"
                                       : "",
                                 }}
                               />
@@ -323,7 +334,15 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                     timeout="auto"
                     unmountOnExit
                   >
-                    <List component="div" disablePadding className="sub-menu">
+                    <List
+                      component="div"
+                      disablePadding
+                      className="sub-menu"
+                      sx={{
+                        background:
+                          "linear-gradient(90deg, #784aee1e 0%, #39c6e228 100%)",
+                      }}
+                    >
                       {data.subItems.map((subItem, subIndex) => (
                         <ListItem
                           key={subIndex}
@@ -387,7 +406,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                     display: "block",
                     position: "relative",
                     background: isActivePath(pathname, data.pathname)
-                      ? "var(--pri-light-color)"
+                      ? "linear-gradient(90deg, #794AEE 0%, #39C6E2 100%)"
                       : "",
                     borderRadius: "10px",
                     "& :hover": { borderRadius: open ? "10px" : "" },
@@ -435,9 +454,9 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                     display: "block",
                     position: "relative",
                     background: isActivePath(pathname, data.pathname)
-                      ? "var(--pri-light-color)"
+                      ? "linear-gradient(90deg, #794AEE 0%, #39C6E2 100%)"
                       : "",
-                    borderRadius: "10px",
+                    borderRadius: "25px",
                     "& :hover": { borderRadius: open ? "10px" : "" },
 
                     // mb: 1
@@ -450,7 +469,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                       textDecoration: "none",
                       // fontWeight: 'bold',
                       color: isActivePath(pathname, data.pathname)
-                        ? "var(--pri-color)"
+                        ? "white"
                         : "#797979",
                     }}
                   >
