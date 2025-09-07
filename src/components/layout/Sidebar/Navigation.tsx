@@ -109,6 +109,25 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
       icon: icon5,
       activeIcon: icon5,
     },
+     {
+      i18nKey: "Email",
+      href: "javascript:void(0)",
+      pathname: "#",
+      icon: icon1,
+      activeIcon: activeicon1,
+      subItems: [
+        {
+          i18nKey: "SMTP Configuration",
+          href: "/ticketing-system/smtp-configuration",
+          pathname: "/ticketing-system/smtp-configuration",
+        },
+        {
+          i18nKey: "IMAP Configuration",
+          href: "/ticketing-system/imap-configuration",
+          pathname: "/ticketing-system/imap-configuration",
+        },
+      ],
+    },
   ];
 
   return (
@@ -141,7 +160,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                     display: "block",
                     position: "relative",
                     background: isActivePath(pathname, data.pathname)
-                      ? "linear-gradient(90deg, #794AEE 0%, #39C6E2 100%)"
+                      ? "linear-gradient(90deg, #32ABB1 0%, #32ABB1 100%)"
                       : "",
                     borderRadius: open ? "100px" : "10px",
                     "& :hover": { borderRadius: open ? "100px" : "" },
@@ -194,7 +213,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                         // openMenus[data.i18nKey] ||
                         isActivePath(pathname, data.pathname) ||
                         data.subItems.some((sub) => pathname === sub.pathname)
-                          ? "linear-gradient(90deg, #794AEE 0%, #39C6E2 100%)"
+                          ? "linear-gradient(90deg, #32ABB1 0%, #3286BD 100%)"
                           : "",
                       borderRadius: open ? "30px" : "10px",
                       "& :hover": { borderRadius: open ? "10px" : "" },
@@ -340,7 +359,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                       className="sub-menu"
                       sx={{
                         background:
-                          "linear-gradient(90deg, #784aee1e 0%, #39c6e228 100%)",
+                          "linear-gradient(90deg, #32abb13c 0%, #3285bd38 100%)",
                       }}
                     >
                       {data.subItems.map((subItem, subIndex) => (
@@ -406,7 +425,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                     display: "block",
                     position: "relative",
                     background: isActivePath(pathname, data.pathname)
-                      ? "linear-gradient(90deg, #794AEE 0%, #39C6E2 100%)"
+                      ? "linear-gradient(90deg, #32ABB1 0%, #3286BD 100%)"
                       : "",
                     borderRadius: "10px",
                     "& :hover": { borderRadius: open ? "10px" : "" },
@@ -454,7 +473,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                     display: "block",
                     position: "relative",
                     background: isActivePath(pathname, data.pathname)
-                      ? "linear-gradient(90deg, #794AEE 0%, #39C6E2 100%)"
+                      ? "linear-gradient(90deg, #32ABB1 0%, #3286BD 100%)"
                       : "",
                     borderRadius: "25px",
                     "& :hover": { borderRadius: open ? "10px" : "" },

@@ -1,5 +1,5 @@
 :root {
-  --navbg-color: var(--faafa, linear-gradient(90deg, #32abb1 0%, #3286bd 100%));
+  --navbg-color: var(--faafa, linear-gradient(90deg, #32ABB1 0%, #3286BD 100%));
 }
 
 ::-webkit-scrollbar {
