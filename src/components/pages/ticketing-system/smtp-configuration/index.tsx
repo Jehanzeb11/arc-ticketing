@@ -32,7 +32,8 @@ import EditEmailConf from "@/components/common/Form/smtp-configuration/EditEmail
 
 const SMTP = () => {
   const queryClient = useQueryClient();
-  const { callApi, fetchUsers, deleteUser, updateUser }: any = useApiStore();
+  const { callApi, fetchDepartments, deleteSmtp, updateUser, getAllSMTP }: any =
+    useApiStore();
   const [addNewModalOpen, setAddNewModalOpen] = useState(false);
   const [editNewModalOpen, setEditNewModalOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -41,37 +42,18 @@ const SMTP = () => {
   const [selectedName, setSelectedName] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
 
-  // const {
-  //   data: users,
-  //   isLoading,
-  //   error,
-  // } = useQuery({
-  //   queryKey: ["smtp"],
-  //   queryFn: () => callApi(fetchUsers, { requestType: "getAllUsers" }),
-  //   refetchOnMount: false,
-  //   refetchOnWindowFocus: false,
-  //   staleTime: Infinity,
-  // });
-
-  const SmtpData =[
-    {
-      user_id: 1,
-      host: "John@gmail.com",
-      port: "3004",
-      ssl: "TSL",
-      dept: "Development",
-      user_status: "Active",
-    },
-    {
-      user_id: 2,
-      host: "jj@gmail.com",
-      port: "3004",
-      ssl: "SSL",
-      dept: "Sales",
-      user_status: "Inactive",
-    },
-   
-  ]
+  const {
+    data: smtps,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["getAllSMTP"],
+    queryFn: () =>
+      callApi(getAllSMTP, { requestType: "getAllSmtps", type: "SMTP" }),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  });
 
   const columns = [
     { key: "host", title: "SMTP Host", filterable: false },
@@ -84,36 +66,34 @@ const SMTP = () => {
   // Process data to include switch component in status column
   const data = useMemo(
     () =>
-      SmtpData?.map((user) => ({
-        user_id: user.user_id,
-       
+      smtps?.map((user) => ({
+        id: user.id,
         host: user.host || "--",
-        port: user.port || "--",
-        ssl: user.ssl || "--",
+        port: String(user.port) || "--",
+        ssl: user.secure || "--",
         dept: user.dept || "--",
         status: (
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Typography
               sx={{
-                color: user.user_status === "Active" ? "#3286BD" : "#000",
+                color: user.secure === "SSL" ? "#3286BD" : "#000",
                 fontSize: "15px",
                 lineHeight: "20px",
                 padding: "4px 12px",
-                background:
-                  user.user_status === "Active" ? "#3286BD15" : "#24242415",
+                background: user.secure === "SSL" ? "#3286BD15" : "#24242415",
                 borderRadius: "100px",
               }}
             >
-              {user.user_status}
+              {user.secure}
             </Typography>
             <IOSSwitch
-              checked={user.user_status === "Active"}
+              checked={user.secure === "SSL"}
               onChange={(e) => handleSwitchChange(e, user.user_id)}
             />
           </Box>
         ),
       })) || [],
-    [SmtpData]
+    [smtps]
   );
 
   // Filter state
@@ -160,7 +140,6 @@ const SMTP = () => {
   ];
 
   const filters = [
-
     {
       name: "status",
       value: filterValues.status,
@@ -196,10 +175,10 @@ const SMTP = () => {
     {
       icon: editIcon,
       onClick: (row) => {
-        if (row && row.user_id) {
-          const user = SmtpData.find((u) => u.user_id === row.user_id);
+        if (row && row.id) {
+          const user = smtps.find((u) => u.id === row.id);
           if (user) {
-            setSelectedId(row.user_id);
+            setSelectedId(row.id);
             setSelectedUser(user);
             setEditNewModalOpen(true);
           } else {
@@ -215,11 +194,9 @@ const SMTP = () => {
     {
       icon: DeleteIcon,
       onClick: (row) => {
-        if (row && row.user_id) {
-          setSelectedId(row.user_id);
-          const user = SmtpData.find((u) => u.user_id === row.user_id);
-          const name = user?.host || user?.port || "User";
-          setSelectedName(name);
+        console.log(row);
+        if (row && row.id) {
+          setSelectedId(row.id);
           setDeleteModal(true);
         } else {
           toast.error("Cannot delete: User data is invalid.");
@@ -228,18 +205,15 @@ const SMTP = () => {
       className: "action-icon",
       tooltip: "Delete User",
     },
-   
   ];
 
   const deleteMutation = useMutation({
-    mutationFn: (id) =>
-      callApi(deleteUser, { requestType: `deleteUser&user_id=${id}` }),
+    mutationFn: (id) => callApi(deleteSmtp, { requestType: `deleteSmtp`, id }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success("User deleted successfully.");
+      queryClient.invalidateQueries({ queryKey: ["getAllSMTP"] });
+      toast.success("SMTP deleted successfully.");
       setDeleteModal(false);
       setSelectedId(null);
-      setSelectedName("");
     },
     onError: (error) => {
       toast.error("Failed to delete user: " + error.message);
@@ -266,9 +240,7 @@ const SMTP = () => {
       filterValues.department &&
       filterValues.department !== "AllDepartment"
     ) {
-      result = result.filter(
-        (row) => row.dept === filterValues.department
-      );
+      result = result.filter((row) => row.dept === filterValues.department);
     }
 
     // Apply status filter
@@ -276,7 +248,7 @@ const SMTP = () => {
       result = result.filter((row) => {
         // For status filtering, we need to match against the original user data
         // Find the original user to get the actual status value
-        const originalUser = SmtpData.find((user) => user.user_id === row.user_id);
+        const originalUser = smtps.find((user) => user.id === row.id);
         return originalUser?.user_status === filterValues.status;
       });
     }
@@ -313,14 +285,14 @@ const SMTP = () => {
   // }
 
   useEffect(() => {
-    if (SmtpData && data && data.length > 0) {
+    if (smtps && data && data.length > 0) {
       applyFilters();
     } else {
-      // If no SmtpData or data, set filteredData to empty array
+      // If no smtps or data, set filteredData to empty array
       setFilteredData([]);
     }
   }, [
-    SmtpData,
+    smtps,
     data,
     searchQuery,
     filterValues.role,
@@ -371,12 +343,17 @@ const SMTP = () => {
               defaultText={filter.filterOptions[0].label}
               className="table-dropdown-select"
               onChange={handleFilterChange}
+              sx={{ border: "1px solid #DBDBDB", borderRadius: "30px" }}
             />
           </Grid>
         ))}
         <Grid size={{ lg: 3, xs: 12 }}>
           <Box sx={{ display: "flex", gap: "10px" }} className="ticket-button">
-            <CustomButton text="Apply Filter" onClick={handleApplyFilter} />
+            <CustomButton
+              text="Apply Filter"
+              customClass={"btn-outlined"}
+              onClick={handleApplyFilter}
+            />
             <Tooltip title="Reset Filter" arrow>
               <Button className="reset-button" onClick={handleResetFilter}>
                 <Image src={resetIcon} alt="reset-icon" />
@@ -429,7 +406,9 @@ const SMTP = () => {
         iconSrc={addnewEntry}
       >
         <AddNewEntryEmailConf
-          getall={() => queryClient.invalidateQueries({ queryKey: ["smtp"] })}
+          getall={() =>
+            queryClient.invalidateQueries({ queryKey: ["getAllSMTP"] })
+          }
           onCloseModal={() => setAddNewModalOpen(false)}
         />
       </MyModal>
@@ -445,7 +424,9 @@ const SMTP = () => {
       >
         <EditEmailConf
           userData={selectedUser}
-          getall={() => queryClient.invalidateQueries({ queryKey: ["smtp"] })}
+          getall={() =>
+            queryClient.invalidateQueries({ queryKey: ["getAllSMTP"] })
+          }
           onCloseModal={() => {
             setEditNewModalOpen(false);
             setSelectedUser(null);
@@ -475,7 +456,6 @@ const SMTP = () => {
             onClick={() => {
               setDeleteModal(false);
               setSelectedId(null);
-              setSelectedName("");
               setSelectedUser(null);
             }}
           />

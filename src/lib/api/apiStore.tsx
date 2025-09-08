@@ -41,6 +41,10 @@ import {
   getUserModules,
   updateUserModule,
   getAllTickets,
+  createSMTP,
+  getAllSMTP,
+  updateSmtp,
+  deleteSmtp,
 } from "./apiCalls";
 
 export const useApiStore = create((set) => ({
@@ -78,6 +82,10 @@ export const useApiStore = create((set) => ({
   updateUniboxTicket,
   deleteUniboxTicket,
 
+  createSMTP,
+  getAllSMTP,
+  updateSmtp,
+  deleteSmtp,
   // departments
   fetchDepartments,
   createDepartment,

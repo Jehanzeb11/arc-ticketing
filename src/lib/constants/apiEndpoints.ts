@@ -10,6 +10,7 @@ export const API_ENDPOINTS = {
 
   // tickets
   TICKETS: `/ticket/multi-purpose`,
+  SMTP: `/smtp/multi-purpose`,
 
   // Unibox tickets
   UNIBOX_TICKETS: "/unibox_tickets",

@@ -395,12 +395,17 @@ const AllUsers = () => {
               defaultText={filter.filterOptions[0].label}
               className="table-dropdown-select"
               onChange={handleFilterChange}
+              sx={{ border: "1px solid #DBDBDB", borderRadius: "30px" }}
             />
           </Grid>
         ))}
         <Grid size={{ lg: 3, xs: 12 }}>
           <Box sx={{ display: "flex", gap: "10px" }} className="ticket-button">
-            <CustomButton text="Apply Filter" onClick={handleApplyFilter} />
+            <CustomButton
+              text="Apply Filter"
+              customClass={"btn-outlined"}
+              onClick={handleApplyFilter}
+            />
             <Tooltip title="Reset Filter" arrow>
               <Button className="reset-button" onClick={handleResetFilter}>
                 <Image src={resetIcon} alt="reset-icon" />

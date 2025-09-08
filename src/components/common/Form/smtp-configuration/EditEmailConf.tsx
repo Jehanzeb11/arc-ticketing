@@ -12,13 +12,22 @@ import GlobalPasswordInput from "../../Input/GlobalPasswordInput";
 import IOSSwitch from "../../switch";
 
 export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
-  const { callApi, updateUser, fetchRoles, fetchDepartments }: any =
+  const { callApi, updateSmtp, fetchRoles, fetchDepartments }: any =
     useApiStore();
 
-  // Fetch roles and departments
-  const { data: roles } = useQuery({
-    queryKey: ["roles"],
-    queryFn: () => callApi(fetchRoles, { requestType: "getAllRoles" }),
+  const {
+    data: departments,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["departments"],
+    queryFn: () =>
+      callApi(fetchDepartments, {
+        requestType: "getAllDepartments",
+      }),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
 
   const {
@@ -29,33 +38,31 @@ export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
     reset,
   } = useForm({
     defaultValues: {
-    host:  "",
-      port: "",
-      password: "",
-      status:  "TSL/SSL",
+      host: userData?.host || "",
+      port: userData?.port?.toString() || "",
+      status: userData?.secure || "",
+      dept: userData?.department_ids || "",
+      email: userData?.username || "",
     },
   });
 
   const mutation = useMutation({
     mutationFn: async (data: any) => {
-      const formData = new FormData();
-
-      // Add required fields
-      formData.append("requestType", `updateUser&user_id=${userData?.user_id}`);
-      formData.append("full_name", data.fullName);
-      formData.append("email", data.email);
-      formData.append("role", data.role);
-      formData.append("status", data.status);
-
-      // If a new picture is selected
-      if (data.picture?.[0]) {
-        formData.append("picture", data.picture[0]); // file itself
-      } else if (userData?.picture) {
-        // If no new picture is chosen, keep the old one (optional: depends on backend)
-        formData.append("existingPicture", userData.picture);
-      }
-
-      return callApi(updateUser, formData, true);
+      return callApi(
+        updateSmtp,
+        {
+          requestType: "updateSMTP",
+          host: data.host,
+          port: data.port,
+          username: data.email,
+          dept: data.dept,
+          secure: data.status ? "SSL" : "TLS",
+          type: "SMTP",
+          user_id: userData?.user_id,
+          id: userData?.id,
+        },
+        true
+      );
       // 👆 make sure callApi detects multipart/form-data
     },
     onSuccess: () => {
@@ -68,25 +75,12 @@ export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
   });
 
   const onSubmit = (data: any) => mutation.mutate(data);
-
-  // Dynamic options from API
-  const roleOptions =
-    roles?.map((role) => ({
-      label: role.role_name,
-      value: role.role_id,
-    })) || [];
-
-  const statusOptions = [
-    { label: "Active", value: "Active" },
-    { label: "Inactive", value: "Inactive" },
-  ];
-
   console.log(userData, " - > userData");
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
-     <Grid size={{ xs: 6 }}>
+        <Grid size={{ xs: 6 }}>
           <GlobalInput
             type="text"
             placeholder="Type Here"
@@ -95,7 +89,7 @@ export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
           />
           {errors.host && (
             <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
-              {errors.host.message}
+              {errors.host.message as string}
             </Typography>
           )}
         </Grid>
@@ -103,70 +97,94 @@ export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
         {/* Email */}
         <Grid size={{ xs: 6 }}>
           <GlobalInput
-            type="text"
+            type="number"
             label="SMTP Port"
             {...register("port", {
               required: "SMTP Port is required",
+            })}
+          />
+          {errors.port && (
+            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
+              {errors.port.message as string}
+            </Typography>
+          )}
+        </Grid>
+
+        <Grid size={{ xs: 6 }}>
+          <GlobalInput
+            type="email"
+            label="Email"
+            {...register("email", {
+              required: "Email is required",
               pattern: {
                 value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                 message: "Invalid email address",
               },
             })}
           />
-          {errors.port && (
+          {errors.email && (
             <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
-              {errors.port.message}
+              {errors.email.message as string}
             </Typography>
           )}
         </Grid>
 
         {/* Status */}
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <Controller
-            name="status"
+            name="dept"
             control={control}
-            rules={{ required: "Status is required" }}
+            rules={{ required: "Department is required" }}
             render={({ field }) => (
               <FormSelect
-                label="Status"
-                name="status"
-                defaultText="Select Status"
+                label="Department"
+                name="dept"
+                defaultText="Select Department"
+                className="modal-select"
                 value={field.value || ""}
                 onChange={(e) => field.onChange(e.target.value)}
-                options={statusOptions}
+                options={departments?.map((department: any) => ({
+                  label: department.name,
+                  value: department.id,
+                }))}
               />
             )}
           />
-          {errors.status && (
+          {errors.dept && (
             <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
-              {errors.status.message}
+              {errors.dept.message as string}
             </Typography>
           )}
         </Grid>
 
         <Grid size={{ xs: 12 }}>
-      <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            
-            <IOSSwitch
-              checked={status === "Active"}
-            />
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <IOSSwitch
+                  checked={field.value === "SSL"}
+                  onChange={(e) =>
+                    field.onChange(e.target.checked ? "SSL" : "TSL")
+                  }
+                />
 
-            <Typography
-              sx={{
-                color:"#000000b8",
-                fontSize: "15px",
-                lineHeight: "20px",
-                padding: "4px 12px",
-              
-                borderRadius: "100px",
-              }}
-            >
-              TSL/SSL
-            </Typography>
-          </Box>
+                <Typography
+                  sx={{
+                    color: "#000000b8",
+                    fontSize: "15px",
+                    lineHeight: "20px",
+                    padding: "4px 12px",
+                    borderRadius: "100px",
+                  }}
+                >
+                  TLS/SSL
+                </Typography>
+              </Box>
+            )}
+          />
         </Grid>
-
-        
       </Grid>
 
       <Box sx={{ display: "flex", gap: "15px", mt: "35px" }}>

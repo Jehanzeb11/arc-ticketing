@@ -6,7 +6,7 @@
       rgba(255, 255, 255, 0.3) 0%,
       rgba(50, 134, 189, 0.3) 100%);
   --linear-color2: linear-gradient(90deg, #32ABB1 0%, #3286BD 100%);
-  --border-color: var(--gra-3, #4e71e7);
+  --border-color: var(--gra-3, #32ABB1);
   --bg-linear3: var(--gra-3, linear-gradient(90deg, #32ABB1 0%, #32ABB1 100%));
   --bg-table: #fff;
 }
@@ -100,7 +100,7 @@ h1 {
 
 .btn-primary,
 .btn-secondray {
-background: linear-gradient(90deg, #32ABB1 0%, #3286BD 100%);
+  background: linear-gradient(90deg, #32ABB1 0%, #3286BD 100%);
   padding: 10px 30px;
   border: 1px solid transparent;
   color: white;
@@ -118,7 +118,7 @@ background: linear-gradient(90deg, #32ABB1 0%, #3286BD 100%);
 }
 
 .btn-delete {
-background: linear-gradient(90deg, #32ABB1 0%, #3286BD 100%);
+  background: linear-gradient(90deg, #32ABB1 0%, #3286BD 100%);
   padding: 7px 30px !important;
   border: 1px solid transparent;
   color: white;
@@ -185,9 +185,9 @@ background: linear-gradient(90deg, #32ABB1 0%, #3286BD 100%);
 }
 
 .btn-outlined:hover {
-background: linear-gradient(90deg, #32ABB1 0%, #3286BD 100%);
+  background: linear-gradient(90deg, #32ABB1 0%, #3286BD 100%);
   color: white !important;
-background: linear-gradient(90deg, #32ABB1 0%, #3286BD 100%);
+  background: linear-gradient(90deg, #32ABB1 0%, #3286BD 100%);
 }
 
 .btn-secondray.disabled {
@@ -297,7 +297,7 @@ background: linear-gradient(90deg, #32ABB1 0%, #3286BD 100%);
 }
 
 .my-modal .MuiBackdrop-root.MuiModal-backdrop {
-background: linear-gradient(90deg, #32abb188 0%, #0c25366e 64%);
+  background: linear-gradient(90deg, #32abb188 0%, #0c25366e 64%);
 }
 
 .modal-header {

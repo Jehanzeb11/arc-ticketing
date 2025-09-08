@@ -228,7 +228,7 @@ export default function AddNewEntry({ getall, onCloseModal }: any) {
         )}
 
         {/* Role */}
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <Controller
             name="role"
             control={control}
@@ -238,6 +238,7 @@ export default function AddNewEntry({ getall, onCloseModal }: any) {
                 label="Role"
                 name="role"
                 defaultText="Select Role"
+                className="modal-select"
                 value={field.value || ""}
                 onChange={(e) => field.onChange(e.target.value)}
                 options={roleOptions}
@@ -252,7 +253,7 @@ export default function AddNewEntry({ getall, onCloseModal }: any) {
         </Grid>
 
         {/* Status */}
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <Controller
             name="status"
             control={control}
@@ -262,6 +263,7 @@ export default function AddNewEntry({ getall, onCloseModal }: any) {
                 label="Status"
                 name="status"
                 defaultText="Select Status"
+                className="modal-select"
                 value={field.value || ""}
                 onChange={(e) => field.onChange(e.target.value)}
                 options={statusOptions}

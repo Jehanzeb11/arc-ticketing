@@ -94,6 +94,7 @@ export default function AddNewEntry({
                 label="Status"
                 name="Status"
                 defaultText="Select Status"
+                className="modal-select"
                 value={field.value || ""}
                 onChange={(e) => field.onChange(e.target.value)}
                 options={statusOptions}

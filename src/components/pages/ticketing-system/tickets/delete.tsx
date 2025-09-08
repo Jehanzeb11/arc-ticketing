@@ -24,7 +24,7 @@ import TableSelectFilterMainNew from "@/components/common/Select/TableSelectFilt
 
 // Asset imports
 import archiveIcon from "@/assets/icons/unibox/ticket/listpage/archive2.svg";
-import archiveModalIcon2 from "@/assets/icons/unibox/ticket/listpage/archivemodal2.png";
+import archiveModalIcon2 from "@/assets/icons/unibox/ticket/listpage/archive-icon-2.png";
 import createModalIcon from "@/assets/icons/unibox/ticket/create-modal.svg";
 import unarchiveIcon from "@/assets/icons/unibox/ticket/listpage/unarchive.svg";
 import AssigneeIcon from "@/assets/icons/unibox/ticket/unibox-ticket-assignee-img.svg";
@@ -512,6 +512,7 @@ export default function DeletedUniBoxTickets() {
               defaultText="All"
               className="table-dropdown-select"
               onChange={handleFilterChange}
+              sx={{ border: "1px solid #DBDBDB", borderRadius: "30px" }}
             />
           </Grid>
         ))}

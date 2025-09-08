@@ -22,7 +22,12 @@ export default function MainContent({
       >
         <Box>
           <Box sx={{ mb: 2 }}>
-            <Search searchQuery={searchQuery} handleSearch={handleSearch} />
+            <Search
+              searchClass="ticket-search"
+              searchQuery={searchQuery}
+              handleSearch={handleSearch}
+              placeholder="Search tickets"
+            />
           </Box>
 
           {ticketData?.length > 0 ? (

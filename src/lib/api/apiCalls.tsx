@@ -53,6 +53,15 @@ export const updateUserModule = (data) =>
 export const deleteUser = (data) =>
   postbackend(API_ENDPOINTS.USERS(data?.requestType), data);
 
+export const getAllSMTP = (data) =>
+  postbackend(`${API_ENDPOINTS.SMTP}?requestType=getAllSmtps`, data);
+export const createSMTP = (data) =>
+  postbackend(`${API_ENDPOINTS.SMTP}?requestType=createSmtp`, data);
+export const updateSmtp = (data) =>
+  postbackend(`${API_ENDPOINTS.SMTP}?requestType=updateSmtp`, data);
+export const deleteSmtp = (data) =>
+  postbackend(`${API_ENDPOINTS.SMTP}?requestType=deleteSmtp`, data);
+
 // unibox_tickets
 export const fetchSingleTicket = (data) =>
   postbackend(API_ENDPOINTS.TICKETS, data);

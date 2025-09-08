@@ -12,7 +12,7 @@ import { useApiStore } from "@/lib/api/apiStore";
 import IOSSwitch from "../../switch";
 
 export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
-  const { callApi, createUser, fetchRoles, fetchDepartments }: any =
+  const { callApi, createSMTP, fetchRoles, fetchDepartments }: any =
     useApiStore();
 
   // 🔹 Local state for password strength
@@ -27,11 +27,20 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
     queryFn: () => callApi(fetchRoles, { requestType: "getAllRoles" }),
   });
 
-  // const { data: departments } = useQuery({
-  //   queryKey: ["departments"],
-  //   queryFn: () =>
-  //     callApi(fetchDepartments, { requestType: "getAllDepartments" }),
-  // });
+  const {
+    data: departments,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["departments"],
+    queryFn: () =>
+      callApi(fetchDepartments, {
+        requestType: "getAllDepartments",
+      }),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  });
 
   const {
     register,
@@ -44,21 +53,26 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
     defaultValues: {
       host: "",
       port: "",
+      email: "",
       password: "",
-      status: "TSL/SSL",
+      dept: "",
+      status: "",
     },
   });
 
   const mutation = useMutation({
     mutationFn: async (data: any) => {
-      const formData = new FormData();
-      formData.append("full_name", data.host);
-      formData.append("email", data.port);
-      formData.append("password", data.password);
-      formData.append("status", data.status);
-      formData.append("requestType", "createUser");
-
-      return callApi(createUser, formData);
+      const object = {
+        requestType: "createSMTP",
+        host: data.host,
+        port: data.port,
+        username: data.email,
+        password: data.password,
+        dept: data.dept,
+        secure: data.status ? "SSL" : "TLS",
+        type: "IMAP",
+      };
+      return callApi(createSMTP, object);
     },
     onSuccess: () => {
       toast.success("User created successfully!");
@@ -106,11 +120,6 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
   //     value: dept.id,
   //   })) || [];
 
-  const statusOptions = [
-    { label: "Active", value: "Active" },
-    { label: "Inactive", value: "Inactive" },
-  ];
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
@@ -120,7 +129,7 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
             type="text"
             placeholder="Type Here"
             label="IMAP Host"
-            {...register("host", { required: "IMAP6 Host is required" })}
+            {...register("host", { required: "IMAP Host is required" })}
           />
           {errors.host && (
             <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
@@ -136,10 +145,6 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
             label="IMAP Port"
             {...register("port", {
               required: "IMAP Port is required",
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: "Invalid email address",
-              },
             })}
           />
           {errors.port && (
@@ -148,10 +153,27 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
             </Typography>
           )}
         </Grid>
-
+        <Grid size={{ xs: 6 }}>
+          <GlobalInput
+            type="email"
+            label="Email"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Invalid email address",
+              },
+            })}
+          />
+          {errors.email && (
+            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
+              {errors.email.message}
+            </Typography>
+          )}
+        </Grid>
 
         {/* Password */}
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <GlobalPasswordInput
             name="password"
             label="Password"
@@ -211,17 +233,21 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
         {/* Status */}
         <Grid size={{ xs: 12 }}>
           <Controller
-            name="status"
+            name="dept"
             control={control}
-            rules={{ required: "Status is required" }}
+            rules={{ required: "Department is required" }}
             render={({ field }) => (
               <FormSelect
-                label="Status"
-                name="status"
-                defaultText="Select Status"
+                label="Department"
+                name="dept"
+                defaultText="Select Department"
+                className="modal-select"
                 value={field.value || ""}
                 onChange={(e) => field.onChange(e.target.value)}
-                options={statusOptions}
+                options={departments?.map((dept) => ({
+                  label: dept.name,
+                  value: dept.id,
+                }))}
               />
             )}
           />
@@ -233,39 +259,44 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
         </Grid>
 
         <Grid size={{ xs: 12 }}>
-      <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            
-            <IOSSwitch
-              checked={status === "Active"}
-            />
-
-            <Typography
-              sx={{
-                color:"#000000b8",
-                fontSize: "15px",
-                lineHeight: "20px",
-                padding: "4px 12px",
-              
-                borderRadius: "100px",
-              }}
-            >
-              TSL/SSL
-            </Typography>
-          </Box>
+          <Controller
+            name="status"
+            control={control}
+            defaultValue="Inactive"
+            render={({ field }) => (
+              <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <IOSSwitch
+                  checked={field.value === "Active"}
+                  onChange={(e) =>
+                    field.onChange(e.target.checked ? "Active" : "Inactive")
+                  }
+                />
+                <Typography
+                  sx={{
+                    color: "#000000b8",
+                    fontSize: "15px",
+                    lineHeight: "20px",
+                    padding: "4px 12px",
+                    borderRadius: "100px",
+                  }}
+                >
+                  TLS/SSL
+                </Typography>
+              </Box>
+            )}
+          />
         </Grid>
-
-       
       </Grid>
 
       {/* Footer Buttons */}
       <Box sx={{ display: "flex", gap: "15px", mt: "35px" }}>
         <ButtonCustom
-          text="Reset SMTP"
+          text="Reset IMAP"
           btntrasnparent={true}
           onClick={onCloseModal}
         />
         <ButtonCustom
-          text={isSubmitting ? "Saving..." : "Save SMTP"}
+          text={isSubmitting ? "Saving..." : "Save IMAP"}
           type="submit"
           disabled={isSubmitting}
         />

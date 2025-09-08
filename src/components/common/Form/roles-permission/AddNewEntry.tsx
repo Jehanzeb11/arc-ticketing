@@ -208,6 +208,7 @@ export default function AddNewEntry() {
                 label="Status"
                 name="status"
                 defaultText="Select Status"
+                className="modal-select"
                 value={field.value || ""}
                 onChange={(e) => field.onChange(e.target.value)}
                 options={statusOptions}
@@ -271,7 +272,7 @@ export default function AddNewEntry() {
                         sx={{
                           mt: 1.5,
                           background:
-                            "linear-gradient(to top, #3CBCE2, #A77BFF)",
+                            "linear-gradient(90deg, #32ABB1 0%, #3286BD 100%)",
                           height: "5px",
                           borderRadius: "5px",
                         }}
