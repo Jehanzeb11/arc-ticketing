@@ -98,6 +98,18 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
       ],
     },
     {
+      name: "status",
+      value: filterValues.status,
+      className: "department-filter",
+      filterOptions: [
+        { value: "AllStatus", label: "All Status" },
+        { value: "Open", label: "Open" },
+        { value: "In-Progress", label: "In-Progress" },
+        { value: "Closed", label: "Closed" },
+        { value: "Resolved", label: "Resolved" },
+      ],
+    },
+    {
       name: "department",
       value: filterValues.department,
       className: "department-filter",

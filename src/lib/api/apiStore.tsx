@@ -26,6 +26,7 @@ import {
   createDepartment,
   updateDepartment,
   deleteDepartment,
+  replyUniboxTicket,
   updateProfile,
   departmentUser,
   fetchProfile,
@@ -45,6 +46,7 @@ import {
   getAllSMTP,
   updateSmtp,
   deleteSmtp,
+  myData,
 } from "./apiCalls";
 
 export const useApiStore = create((set) => ({
@@ -69,7 +71,7 @@ export const useApiStore = create((set) => ({
   deleteUser,
   loginUser,
   updateProfile,
-
+  myData,
   // modules
 
   createModules,
@@ -81,6 +83,7 @@ export const useApiStore = create((set) => ({
   createUniboxTicket,
   updateUniboxTicket,
   deleteUniboxTicket,
+  replyUniboxTicket,
 
   createSMTP,
   getAllSMTP,

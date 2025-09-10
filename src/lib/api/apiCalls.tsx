@@ -72,8 +72,12 @@ export const createUniboxTicket = (data) =>
 export const updateUniboxTicket = (data) =>
   postbackend(API_ENDPOINTS.TICKETS, data);
 
+export const replyUniboxTicket = (data) =>
+  postbackend(API_ENDPOINTS.TICKETS, data);
+
 export const getAllTickets = (data) => postbackend(API_ENDPOINTS.TICKETS, data);
 export const loginUser = (data) => postbackend(API_ENDPOINTS.LOGIN, data);
+export const myData = () => getbackend(API_ENDPOINTS.ME);
 
 export const deleteUniboxTicket = (id) =>
   dellocal(API_ENDPOINTS.UNIBOX_TICKET_BY_ID(id));

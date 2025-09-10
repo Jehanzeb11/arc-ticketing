@@ -8,13 +8,17 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import FormSelect from "@/components/common/Select";
 import GlobalInput from "@/components/common/Input/GlobalInput";
 import GlobalTextarea from "@/components/common/textarea/GlobalTextarea";
-import replyIcon from "@/assets/icons/unibox/ticket/viewpage/reply.svg";
+import replyIcon from "@/assets/icons/unibox/ticket/viewpage/ticket.svg";
 import Image from "next/image";
 import MyButton from "@/components/common/Button/Button";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
+import { myData, replyUniboxTicket } from "@/lib/api/apiCalls";
+import toast from "react-hot-toast";
 
-const ReplyForm = ({ ticketId }: any) => {
+const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
+  const queryClient = useQueryClient();
+
   const { callApi, fetchDepartments }: any = useApiStore();
 
   const [ccInput, setCcInput] = React.useState("");
@@ -28,6 +32,8 @@ const ReplyForm = ({ ticketId }: any) => {
   } = useForm({
     defaultValues: {
       ccEmails: [], // array by default
+      to_email: "",
+      customer_email: "",
       department: "",
       type: "",
       priority: "",
@@ -42,10 +48,10 @@ const ReplyForm = ({ ticketId }: any) => {
         requestType: "getAllDepartments",
       }),
   });
-
-  const onSubmit = (data: any) => {
-    console.log("Form submitted:", data);
-  };
+  const { data: user } = useQuery({
+    queryKey: ["auth"],
+    queryFn: () => callApi(myData),
+  });
 
   const ccEmails: string[] = watch("ccEmails") || [];
 
@@ -54,6 +60,58 @@ const ReplyForm = ({ ticketId }: any) => {
       setValue("ccEmails", [...ccEmails, ccInput.trim()]);
       setCcInput("");
     }
+  };
+
+  //  ticket_id,
+  //         to_email,
+  //         department_id,
+  //         type,
+  //         priority,
+  //         message,
+  let emailstosend: any;
+
+  const replyTicketMutation = useMutation({
+    mutationFn: (data: any) => {
+      if (c_mail == user?.email) {
+        emailstosend = tomails;
+      } else {
+        emailstosend = c_mail;
+      }
+
+      const formData = new FormData();
+
+      formData.append("requestType", "ticketReply");
+      formData.append("ticket_id", ticketId);
+      formData.append("type", data.type);
+      formData.append("priority", data.priority);
+      formData.append("message", data.message);
+      formData.append("cc_emails", data.ccEmails);
+      formData.append("department_id", data.department);
+      formData.append("to_email", emailstosend);
+
+      return callApi(replyUniboxTicket, {
+        requestType: "ticketReply",
+        ticket_id: ticketId,
+        type: data.type,
+        priority: data.priority,
+        message: data.message,
+        cc_emails: data.ccEmails,
+        department_id: data.department,
+        to_email: emailstosend,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["uniboxTickets"] });
+      toast.success("Ticket Replied successfully!");
+    },
+    onError: (error) => {
+      console.error("Failed to update ticket:", error);
+    },
+  });
+
+  const onSubmit = (data: any) => {
+    // console.log("Form submitted:", data);
+    replyTicketMutation.mutate(data);
   };
 
   return (
@@ -88,7 +146,7 @@ const ReplyForm = ({ ticketId }: any) => {
           <Typography variant="body2" sx={{ mb: 1, color: "#666" }}>
             CC Emails
           </Typography>
-          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 2, gap: 2 }}>
             <GlobalInput
               type="text"
               placeholder="Add CC emails."
@@ -100,7 +158,13 @@ const ReplyForm = ({ ticketId }: any) => {
               icon={<PersonAddIcon />}
               label=""
               onClick={addCcEmail}
-              sx={{ borderRadius: "10px", cursor: "pointer" }}
+              sx={{
+                borderRadius: "10px",
+                cursor: "pointer",
+                height: "45px",
+                mt: 1,
+                width: "50px",
+              }}
             />
           </Box>
           {ccEmails.length > 0 && (
@@ -129,13 +193,16 @@ const ReplyForm = ({ ticketId }: any) => {
           <FormSelect
             label="Department"
             name="department"
+            className="modal-select"
             value={watch("department") || ""}
             onChange={(e) => register("department").onChange(e)}
             options={departments?.map((department: any) => ({
               label: department.name,
               value: department.id,
             }))}
-            {...register("department", { required: "Department is required" })}
+            {...register("department", {
+              required: "Department is required",
+            })}
           />
           {errors.department && (
             <p style={{ color: "#B80505", margin: "0px" }}>
@@ -149,6 +216,7 @@ const ReplyForm = ({ ticketId }: any) => {
           <FormSelect
             label="Type"
             name="type"
+            className="modal-select"
             value={watch("type") || ""}
             onChange={(e) => register("type").onChange(e)}
             options={[
@@ -171,6 +239,7 @@ const ReplyForm = ({ ticketId }: any) => {
           <FormSelect
             label="Priority"
             name="priority"
+            className="modal-select"
             value={watch("priority") || ""}
             onChange={(e) => register("priority").onChange(e)}
             options={[
@@ -236,7 +305,7 @@ const ReplyForm = ({ ticketId }: any) => {
           text="Cancel"
           btntrasnparent
         />
-        <Button
+        {/* <Button
           variant="outlined"
           onClick={() => alert("Resolve Ticket clicked")}
           sx={{
@@ -250,7 +319,7 @@ const ReplyForm = ({ ticketId }: any) => {
         >
           <CheckCircleIcon sx={{ mr: 1, color: "var(--pri-color)" }} /> Resolve
           Ticket
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   );

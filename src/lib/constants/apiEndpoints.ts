@@ -4,6 +4,7 @@ export const API_ENDPOINTS = {
   USER_BY_ID: (id) => `/users/multi-purpose?requestType=${id}`,
   PROFILE: "/profile",
   LOGIN: "/auth/login",
+  ME: "/auth/me",
   VERIFY_2FA: "/auth/verify-2fa",
 
   USER_MODULES: (type) => `/usermodules/multi-purpose${type}`,

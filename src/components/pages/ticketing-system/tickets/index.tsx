@@ -66,11 +66,19 @@ export default function UniBoxTickets() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const {
+    data: ticketKpiStats,
+    isLoading: ticketKpiStatsLoading,
+    error: ticketKpiStatsError,
+  } = useQuery({
+    queryKey: ["uniboxTickets"],
+    queryFn: () => callApi(getAllTickets, { requestType: "ticketKpiStats" }),
+  });
+  const {
     data: uniboxTickets,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["uniboxTickets"],
+    queryKey: ["ticketKpi"],
     queryFn: () => callApi(getAllTickets, { requestType: "getAllTickets" }),
   });
 
@@ -439,7 +447,7 @@ export default function UniBoxTickets() {
         title="Tickets"
         text="Manege customer support tickets with real-time KPIs"
       />
-      <TicketsCards />
+      <TicketsCards ticketKpiStats={ticketKpiStats} />
       <TicketHeader
         onClickAddTicket={() => setAddModal(true)}
         onClickArchive={() => router.push("/ticketing-system/tickets/archive")}

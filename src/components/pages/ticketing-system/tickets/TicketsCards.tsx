@@ -10,49 +10,49 @@ import cardBg5 from "@/assets/images/tickets/small-cards/ticket-card5.png";
 import cardBg6 from "@/assets/images/tickets/small-cards/ticket-card6.png";
 import cardBg7 from "@/assets/images/tickets/small-cards/ticket-card7.png";
 import cardBg8 from "@/assets/images/tickets/small-cards/ticket-card8.png";
-export default function TicketsCards() {
+export default function TicketsCards({ ticketKpiStats }) {
   const cards = [
     {
       img: cardBg1,
       title: "Total Tickets",
-      value: "25",
-      percent: "4.6%",
+      value: ticketKpiStats?.counts?.total,
+      percent: ticketKpiStats?.percentageChange?.total,
       vs: "vs yestarday",
     },
     {
       img: cardBg2,
       title: "Open Tickets",
-      value: "25",
-      percent: "4.6%",
+      value: ticketKpiStats?.counts?.open,
+      percent: ticketKpiStats?.percentageChange?.open,
       vs: "vs yestarday",
     },
     {
       img: cardBg3,
       title: "In Progress",
-      value: "25",
-      percent: "4.6%",
+      value: ticketKpiStats?.counts?.inProgress,
+      percent: ticketKpiStats?.percentageChange?.inProgress,
       vs: "vs yestarday",
     },
     {
       img: cardBg4,
       title: "Resolved",
-      value: "25",
-      percent: "4.6%",
+      value: ticketKpiStats?.counts?.resolved,
+      percent: ticketKpiStats?.percentageChange?.resolved,
       vs: "vs yestarday",
     },
     {
       img: cardBg5,
-      title: "Cancelled",
-      value: "25",
-      percent: "4.6%",
+      title: "Close",
+      value: ticketKpiStats?.counts?.close,
+      percent: ticketKpiStats?.percentageChange?.close,
       vs: "vs yestarday",
     },
 
     {
       img: cardBg6,
       title: "High/Urgent",
-      value: "25",
-      percent: "4.6%",
+      value: ticketKpiStats?.counts?.highPriority,
+      percent: ticketKpiStats?.percentageChange?.highPriority,
       vs: "vs yestarday",
     },
     {
@@ -142,15 +142,6 @@ export default function TicketsCards() {
                 </Typography>
                 <Typography ml={3} fontSize={15} fontWeight={500}>
                   {card.vs}
-                </Typography>
-
-                <Typography
-                  color="#2D83C3"
-                  ml={3}
-                  fontSize={15}
-                  fontWeight={500}
-                >
-                  2m 32s
                 </Typography>
               </Box>
             </CardContent>

@@ -1,22 +1,22 @@
-'use client'
-import React from 'react'
-import profileImg from '@/assets/images/profile/small-profile.png'
+"use client";
+import React from "react";
+import profileImg from "@/assets/images/profile/small-profile.png";
 
-import { Box, Typography, Avatar, Chip, Button } from '@mui/material'
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
-import AttachFileIcon from '@mui/icons-material/AttachFile'
-import replyIcon from '@/assets/icons/unibox/ticket/viewpage/reply.svg'
-import Image from 'next/image'
-import FileDownloadIcon from '@mui/icons-material/FileDownload'
-import calenderIcon from '@/assets/icons/unibox/ticket/viewpage/calender.svg'
+import { Box, Typography, Avatar, Chip, Button } from "@mui/material";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import replyIcon from "@/assets/icons/unibox/ticket/viewpage/reply.svg";
+import Image from "next/image";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import calenderIcon from "@/assets/icons/unibox/ticket/viewpage/calender.svg";
 const TicketConversation = ({ conversationData }: any) => {
   return (
     <Box
       sx={{
         p: 2.5,
-        backgroundColor: '#fff',
-        borderRadius: '10px',
-        filter: 'drop-shadow(0px 16.88px 59.079px rgba(86, 89, 146, 0.10))'
+        backgroundColor: "#fff",
+        borderRadius: "10px",
+        filter: "drop-shadow(0px 16.88px 59.079px rgba(86, 89, 146, 0.10))",
       }}
     >
       {/* Ticket Header */}
@@ -24,68 +24,68 @@ const TicketConversation = ({ conversationData }: any) => {
         sx={{
           p: 1.5,
           mb: 2,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          borderBottom: '1px solid #e0e0e0'
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          borderBottom: "1px solid #e0e0e0",
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Image src={replyIcon} alt='icon' style={{ marginRight: '10px' }} />
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Image src={replyIcon} alt="icon" style={{ marginRight: "10px" }} />
           <Box>
             <Typography
-              sx={{ fontSize: '23px', fontWeight: '600', color: '#000' }}
+              sx={{ fontSize: "23px", fontWeight: "600", color: "#000" }}
             >
               Login Issues
             </Typography>
-            <Typography sx={{ color: '#666', fontSize: '16px' }}>
+            <Typography sx={{ color: "#666", fontSize: "16px" }}>
               Requested by John Smith • 2025-01-07 09:30 • Assigned to
               <span
                 style={{
-                  color: 'var(--pri-color)',
-                  fontWeight: '600',
-                  textDecoration: 'underline'
+                  color: "var(--pri-color)",
+                  fontWeight: "600",
+                  textDecoration: "underline",
                 }}
               >
-                {' '}
+                {" "}
                 Sarah Wilson
               </span>
             </Typography>
           </Box>
         </Box>
-        <Box sx={{ display: 'flex', gap: 1 }}>
+        <Box sx={{ display: "flex", gap: 1 }}>
           <Chip
-            label='Open'
+            label="Open"
             sx={{
-              color: 'var(-pri-color)',
-              background: 'transparent',
-              borderRadius: '100px',
-              border: '1px solid var(--border-color)'
+              color: "var(-pri-color)",
+              background: "transparent",
+              borderRadius: "100px",
+              border: "1px solid var(--border-color)",
             }}
           />
           <Chip
-            label='High'
+            label="High"
             sx={{
-              borderRadius: '100px',
-              backgroundColor: 'var(--pri-light-color)',
-              color: 'var(-pri-color)'
+              borderRadius: "100px",
+              backgroundColor: "var(--pri-light-color)",
+              color: "var(-pri-color)",
             }}
           />
         </Box>
       </Box>
 
       {/* Conversation Messages */}
-      {conversationData.map(message => (
+      {conversationData.map((message) => (
         <Box
           key={message.id}
           sx={{
-            backgroundColor: '#fff',
+            backgroundColor: "#fff",
             borderRadius: 1,
             p: 1.5,
             mb: 1.5,
-            display: 'flex',
-            alignItems: 'flex-start',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+            display: "flex",
+            alignItems: "flex-start",
+            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Avatar
@@ -95,50 +95,50 @@ const TicketConversation = ({ conversationData }: any) => {
           />
           <Box sx={{ flexGrow: 1 }}>
             <Typography
-              sx={{ fontSize: '18px', fontWeight: '500', color: '#333' }}
+              sx={{ fontSize: "18px", fontWeight: "500", color: "#333" }}
             >
-              {message.name}{' '}
-              <span style={{ fontSize: '14px', color: '#666' }}>
-                {message.email}
+              {message.creator.full_name}{" "}
+              <span style={{ fontSize: "14px", color: "#666" }}>
+                {message.creator.email}
               </span>
             </Typography>
-            <Typography variant='body2' sx={{ color: '#565656', mt: 0.5 }}>
+            <Typography variant="body2" sx={{ color: "#565656", mt: 0.5 }}>
               {message.message}
             </Typography>
             {message.attachment && (
               <Button
-                variant='outlined'
+                variant="outlined"
                 startIcon={<AttachFileIcon />}
                 sx={{
                   mt: 1,
-                  borderColor: 'var(--border-color)',
-                  color: 'var(--pri-color)',
-                  textTransform: 'none',
-                  borderRadius: '3px',
-                  border: '1px solid var(--border-color)',
+                  borderColor: "var(--border-color)",
+                  color: "var(--pri-color)",
+                  textTransform: "none",
+                  borderRadius: "3px",
+                  border: "1px solid var(--border-color)",
 
-                  background: 'var(--pri-light-color)'
+                  background: "var(--pri-light-color)",
                 }}
               >
-                {message.attachment}{' '}
-                <FileDownloadIcon sx={{ color: 'var(--pri-color)', ml: 1 }} />
+                {message.attachment}{" "}
+                <FileDownloadIcon sx={{ color: "var(--pri-color)", ml: 1 }} />
               </Button>
             )}
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
+          <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
             <Image
               src={calenderIcon}
-              alt='icon'
-              style={{ marginRight: '10px' }}
+              alt="icon"
+              style={{ marginRight: "10px" }}
             />
-            <Typography variant='caption' sx={{ color: '#666' }}>
-              {message.date}
+            <Typography variant="caption" sx={{ color: "#666" }}>
+              {new Date(message.updated_at).toLocaleString()}
             </Typography>
           </Box>
         </Box>
       ))}
     </Box>
-  )
-}
+  );
+};
 
-export default TicketConversation
+export default TicketConversation;

@@ -7,10 +7,10 @@ import Image from "next/image";
 import CustomButton from "@/components/common/Button/Button";
 import AssigneeIcon from "@/assets/icons/unibox/ticket/unibox-ticket-assignee-img.svg";
 import resetIcon from "@/assets/icons/unibox/ticket/hugeicons_filter-reset.svg";
-import totalTicketIcon from "@/assets/icons/analytics/total-tickets-icon.svg";
-import ticketsResolvedIcon from "@/assets/icons/analytics/tickets-resolved-icons.svg";
-import ticketsOpenIcon from "@/assets/icons/analytics/tickets-open-icon.svg";
-import avgResponseTimeIcon from "@/assets/icons/analytics/avg-response-time-icon.svg";
+import totalTicketIcon from "@/assets/icons/analytics/totaltockets.png";
+import ticketsResolvedIcon from "@/assets/icons/analytics/resolvedtickets.svg";
+import ticketsOpenIcon from "@/assets/icons/analytics/opentickets.svg";
+import avgResponseTimeIcon from "@/assets/icons/analytics/avgticket.svg";
 import ReusableTable from "@/components/common/Table/ReusableTable";
 import AnalyticsProgressBarCard from "./AnalyticsProgressBarCard";
 
@@ -493,6 +493,7 @@ function Analytics() {
             color: "#3E3E3E",
             fontSize: "28.64px",
             fontWeight: 600,
+            px: 1,
           }}
         >
           Agent Performance table

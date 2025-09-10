@@ -1,64 +1,64 @@
-'use client'
-import React from 'react'
-import { Box, Typography, Avatar, Chip, Button, Grid } from '@mui/material'
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
-import AttachFileIcon from '@mui/icons-material/AttachFile'
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline'
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
-import profileImg from '@/assets/images/profile/small-profile.png'
+"use client";
+import React from "react";
+import { Box, Typography, Avatar, Chip, Button, Grid } from "@mui/material";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import profileImg from "@/assets/images/profile/small-profile.png";
 
-import Image from 'next/image'
-import icon1 from '@/assets/icons/unibox/ticket/viewpage/created.svg'
-import icon2 from '@/assets/icons/unibox/ticket/viewpage/assigned.svg'
-import icon3 from '@/assets/icons/unibox/ticket/viewpage/attatch.svg'
-import icon4 from '@/assets/icons/unibox/ticket/viewpage/msg1.svg'
-import icon5 from '@/assets/icons/unibox/ticket/viewpage/msg2.svg'
-import icon6 from '@/assets/icons/unibox/ticket/viewpage/priority.svg'
-import TableSelectFilterMainNew from '@/components/common/Select/TableSelectFilterMainNew'
+import Image from "next/image";
+import icon1 from "@/assets/icons/unibox/ticket/viewpage/created.svg";
+import icon2 from "@/assets/icons/unibox/ticket/viewpage/assigned.svg";
+import icon3 from "@/assets/icons/unibox/ticket/viewpage/attatch.svg";
+import icon4 from "@/assets/icons/unibox/ticket/viewpage/msg1.svg";
+import icon5 from "@/assets/icons/unibox/ticket/viewpage/msg2.svg";
+import icon6 from "@/assets/icons/unibox/ticket/viewpage/priority.svg";
+import TableSelectFilterMainNew from "@/components/common/Select/TableSelectFilterMainNew";
 const ActivityLog = ({ activityData }) => {
-  const [filter, setFilter] = React.useState('all')
+  const [filter, setFilter] = React.useState("all");
   const handleFilterChange = (event: any) => {
-    setFilter(event.target.value)
-  }
+    setFilter(event.target.value);
+  };
   return (
     <Box
       sx={{
         p: 2.4,
-        backgroundColor: '#fff',
-        borderRadius: '10px',
-        filter: 'drop-shadow(0px 16.88px 59.079px rgba(86, 89, 146, 0.10))'
+        backgroundColor: "#fff",
+        borderRadius: "10px",
+        filter: "drop-shadow(0px 16.88px 59.079px rgba(86, 89, 146, 0.10))",
       }}
     >
       <Grid
         container
         sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
           pb: 2,
           mb: 2,
-          borderBottom: '1px solid #e0e0e0'
+          borderBottom: "1px solid #e0e0e0",
         }}
       >
         <Grid size={{ lg: 6, xs: 12 }}>
-          <Typography variant='h6' sx={{ fontWeight: 'bold', color: '#333' }}>
+          <Typography variant="h6" sx={{ fontWeight: "bold", color: "#333" }}>
             Activity Log
           </Typography>
         </Grid>
         <Grid size={{ lg: 6, xs: 12 }}>
           <TableSelectFilterMainNew
             value={filter}
-            name={'activityFilter'}
+            name={"activityFilter"}
             options={[
-              { value: 'all', label: 'All' },
-              { value: 'replies', label: 'Replies' },
-              { value: 'status', label: 'Ticket' },
-              { value: 'assignment', label: 'Assignment' },
-              { value: 'files', label: 'Files' }
+              { value: "all", label: "All" },
+              { value: "replies", label: "Replies" },
+              { value: "status", label: "Ticket" },
+              { value: "assignment", label: "Assignment" },
+              { value: "files", label: "Files" },
             ]}
-            popperClassName='department-filter'
-            defaultText='All'
-            className='table-dropdown-select view'
+            popperClassName="department-filter"
+            defaultText="All"
+            className="table-dropdown-select view"
             onChange={handleFilterChange}
           />
         </Grid>
@@ -76,17 +76,17 @@ const ActivityLog = ({ activityData }) => {
         </Button> */}
       </Grid>
 
-      {activityData?.map(activity => (
+      {activityData?.map((activity) => (
         <Box
           key={activity.id}
           sx={{
-            backgroundColor: 'var(--pri-light-color)',
-            borderRadius: '10px',
+            backgroundColor: "var(--pri-light-color)",
+            borderRadius: "10px",
             p: 1.8,
             mb: 1.6,
-            display: 'flex',
+            display: "flex",
             // alignItems: "center",
-            border: '1px solid var(--pri-light-color)'
+            border: "1px solid var(--pri-light-color)",
           }}
         >
           {/* Icon */}
@@ -94,24 +94,24 @@ const ActivityLog = ({ activityData }) => {
             sx={{
               width: 35,
               height: 35,
-              borderRadius: '50%',
-              backgroundColor: 'var(--pri-color)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              borderRadius: "50%",
+              backgroundColor: "var(--pri-color)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               mr: 1.5,
-              color: '#fff',
-              padding: '9px'
+              color: "#fff",
+              padding: "9px",
             }}
           >
-            {activity.type === 'TicketCreated' && (
-              <Image
-                src={icon1}
-                alt='icon'
-                style={{ maxWidth: '100%', height: 'auto' }}
-              />
-            )}
-            {activity.type === 'TicketAssigned' && (
+            {/* {activity.type === 'TicketCreated' && ( */}
+            <Image
+              src={icon1}
+              alt="icon"
+              style={{ maxWidth: "100%", height: "auto" }}
+            />
+            {/* )} */}
+            {/* {activity.type === 'TicketAssigned' && (
               <Image
                 src={icon2}
                 alt='icon'
@@ -145,35 +145,35 @@ const ActivityLog = ({ activityData }) => {
                 alt='icon'
                 style={{ maxWidth: '100%', height: 'auto' }}
               />
-            )}
+            )} */}
           </Box>
 
           {/* Content */}
           <Box sx={{ flexGrow: 1 }}>
             <Typography
-              sx={{ fontSize: '16px', fontWeight: '500', color: '#000' }}
+              sx={{ fontSize: "16px", fontWeight: "500", color: "#000" }}
             >
-              {activity.type}
+              {activity.description}
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
+            <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
               <Avatar
-                alt={activity.name}
+                alt={activity.full_name}
                 src={profileImg.src}
                 sx={{ width: 24, height: 24, mr: 1 }}
               />
-              <Typography sx={{ color: '#666', fontSize: '14px' }}>
-                {activity.name}
+              <Typography sx={{ color: "#666", fontSize: "14px" }}>
+                {activity.full_name}
               </Typography>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
+            <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
               <CalendarTodayIcon
-                sx={{ fontSize: 16, color: '#666', mr: 0.5 }}
+                sx={{ fontSize: 16, color: "#666", mr: 0.5 }}
               />
-              <Typography sx={{ color: '#666', fontSize: '12px' }}>
-                {activity.date}
+              <Typography sx={{ color: "#666", fontSize: "12px" }}>
+                {new Date(activity.updatedAt).toDateString()}
               </Typography>
             </Box>
-            {activity.fileName && (
+            {/* {activity.fileName && (
               <Typography
                 sx={{
                   backgroundColor: '#EDFEFF',
@@ -204,12 +204,12 @@ const ActivityLog = ({ activityData }) => {
                   sx={{ backgroundColor: '#32abb12d', color: '#32AAB1' }}
                 />
               </Box>
-            )}
+            )} */}
           </Box>
         </Box>
       ))}
     </Box>
-  )
-}
+  );
+};
 
-export default ActivityLog
+export default ActivityLog;

@@ -28,7 +28,10 @@ export default function LoginForm2() {
     },
     onSuccess: (data) => {
       toast.success("Login successful!");
-      Cookies.set("access_token", data.token, { secure: true });
+      Cookies.set("access_token", data.token, {
+        secure: false,
+        sameSite: "Lax",
+      });
       router.push("/ticketing-system/tickets");
     },
     onError: (err) => {

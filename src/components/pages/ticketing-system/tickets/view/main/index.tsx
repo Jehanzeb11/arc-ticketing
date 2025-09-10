@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import TicketCard from "./TicketCard";
 import { Alert, AlertTitle, Box, Grid, Typography } from "@mui/material";
@@ -6,6 +7,8 @@ import ReplyForm from "./ReplyForm";
 import ActivityLog from "./ActivityLog";
 import TicketConversation from "./TicketConversation";
 import profileImg from "@/assets/images/profile/small-profile.png";
+import { useQuery } from "@tanstack/react-query";
+import { useApiStore } from "@/lib/api/apiStore";
 
 export default function MainContent({
   ticketData,
@@ -14,6 +17,17 @@ export default function MainContent({
   handleSearch,
   conversationData,
 }: any) {
+  const { callApi, getAllTickets }: any = useApiStore();
+
+  const {
+    data: uniboxTickets,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["uniboxTickets"],
+    queryFn: () => callApi(getAllTickets, { requestType: "getAllTickets" }),
+  });
+
   return (
     <Grid container spacing={2} sx={{ mt: 5 }}>
       <Grid
@@ -30,16 +44,16 @@ export default function MainContent({
             />
           </Box>
 
-          {ticketData?.length > 0 ? (
-            ticketData.map((ticket, index) => (
+          {uniboxTickets?.length > 0 ? (
+            uniboxTickets.map((ticket, index) => (
               <TicketCard
                 key={index}
-                ticketId={ticket.ticketId}
-                status={ticket.Status}
-                priority={ticket.Priority}
-                title={ticket.Title}
-                name={ticket.Assignee}
-                date={ticket.Created}
+                ticketId={ticket.ticket_reference}
+                status={ticket.status}
+                priority={ticket.priority}
+                title={ticket.subject}
+                name={ticket.assignee}
+                date={new Date(ticket.created_at).toLocaleString()}
                 imageUrl={ticket.imageUrl}
               />
             ))
@@ -52,7 +66,11 @@ export default function MainContent({
         size={{ lg: 6, xs: 12 }}
         sx={{ display: "flex", flexDirection: "column", gap: "20px" }}
       >
-        <ReplyForm ticketId={ticketData.id} />
+        <ReplyForm
+          ticketId={ticketData.id}
+          tomails={ticketData.to_email}
+          c_mail={ticketData.customer_email}
+        />
         <Alert
           severity="error"
           sx={{ borderRadius: "10px", border: "1px solid #FF4242" }}
@@ -61,13 +79,13 @@ export default function MainContent({
           This ticket will be automatically resolved on 2025-01-10 10:15 if no
           activity occurs.
         </Alert>
-        {/* <TicketConversation conversationData={conversationData} /> */}
+        <TicketConversation conversationData={ticketData?.replies} />
       </Grid>
       <Grid
         size={{ lg: 3, xs: 12 }}
         sx={{ position: "sticky", top: "20px", height: "fit-content" }}
       >
-        {/* <ActivityLog activityData={activityData} /> */}
+        <ActivityLog activityData={ticketData?.logs} />
       </Grid>
     </Grid>
   );
