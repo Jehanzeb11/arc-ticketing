@@ -413,4 +413,30 @@ button.react-calendar__navigation__label {
   border-radius: 10px;
 }
 
+
+.main-sidebar .MuiListItemIcon-root img {
+  width: 20px;
+  height: 20px;
+}
+
+
+
+.no-border-select .css-1tlcqt-MuiAutocomplete-root .MuiOutlinedInput-root .MuiAutocomplete-input {
+  border: none !important;
+  border-radius: 12px !important;
+}
+
+.no-border-select .MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon.css-1tlcqt-MuiAutocomplete-root .MuiOutlinedInput-root {
+  border: none !important;
+}
+
+.css-unjnvd-MuiTable-root {
+  width: 100% !important;
+}
+
+
+.MuiTableContainer-root .css-1clj3bu-MuiTableContainer-root .css-unjnvd-MuiTable-root {
+  min-width: 100% !important;
+}
+
 /* abdul */

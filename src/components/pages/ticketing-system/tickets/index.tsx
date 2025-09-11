@@ -53,15 +53,19 @@ export default function UniBoxTickets() {
   const queryClient = useQueryClient();
   const [addModal, setAddModal] = useState(false);
   const [archiveModal, setArchiveModal] = useState(false);
+  const [update, SetUpdate] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [archivedTickets, setArchivedTickets] = useState<string[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
   const [filterValues, setFilterValues] = useState({
-    department_id: "",
-    type: "",
-    assignee: "",
-    priority: "",
-    status: "",
+    department_id: "All",
+    type: "All",
+    assignee: "All",
+    priority: "All",
+    status: "All",
   });
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -70,7 +74,7 @@ export default function UniBoxTickets() {
     isLoading: ticketKpiStatsLoading,
     error: ticketKpiStatsError,
   } = useQuery({
-    queryKey: ["uniboxTickets"],
+    queryKey: ["ticketKpi"],
     queryFn: () => callApi(getAllTickets, { requestType: "ticketKpiStats" }),
   });
   const {
@@ -78,8 +82,23 @@ export default function UniBoxTickets() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["ticketKpi"],
-    queryFn: () => callApi(getAllTickets, { requestType: "getAllTickets" }),
+    queryKey: [`uniboxTickets_${update}`],
+    queryFn: () =>
+      callApi(getAllTickets, {
+        requestType: "getAllTickets",
+        type: filterValues.type == "All" ? "" : filterValues.type,
+        status: filterValues.status == "All" ? "" : filterValues.status,
+        priority: filterValues.priority == "All" ? "" : filterValues.priority,
+        department:
+          filterValues.department_id == "All" ? "" : filterValues.department_id,
+        assignee: filterValues.assignee == "All" ? "" : filterValues.assignee,
+        startDate: selectedDate?.[0]
+          ? selectedDate[0].toISOString().split("T")[0]
+          : "",
+        endDate: selectedDate?.[1]
+          ? selectedDate[1].toISOString().split("T")[0]
+          : "",
+      }),
   });
 
   const { data: departments } = useQuery({
@@ -296,8 +315,8 @@ export default function UniBoxTickets() {
             />
           </div>
         ),
-        Created: ticket.created_at || "N/A",
-        LastReply: ticket.LastReply || "N/A",
+        Created: ticket.created_at.split("T")[0] || "N/A",
+        LastReply: ticket.replies[0] || "N/A",
       }))) ||
     [];
 
@@ -343,7 +362,7 @@ export default function UniBoxTickets() {
       value: filterValues.status,
       className: "status-filter",
       filterOptions: [
-        { value: "", label: "All Status" },
+        { value: "All", label: "All Status" },
         { value: "Open", label: "Open" },
         { value: "In-progress", label: "In-progress" },
         { value: "Resolved", label: "Resolved" },
@@ -355,7 +374,7 @@ export default function UniBoxTickets() {
       value: filterValues.priority,
       className: "priority-filter",
       filterOptions: [
-        { value: "", label: "All Priority" },
+        { value: "All", label: "All Priority" },
         { value: "Low", label: "Low" },
         { value: "Medium", label: " Medium" },
         { value: "High", label: " High" },
@@ -367,7 +386,7 @@ export default function UniBoxTickets() {
       value: filterValues.department_id,
       className: "department-filter",
       filterOptions: [
-        { value: "", label: "All Departments" },
+        { value: "All", label: "All Departments" },
         ...(departments?.map((dept: any) => ({
           value: dept.id,
           label: dept.name,
@@ -379,7 +398,7 @@ export default function UniBoxTickets() {
       value: filterValues.type,
       className: "type-filter",
       filterOptions: [
-        { value: "", label: "All Types" },
+        { value: "All", label: "All Types" },
         { value: "Support", label: "Support" },
         { value: "Feature", label: "Feature" },
         { value: "Bug", label: "Bug" },
@@ -391,10 +410,10 @@ export default function UniBoxTickets() {
       value: filterValues.assignee,
       className: "assignee-filter",
       filterOptions: [
-        { value: "", label: "All Assignees" },
+        { value: "All", label: "All Assignees" },
         ...(users?.map((user: any) => ({
-          value: user.full_name,
-          label: user.user_id,
+          value: user.user_id,
+          label: user.full_name,
           icon: AssigneeIcon,
         })) || []),
       ],
@@ -410,12 +429,12 @@ export default function UniBoxTickets() {
   };
 
   const handleApplyFilter = () => {
-    console.log("Applying filters:", filterValues);
+    SetUpdate(!update);
   };
 
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
-    console.log("Selected Date:", date);
+  const handleDateChange = (range: [Date | null, Date | null]) => {
+    // setSelectedDate(range);
+    console.log("Selected range:", range);
   };
 
   const handleResetFilter = () => {
@@ -426,6 +445,7 @@ export default function UniBoxTickets() {
       type: "",
       assignee: "",
     });
+    SetUpdate(!update);
   };
 
   const filteredTicketData = data.filter((ticket) =>
@@ -440,6 +460,8 @@ export default function UniBoxTickets() {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value?.toString() || "");
   };
+
+  console.log(selectedDate);
 
   return (
     <div>
@@ -481,13 +503,14 @@ export default function UniBoxTickets() {
         ))}
         <ReuseableDatePicker
           value={selectedDate}
-          onChange={handleDateChange}
-          className={styles.customDatePicker}
+          onChange={(range) => {
+            console.log("Final range:", range);
+            setSelectedDate(range);
+          }}
           minDate={new Date(2023, 0, 1)}
           maxDate={new Date(2025, 11, 31)}
-          locale="en-US"
-          format="dd/MM/yyyy"
         />
+
         <Grid size={{ lg: 3, xs: 12 }}>
           <Box sx={{ display: "flex", gap: "10px" }} className="ticket-button">
             <CustomButton

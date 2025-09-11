@@ -42,6 +42,7 @@ export default function TableSelectFilterMainNew({
   return (
     <Box className={`my-select ${className ? className : ""}`} sx={{ ...sx }}>
       <Autocomplete
+        disableClearable={true}
         options={options || []}
         getOptionLabel={(option) => option.label || defaultText}
         value={selectedOption}

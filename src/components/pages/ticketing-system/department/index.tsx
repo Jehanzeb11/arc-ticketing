@@ -5,8 +5,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@/assets/icons/deleteicon-agents.svg";
 import ReusableTable from "@/components/common/Table/ReusableTable";
 import MyModal from "@/components/common/Modal";
-import addnewEntry from "@/assets/icons/modal/contacts/addnewEntry.svg";
+import addnewEntry from "@/assets/icons/modal/add-dept.svg";
 import editIcon from "@/assets/icons/table/edit.svg";
+import editIconDept from "@/assets/icons/modal/edit-dept.png";
 import DeleteModalIcon from "@/assets/icons/modal/deleteModalIcon2.svg";
 import deleteModalDeleteIcon from "@/assets/icons/users/delete-icon-2.png";
 import CustomButton from "@/components/common/Button/Button";
@@ -373,7 +374,7 @@ const DepartmentPage = () => {
         modalHeader="true"
         modalTitle="Edit Department"
         modalText="Update the details for the department."
-        iconSrc={editIcon}
+        iconSrc={editIconDept}
       >
         <EditDepartmentEntry
           contactData={selectedDepartment}

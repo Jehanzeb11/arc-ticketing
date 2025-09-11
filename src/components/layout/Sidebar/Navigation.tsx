@@ -21,14 +21,14 @@ import KeyboardArrowRightSharpIcon from "@mui/icons-material/KeyboardArrowRightS
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import "@/lib/i18n";
-import icon1 from "@/assets/icons/navigation/icon1.svg";
+import icon1 from "@/assets/icons/navigation/ticket-nav.png";
 import icon2 from "@/assets/icons/navigation/icon2.svg";
 import icon3 from "@/assets/icons/navigation/icon3.svg";
 import icon4 from "@/assets/icons/navigation/icon4.svg";
 import icon5 from "@/assets/icons/navigation/icon5.svg";
-import activeicon1 from "@/assets/icons/navigation/active-tickets.png";
-import activeicon2 from "@/assets/icons/navigation/active/icon2.svg";
-import activeicon3 from "@/assets/icons/navigation/active/icon3.svg";
+import activeicon1 from "@/assets/icons/navigation/ticket-nav-active.png";
+import activeicon2 from "@/assets/icons/navigation/users-active.png";
+import activeicon3 from "@/assets/icons/navigation/dpt-active.png";
 import activeicon4 from "@/assets/icons/navigation/active/icon4.svg";
 
 import phoneIcon from "@/assets/icons/navigation/phone.svg";
@@ -102,14 +102,14 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
       icon: icon4,
       activeIcon: activeicon4,
     },
+    // {
+    //   i18nKey: "Company Profile",
+    //   href: "/ticketing-system/company-profile",
+    //   pathname: "/ticketing-system/company-profile",
+    //   icon: icon5,
+    //   activeIcon: icon5,
+    // },
     {
-      i18nKey: "Company Profile",
-      href: "/ticketing-system/company-profile",
-      pathname: "/ticketing-system/company-profile",
-      icon: icon5,
-      activeIcon: icon5,
-    },
-     {
       i18nKey: "Email",
       href: "javascript:void(0)",
       pathname: "#",
@@ -179,6 +179,8 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                       }}
                     >
                       <Image
+                        height={18}
+                        width={18}
                         src={
                           isActivePath(pathname, data.pathname)
                             ? data.activeIcon
@@ -268,29 +270,18 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                           ]}
                         >
                           <Image
+                            height={18}
+                            width={18}
                             src={
-                              isActivePath(pathname, data.pathname)
+                              isActivePath(pathname, data.pathname) ||
+                              (data.subItems &&
+                                data.subItems.some(
+                                  (sub) => pathname === sub.pathname
+                                ))
                                 ? data.activeIcon
                                 : data.icon
                             }
                             alt="icon"
-                            // style={{
-                            //   filter:
-                            //     isActivePath(pathname, data.pathname) ||
-                            //     data.subItems.some(
-                            //       sub => pathname === sub.pathname
-                            //     )
-                            //       ? 'invert(1) brightness(0.9)'
-                            //       : 'none'
-                            // }}
-                            // className={`nav-icon ${
-                            //   isActivePath(pathname, data.pathname) ||
-                            //   data.subItems.some(
-                            //     sub => pathname === sub.pathname
-                            //   )
-                            //     ? 'active'
-                            //     : ''
-                            // }`}
                           />
                         </ListItemIcon>
                         <ListItemText
@@ -444,6 +435,8 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                       }}
                     >
                       <Image
+                        height={18}
+                        width={18}
                         src={
                           isActivePath(pathname, data.pathname)
                             ? data.activeIcon
@@ -520,6 +513,8 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                         ]}
                       >
                         <Image
+                          height={18}
+                          width={18}
                           src={
                             isActivePath(pathname, data.pathname)
                               ? data.activeIcon

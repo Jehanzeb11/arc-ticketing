@@ -16,18 +16,8 @@ export default function MainContent({
   searchQuery,
   handleSearch,
   conversationData,
+  allTickets,
 }: any) {
-  const { callApi, getAllTickets }: any = useApiStore();
-
-  const {
-    data: uniboxTickets,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["uniboxTickets"],
-    queryFn: () => callApi(getAllTickets, { requestType: "getAllTickets" }),
-  });
-
   return (
     <Grid container spacing={2} sx={{ mt: 5 }}>
       <Grid
@@ -44,8 +34,8 @@ export default function MainContent({
             />
           </Box>
 
-          {uniboxTickets?.length > 0 ? (
-            uniboxTickets.map((ticket, index) => (
+          {allTickets?.length > 0 ? (
+            allTickets.map((ticket, index) => (
               <TicketCard
                 key={index}
                 ticketId={ticket.ticket_reference}

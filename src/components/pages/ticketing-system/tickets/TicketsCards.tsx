@@ -16,35 +16,35 @@ export default function TicketsCards({ ticketKpiStats }) {
       img: cardBg1,
       title: "Total Tickets",
       value: ticketKpiStats?.counts?.total,
-      percent: ticketKpiStats?.percentageChange?.total,
+      percent: parseFloat(ticketKpiStats?.percentageChange?.total),
       vs: "vs yestarday",
     },
     {
       img: cardBg2,
       title: "Open Tickets",
       value: ticketKpiStats?.counts?.open,
-      percent: ticketKpiStats?.percentageChange?.open,
+      percent: parseFloat(ticketKpiStats?.percentageChange?.open),
       vs: "vs yestarday",
     },
     {
       img: cardBg3,
       title: "In Progress",
       value: ticketKpiStats?.counts?.inProgress,
-      percent: ticketKpiStats?.percentageChange?.inProgress,
+      percent: parseFloat(ticketKpiStats?.percentageChange?.inProgress),
       vs: "vs yestarday",
     },
     {
       img: cardBg4,
       title: "Resolved",
       value: ticketKpiStats?.counts?.resolved,
-      percent: ticketKpiStats?.percentageChange?.resolved,
+      percent: parseFloat(ticketKpiStats?.percentageChange?.resolved),
       vs: "vs yestarday",
     },
     {
       img: cardBg5,
       title: "Close",
       value: ticketKpiStats?.counts?.close,
-      percent: ticketKpiStats?.percentageChange?.close,
+      percent: parseFloat(ticketKpiStats?.percentageChange?.close),
       vs: "vs yestarday",
     },
 
@@ -52,21 +52,23 @@ export default function TicketsCards({ ticketKpiStats }) {
       img: cardBg6,
       title: "High/Urgent",
       value: ticketKpiStats?.counts?.highPriority,
-      percent: ticketKpiStats?.percentageChange?.highPriority,
+      percent: parseFloat(ticketKpiStats?.percentageChange?.highPriority),
       vs: "vs yestarday",
     },
     {
       img: cardBg7,
       title: "Avg Response",
-      value: "25",
-      percent: "4.6%",
+      value: ticketKpiStats?.avgResponseTime?.overallReadable,
+      percent: parseFloat(
+        ticketKpiStats?.avgResponseTime?.percentageChange.split("%")[0]
+      ),
       vs: "vs yestarday",
     },
     {
       img: cardBg8,
       title: "Eight Card",
       value: "25",
-      percent: "4.6%",
+      percent: 4.6,
       vs: "vs yestarday",
     },
   ];
@@ -136,9 +138,10 @@ export default function TicketsCards({ ticketKpiStats }) {
                   alignItems={"center"}
                   fontSize={14}
                   fontWeight={500}
-                  color="#0FA373"
+                  color={card.percent < 0 ? "#FF0101" : "#0FA373"}
                 >
-                  <ExpandLessIcon /> {card.percent}
+                  {card.percent < 0 ? <ExpandMoreIcon /> : <ExpandLessIcon />}{" "}
+                  {card.percent}%
                 </Typography>
                 <Typography ml={3} fontSize={15} fontWeight={500}>
                   {card.vs}

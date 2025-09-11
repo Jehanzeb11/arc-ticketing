@@ -295,7 +295,10 @@ export default function EnhancedTable({
           <Table
             className={styles.table}
             aria-labelledby="tableTitle"
-            sx={{ width: maxContentWidth && maxContentWidth }}
+            // maxContentWidth &&
+            sx={{
+              minWidth: maxContentWidth ? maxContentWidth : "100% !important",
+            }}
           >
             <TableHead className={styles.table}>
               <TableRow>

@@ -21,6 +21,9 @@ import adminprofileLogo from "@/assets/icons/navigation/adminProfileIcon.svg";
 import Typography from "@mui/material/Typography";
 import Cookies from "js-cookie";
 import { Avatar } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { useApiStore } from "@/lib/api/apiStore";
+import { imageUrl } from "@/lib/constants/variables";
 
 const drawerWidth = 270;
 
@@ -82,13 +85,26 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Sidebar() {
+  const { fetchAdminProfile, callApi }: any = useApiStore();
+
   const [open, setOpen] = React.useState(true);
   const isMobile = useCustomMediaQuery("(max-width:767px)");
   const [isNavVisible, setIsNavVisible] = React.useState(!isMobile);
   const [openMenus, setOpenMenus] = React.useState<{ [key: string]: boolean }>(
     {}
   );
-  const [loginName, setLoginName] = React.useState("");
+
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["profile"],
+    queryFn: () => callApi(fetchAdminProfile),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  });
 
   React.useEffect(() => {
     setIsNavVisible(!isMobile);
@@ -114,18 +130,6 @@ export default function Sidebar() {
     setOpen(true);
   };
 
-  React.useEffect(() => {
-    const userData = Cookies.get("userData");
-    if (userData) {
-      try {
-        const parsed = JSON.parse(userData);
-        setLoginName(parsed.user_name);
-        console.log(parsed);
-      } catch (error) {
-        console.error("Invalid userData in cookies", error);
-      }
-    }
-  }, []);
   return (
     <Box sx={{ display: "flex" }} className="main-sidebar">
       <CssBaseline />
@@ -187,19 +191,33 @@ export default function Sidebar() {
             openMenus={openMenus}
             handleMenuClick={handleMenuClick}
           />
-          <Typography
+          {/* <Typography
             variant="body1"
             color="initial"
             className="navigation-label"
           >
             {" "}
-            <Avatar alt="Alex Morgan" sx={{ width: 26, height: 26 }} />
-            {loginName || "User"}
-          </Typography>
-          <Link href="/admin-profile" className="navigation-label">
+            <Image
+              src={imageUrl + user?.picture}
+              alt="Profile"
+              width={20}
+              height={20}
+              style={{ objectFit: "cover", borderRadius: "50%" }}
+            />
+            {user?.full_name || "User"}
+          </Typography> */}
+          <Link
+            href="/ticketing-system/admin-profile"
+            className="navigation-label"
+          >
             {" "}
-            <Image src={adminprofileLogo} alt="adminprofileLogo" />
-            Admin Profile
+            <Image
+              src={imageUrl + user?.picture}
+              alt="Profile"
+              width={20}
+              height={20}
+            />
+            {user?.full_name || "User"}
           </Link>
           <>
             <IconButton

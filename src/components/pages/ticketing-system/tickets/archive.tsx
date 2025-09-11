@@ -57,15 +57,16 @@ export default function UniBoxTickets() {
   const [addModal, setAddModal] = useState(false);
   const [archiveModal, setArchiveModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [update, SetUpdate] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [archivedTickets, setArchivedTickets] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [filterValues, setFilterValues] = useState({
-    department: "AllDepartments",
-    type: "AllTypes",
-    assignee: "AllAssignees",
-    priority: "AllPriority",
-    status: "AllStatus",
+    department_id: "All",
+    type: "All",
+    assignee: "All",
+    priority: "All",
+    status: "All",
   });
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -74,9 +75,24 @@ export default function UniBoxTickets() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["uniboxTickets"],
+    queryKey: [`uniboxTicketsArchive_${update}`],
     queryFn: () =>
-      callApi(getAllTickets, { requestType: "getTicketList", type: "archive" }),
+      callApi(getAllTickets, {
+        requestType: `getTicketList`,
+        apitype: "archive",
+        type: filterValues.type == "All" ? "" : filterValues.type,
+        status: filterValues.status == "All" ? "" : filterValues.status,
+        priority: filterValues.priority == "All" ? "" : filterValues.priority,
+        department:
+          filterValues.department_id == "All" ? "" : filterValues.department_id,
+        assignee: filterValues.assignee == "All" ? "" : filterValues.assignee,
+        startDate: selectedDate?.[0]
+          ? selectedDate[0].toISOString().split("T")[0]
+          : "",
+        endDate: selectedDate?.[1]
+          ? selectedDate[1].toISOString().split("T")[0]
+          : "",
+      }),
   });
 
   const { data: departments } = useQuery({
@@ -111,7 +127,7 @@ export default function UniBoxTickets() {
       return callApi(updateUniboxTicket, updatedTicket);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["uniboxTickets"] });
+      queryClient.invalidateQueries({ queryKey: ["uniboxTicketsArchive"] });
       setArchiveModal(false);
       toast.success("Ticket updated successfully!");
     },
@@ -136,7 +152,7 @@ export default function UniBoxTickets() {
       return callApi(updateUniboxTicket, updatedTicket);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["uniboxTickets"] });
+      queryClient.invalidateQueries({ queryKey: ["uniboxTicketsArchive"] });
       setArchiveModal(false);
       toast.success("Ticket updated successfully!");
     },
@@ -145,7 +161,7 @@ export default function UniBoxTickets() {
     },
   });
 
-  console.log(uniboxTickets, "uniboxTickets");
+  console.log(uniboxTickets, "uniboxTicketsArchive");
 
   const archiveTicketMutation = useMutation({
     mutationFn: ({ ticketId, archived }: any) => {
@@ -156,7 +172,7 @@ export default function UniBoxTickets() {
       return callApi(updateUniboxTicket, ticketId, updatedTicket);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["uniboxTickets"] });
+      queryClient.invalidateQueries({ queryKey: ["uniboxTicketsArchive"] });
       setArchiveModal(false);
       setSelectedTicket(null);
     },
@@ -381,7 +397,7 @@ export default function UniBoxTickets() {
       value: filterValues.status,
       className: "status-filter",
       filterOptions: [
-        { value: "AllStatus", label: "All Status" },
+        { value: "All", label: "All Status" },
         { value: "Open", label: "Open" },
         { value: "In-progress", label: "In-progress" },
         { value: "Resolved", label: "Resolved" },
@@ -393,7 +409,7 @@ export default function UniBoxTickets() {
       value: filterValues.priority,
       className: "priority-filter",
       filterOptions: [
-        { value: "AllPriority", label: "All Priority" },
+        { value: "All", label: "All Priority" },
         { value: "Low", label: "Low" },
         { value: "Medium", label: " Medium" },
         { value: "High", label: " High" },
@@ -401,11 +417,11 @@ export default function UniBoxTickets() {
       ],
     },
     {
-      name: "department",
-      value: filterValues.department,
+      name: "department_id",
+      value: filterValues.department_id,
       className: "department-filter",
       filterOptions: [
-        { value: "AllDepartments", label: "All Departments" },
+        { value: "All", label: "All Departments" },
         ...(departments?.map((dept: any) => ({
           value: dept.name,
           label: dept.name,
@@ -417,7 +433,7 @@ export default function UniBoxTickets() {
       value: filterValues.type,
       className: "type-filter",
       filterOptions: [
-        { value: "AllTypes", label: "All Types" },
+        { value: "All", label: "All Types" },
         { value: "Support", label: "Support" },
         { value: "Feature", label: "Feature" },
         { value: "Bug", label: "Bug" },
@@ -429,7 +445,7 @@ export default function UniBoxTickets() {
       value: filterValues.assignee,
       className: "assignee-filter",
       filterOptions: [
-        { value: "AllAssignees", label: "All Assignees" },
+        { value: "All", label: "All Assignees" },
         ...(users?.map((user: any) => ({
           value: user.full_name,
           label: user.full_name,
@@ -448,7 +464,7 @@ export default function UniBoxTickets() {
   };
 
   const handleApplyFilter = () => {
-    console.log("Applying filters:", filterValues);
+    SetUpdate(!update);
   };
 
   const handleDateChange = (date: Date | null) => {
@@ -458,12 +474,14 @@ export default function UniBoxTickets() {
 
   const handleResetFilter = () => {
     setFilterValues({
-      status: "AllStatus",
-      priority: "AllPriority",
-      department: "AllDepartments",
-      type: "AllTypes",
-      assignee: "AllAssignees",
+      status: "All",
+      priority: "All",
+      department_id: "All",
+      type: "All",
+      assignee: "All",
     });
+    setSelectedDate([null, null]);
+    SetUpdate(!update);
   };
 
   const filteredTicketData = data.filter((ticket) =>

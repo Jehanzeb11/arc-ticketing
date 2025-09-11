@@ -8,16 +8,36 @@ import { useApiStore } from "@/lib/api/apiStore";
 import { useQuery } from "@tanstack/react-query";
 import { Alert, Box, CircularProgress } from "@mui/material";
 export default function ViewUniBoxTicket({ ticketId }: any) {
-  const { callApi, fetchSingleTicket }: any = useApiStore();
+  const { callApi, fetchSingleTicket, fetchDepartments, getAllTickets }: any =
+    useApiStore();
   const [searchQuery, setSearchQuery] = useState("");
+  const [update, SetUpdate] = useState(false);
   // State to manage filter values
   const [filterValues, setFilterValues] = useState({
-    status: "AllStatus",
-    priority: "AllPriority",
-    department: "AllDepartments",
-    type: "AllTypes",
-    assignee: "AllAssignees",
+    status: "All",
+    priority: "All",
+    department_id: "All",
+    type: "All",
+    assignee: "All",
   });
+
+  const {
+    data: allTickets,
+    isLoading: allTicketsLoading,
+    error: allTicketsError,
+  } = useQuery({
+    queryKey: [`uniboxTickets_${update}`],
+    queryFn: () =>
+      callApi(getAllTickets, {
+        requestType: "getAllTickets",
+
+        status: filterValues.status == "All" ? "" : filterValues.status,
+        priority: filterValues.priority == "All" ? "" : filterValues.priority,
+        department:
+          filterValues.department_id == "All" ? "" : filterValues.department_id,
+      }),
+  });
+
   const {
     data: uniboxTickets,
     isLoading,
@@ -28,6 +48,14 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
       callApi(fetchSingleTicket, {
         requestType: "ticketDetail",
         ticketId: JSON.parse(ticketId.value)?.id,
+      }),
+  });
+
+  const { data: departments } = useQuery({
+    queryKey: ["departments"],
+    queryFn: () =>
+      callApi(fetchDepartments, {
+        requestType: "getAllDepartments",
       }),
   });
 
@@ -90,7 +118,7 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
       value: filterValues.priority,
       className: "priority-filter",
       filterOptions: [
-        { value: "AllPriority", label: "All Priority" },
+        { value: "All", label: "All Priority" },
         { value: "Low", label: "Low" },
         { value: "Medium", label: " Medium" },
         { value: "High", label: " High" },
@@ -102,7 +130,7 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
       value: filterValues.status,
       className: "department-filter",
       filterOptions: [
-        { value: "AllStatus", label: "All Status" },
+        { value: "All", label: "All Status" },
         { value: "Open", label: "Open" },
         { value: "In-Progress", label: "In-Progress" },
         { value: "Closed", label: "Closed" },
@@ -110,14 +138,15 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
       ],
     },
     {
-      name: "department",
-      value: filterValues.department,
+      name: "department_id",
+      value: filterValues.department_id,
       className: "department-filter",
       filterOptions: [
-        { value: "AllDepartments", label: "All Departments" },
-        { value: "Technical", label: "Technical" },
-        { value: "Sales", label: "Sales" },
-        { value: "Billing", label: "Billing" },
+        { value: "All", label: "All Departments" },
+        ...(departments?.map((department: any) => ({
+          value: department.id,
+          label: department.name,
+        })) || []),
       ],
     },
   ];
@@ -133,8 +162,7 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
 
   // Handle apply filter button
   const handleApplyFilter = () => {
-    console.log("Applying filters:", filterValues);
-    // Add your filtering logic here (e.g., filter a table or make an API call)
+    SetUpdate(!update);
   };
   // const filteredTicketData = ticketData.filter((ticket) =>
   //   Object.values(ticket).some((value) =>
@@ -159,6 +187,7 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
         handleSearch={handleSearch}
         activityData={uniboxTickets}
         conversationData={uniboxTickets}
+        allTickets={allTickets}
       />
     </div>
   );

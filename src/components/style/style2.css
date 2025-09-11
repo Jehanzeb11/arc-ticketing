@@ -1956,7 +1956,7 @@ span.MuiTypography-root.MuiTypography-caption.MuiDayCalendar-weekDayLabel.css-1l
 }
 
 .unibox-table .MuiTableContainer-root {
-  overflow-x: hidden !important;
+  overflow-x: scroll !important;
 }
 
 /* Dashboard */
@@ -2323,7 +2323,7 @@ span.MuiSwitch-track {
 .navigation-label {
   color: #00000050 !important;
   font-size: 15px !important;
-  line-height: 40px !important;
+  line-height: 140px !important;
   /* 266.667% */
   text-decoration: none !important;
   display: flex;

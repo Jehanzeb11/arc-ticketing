@@ -13,6 +13,8 @@ import { useApiStore } from "@/lib/api/apiStore";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { imageUrl } from "@/lib/constants/variables";
+import { Controller } from "react-hook-form";
+import FormSelect from "@/components/common/Select";
 
 export default function AdminProfilePage({ title }) {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -28,8 +30,13 @@ export default function AdminProfilePage({ title }) {
   const token = Cookies.get("access_token");
 
   // Access the fetchAdminProfile, updateUser, and callApi from the Zustand store
-  const { fetchAdminProfile, updateUser, callApi, updateProfile }: any =
-    useApiStore();
+  const {
+    fetchAdminProfile,
+    updateUser,
+    callApi,
+    updateProfile,
+    fetchRoles,
+  }: any = useApiStore();
 
   // Fetch all users and find the logged-in user's profile
   const {
@@ -44,6 +51,11 @@ export default function AdminProfilePage({ title }) {
     staleTime: Infinity,
   });
 
+  const { data: roles } = useQuery({
+    queryKey: ["roles"],
+    queryFn: () => callApi(fetchRoles, { requestType: "getAllRoles" }),
+  });
+
   // Find the logged-in user's profile
 
   // Populate form fields when profileData is available
@@ -52,7 +64,7 @@ export default function AdminProfilePage({ title }) {
       setName(user.full_name || "");
       setEmail(user.email || "");
       setPhoneNumber(user.phone || "");
-      setRole(user.user_role || "");
+      setRole(user.roleId || "");
       if (user.picture) {
         setProfilePicture(user.picture);
       }
@@ -94,7 +106,7 @@ export default function AdminProfilePage({ title }) {
       toast.error("No user profile found to update");
       return;
     }
-    const updatedData = {
+    const updatedData: any = {
       user_name: name,
       user_email: email,
       user_phone: phoneNumber,
@@ -293,7 +305,7 @@ export default function AdminProfilePage({ title }) {
                   className="primary-border"
                 />
               </Grid>
-              <Grid size={{ xs: 12, lg: 6 }}>
+              {/* <Grid size={{ xs: 12, lg: 6 }}>
                 <GlobalInput
                   label="Role"
                   type="text"
@@ -302,6 +314,21 @@ export default function AdminProfilePage({ title }) {
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   className="primary-border"
+                />
+              </Grid> */}
+
+              <Grid size={{ lg: 6, xs: 12 }}>
+                <FormSelect
+                  label="Role"
+                  name="role"
+                  defaultText="Select Role"
+                  className="no-border-select"
+                  value={role || ""}
+                  onChange={(e) => setRole(e.target.value)}
+                  options={roles?.map((role) => ({
+                    value: role.role_id,
+                    label: role.role_name,
+                  }))}
                 />
               </Grid>
             </Grid>
