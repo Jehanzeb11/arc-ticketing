@@ -282,9 +282,10 @@ const DepartmentPage = () => {
           Department Overview
         </Typography>
         <CustomButton
-          text="Add New"
+          text="Add New Department"
+          customClass="btn-add"
           onClick={() => setAddNewModalOpen(true)}
-          libIcon={<AddCircleIcon />}
+          libIcon={<AddCircleIcon sx={{ fontSize: "30px" }} />}
         />
       </Box>
 

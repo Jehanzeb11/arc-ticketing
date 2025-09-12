@@ -14,6 +14,7 @@ import MyButton from "@/components/common/Button/Button";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
 import { myData, replyUniboxTicket } from "@/lib/api/apiCalls";
+import addUserIcon from "@/assets/icons/unibox/ticket/viewpage/add-user.png";
 import toast from "react-hot-toast";
 
 const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
@@ -114,6 +115,17 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
     replyTicketMutation.mutate(data);
   };
 
+  const departmentOptionst = [
+    {
+      label: "Select",
+      value: "",
+    },
+    ...((departments || []).map((department: any) => ({
+      label: department.name,
+      value: department.id,
+    })) || []),
+  ];
+
   return (
     <Box
       sx={{
@@ -154,18 +166,27 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
               onChange={(e: any) => setCcInput(e.target.value)}
               sx={{ width: "100%" }}
             />
-            <Chip
-              icon={<PersonAddIcon />}
-              label=""
+            <Button
               onClick={addCcEmail}
               sx={{
                 borderRadius: "10px",
                 cursor: "pointer",
-                height: "45px",
+                height: "50px",
                 mt: 1,
-                width: "50px",
+                width: "40px",
+                backgroundColor: "#FBFBFB",
+                border: "1px solid #00000015",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
-            />
+            >
+              <Image
+                src={addUserIcon}
+                alt="icon"
+                style={{ marginRight: "10px" }}
+              />
+            </Button>
           </Box>
           {ccEmails.length > 0 && (
             <Box sx={{ mt: 1, display: "flex", flexWrap: "wrap", gap: 1 }}>
@@ -196,10 +217,7 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
             className="modal-select"
             value={watch("department") || ""}
             onChange={(e) => register("department").onChange(e)}
-            options={departments?.map((department: any) => ({
-              label: department.name,
-              value: department.id,
-            }))}
+            options={departmentOptionst}
             {...register("department", {
               required: "Department is required",
             })}

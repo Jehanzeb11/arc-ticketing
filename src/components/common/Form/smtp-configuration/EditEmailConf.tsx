@@ -194,7 +194,7 @@ export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
           onClick={onCloseModal}
         />
         <ButtonCustom
-          text={isSubmitting ? "Saving..." : "Save"}
+          text={isSubmitting ? "Updating..." : "Update SMTP"}
           type="submit"
           disabled={isSubmitting}
         />

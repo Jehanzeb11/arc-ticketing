@@ -17,7 +17,7 @@ import TableFilter from "../../../pages/ticketing-system/users/UserTableFilter";
 
 // Asset imports
 import editIcon from "@/assets/icons/table/edit.svg";
-import deleteIcon from "@/assets/icons/table/delete.svg";
+import deleteIcon from "@/assets/icons/new-delete.png";
 import copyIcon from "@/assets/icons/table/copy.svg";
 import NewUserIcon from "@/assets/icons/modal/add-user.svg";
 import DeleteModalIcon from "@/assets/icons/modal/deleteModalIcon.svg";

@@ -29,7 +29,7 @@ import icon5 from "@/assets/icons/navigation/icon5.svg";
 import activeicon1 from "@/assets/icons/navigation/ticket-nav-active.png";
 import activeicon2 from "@/assets/icons/navigation/users-active.png";
 import activeicon3 from "@/assets/icons/navigation/dpt-active.png";
-import activeicon4 from "@/assets/icons/navigation/active/icon4.svg";
+import activeicon4 from "@/assets/icons/navigation/analytics-active.png";
 
 import phoneIcon from "@/assets/icons/navigation/phone.svg";
 import aiAgnetIcon from "@/assets/icons/navigation/ai-agent-icon.svg";

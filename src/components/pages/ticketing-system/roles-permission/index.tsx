@@ -6,7 +6,7 @@ import { Box, Typography, Grid, Button, Tooltip, Alert } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 // Asset imports
-import DeleteIcon from "@/assets/icons/deleteicon-agents.svg";
+import DeleteIcon from "@/assets/icons/new-delete.png";
 import addnewEntry from "@/assets/icons/all-users/newUserModalIcon.svg";
 import editnewEntry from "@/assets/icons/all-users/editUserModalIcon.svg";
 import editIcon from "@/assets/icons/table/edit.svg";
@@ -348,11 +348,12 @@ const RolesAndPermission = () => {
           Roles & Permissions
         </Typography>
         <CustomButton
-          text="Add New"
+          customClass="btn-add"
+          text="Add New Role"
           onClick={() =>
             router.push("/ticketing-system/roles-permission/create-permissions")
           }
-          libIcon={<AddCircleIcon />}
+          libIcon={<AddCircleIcon sx={{ fontSize: "30px" }} />}
         />
       </Box>
 

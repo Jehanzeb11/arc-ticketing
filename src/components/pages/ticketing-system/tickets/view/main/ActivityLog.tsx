@@ -15,6 +15,7 @@ import icon4 from "@/assets/icons/unibox/ticket/viewpage/msg1.svg";
 import icon5 from "@/assets/icons/unibox/ticket/viewpage/msg2.svg";
 import icon6 from "@/assets/icons/unibox/ticket/viewpage/priority.svg";
 import TableSelectFilterMainNew from "@/components/common/Select/TableSelectFilterMainNew";
+import { imageUrl } from "@/lib/constants/variables";
 const ActivityLog = ({ activityData }) => {
   const [filter, setFilter] = React.useState("all");
   const handleFilterChange = (event: any) => {
@@ -157,12 +158,12 @@ const ActivityLog = ({ activityData }) => {
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
               <Avatar
-                alt={activity.full_name}
-                src={profileImg.src}
+                alt={activity.user.full_name}
+                src={imageUrl + activity.user.picture}
                 sx={{ width: 24, height: 24, mr: 1 }}
               />
               <Typography sx={{ color: "#666", fontSize: "14px" }}>
-                {activity.full_name}
+                {activity.user.full_name}
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>

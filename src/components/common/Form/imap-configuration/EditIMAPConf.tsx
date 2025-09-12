@@ -194,7 +194,7 @@ export default function EditIMAPConf({ getall, onCloseModal, userData }: any) {
           onClick={onCloseModal}
         />
         <ButtonCustom
-          text={isSubmitting ? "Saving..." : "Save"}
+          text={isSubmitting ? "Updating..." : "Update Imap"}
           type="submit"
           disabled={isSubmitting}
         />

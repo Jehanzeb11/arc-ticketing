@@ -2,11 +2,11 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Box, Typography, Grid, Button, Tooltip, Alert } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import DeleteIcon from "@/assets/icons/deleteicon-agents.svg";
+import DeleteIcon from "@/assets/icons/new-delete.png";
 import ReusableTable from "@/components/common/Table/ReusableTable";
 import MyModal from "@/components/common/Modal";
-import addnewEntry from "@/assets/icons/all-users/newUserModalIcon.svg";
-import editnewEntry from "@/assets/icons/all-users/editUserModalIcon.svg";
+import addnewEntry from "@/assets/icons/users/add-new-user.png";
+import editnewEntry from "@/assets/icons/users/new-user-edit.svg";
 import editIcon from "@/assets/icons/table/edit.svg";
 import DeleteModalIcon from "@/assets/icons/modal/deleteModalIcon2.svg";
 import deleteModalDeleteIcon from "@/assets/icons/users/delete-icon-2.png";
@@ -362,9 +362,10 @@ const AllUsers = () => {
           All Users
         </Typography>
         <CustomButton
-          text="Add New"
+          customClass="btn-add"
+          text="Add New User"
           onClick={() => setAddNewModalOpen(true)}
-          libIcon={<AddCircleIcon />}
+          libIcon={<AddCircleIcon sx={{ fontSize: "30px" }} />}
         />
       </Box>
 

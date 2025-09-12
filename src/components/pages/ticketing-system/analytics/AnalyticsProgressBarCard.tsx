@@ -5,7 +5,12 @@ function AnalyticsProgressBarCard({ analyticsData }) {
   const data = analyticsData.slice(0, 5)?.map((item) => ({
     name: item.username,
     value: item.avgResponseTime,
-    color: item.color,
+    color:
+      item.avgResponseTime >= 75
+        ? "#0AC947"
+        : item.avgResponseTime >= 50
+        ? "#FFBD21"
+        : "#FF293D",
   }));
 
   // Assuming a max time of 100 minutes for normalization

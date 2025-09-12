@@ -5,10 +5,11 @@ import profileImg from "@/assets/images/profile/small-profile.png";
 import { Box, Typography, Avatar, Chip, Button } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import replyIcon from "@/assets/icons/unibox/ticket/viewpage/reply.svg";
 import Image from "next/image";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import calenderIcon from "@/assets/icons/unibox/ticket/viewpage/calender.svg";
+import replyIcon from "@/assets/icons/unibox/ticket/viewpage/ticket.svg";
+
 const TicketConversation = ({ conversationData }: any) => {
   return (
     <Box

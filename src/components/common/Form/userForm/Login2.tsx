@@ -86,7 +86,7 @@ export default function LoginForm2() {
           justifyContent: "flex-end",
         }}
       >
-        Forget password
+        Forgot password?
       </Link>
       <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
         {isSubmitting ? "Logging in..." : "Login"}
@@ -96,13 +96,14 @@ export default function LoginForm2() {
         href="/auth/sign-up"
         style={{
           textDecoration: "none",
-          color: "gray",
-          fontSize: "14px",
+          color: "#404040",
+          fontSize: "16px",
           display: "flex",
           justifyContent: "center",
+          gap: "5px",
         }}
       >
-        Don't have an account? Signup
+        Don't have an account? <b>Signup</b>
       </Link>
     </form>
   );

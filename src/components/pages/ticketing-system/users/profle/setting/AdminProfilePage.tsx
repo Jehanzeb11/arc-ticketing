@@ -339,7 +339,7 @@ export default function AdminProfilePage({ title }) {
                 display: "flex",
                 gap: "20px",
                 mt: "40px",
-                marginInline: "auto",
+                // marginInline: "auto",
               }}
             >
               <Button

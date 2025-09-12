@@ -26,9 +26,9 @@ import TableSelectFilterMainNew from "@/components/common/Select/TableSelectFilt
 import archiveIcon from "@/assets/icons/unibox/ticket/listpage/archive2.svg";
 import archiveModalIcon2 from "@/assets/icons/unibox/ticket/listpage/archive-icon-2.png";
 import createModalIcon from "@/assets/icons/unibox/ticket/create-modal.svg";
-import unarchiveIcon from "@/assets/icons/unibox/ticket/listpage/unarchive.svg";
+import unarchiveIcon from "@/assets/icons/unibox/ticket/listpage/new-archive.png";
 import AssigneeIcon from "@/assets/icons/unibox/ticket/unibox-ticket-assignee-img.svg";
-import deleteIcon from "@/assets/icons/deleteicon-agents.svg";
+import deleteIcon from "@/assets/icons/new-delete.png";
 import deleteModalDeleteIcon from "@/assets/icons/users/delete-icon-2.png";
 import DeleteModalIcon from "@/assets/icons/modal/deleteModalIcon2.svg";
 
@@ -356,7 +356,7 @@ export default function UniBoxTickets() {
     {
       className: "action-icon",
       icon2: (row: any) => {
-        return archivedTickets.includes(row.id) ? unarchiveIcon : archiveIcon;
+        return archivedTickets.includes(row.id) ? unarchiveIcon : unarchiveIcon;
       },
       onClick: (row: any) => {
         if (row && row.id) {
