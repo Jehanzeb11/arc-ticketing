@@ -46,7 +46,7 @@ export default function AccountMenu() {
     setChangePasswordModalOpen(false);
   };
   const handleLogout = () => {
-    Cookies.remove("userData");
+    Cookies.remove("access_token");
     toast.success("Logout Successful!");
     setTimeout(() => {
       window.location.reload();
