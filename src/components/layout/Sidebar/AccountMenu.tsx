@@ -16,11 +16,16 @@ import CustomButton from "@/components/common/Button/Button"; // Assuming Button
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import ResetPassword from "@/components/common/Form/userForm/ResetPassword";
+import { useQuery } from "@tanstack/react-query";
+import { useApiStore } from "@/lib/api/apiStore";
+import { imageUrl } from "@/lib/constants/variables";
+import Image from "next/image";
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [logoutModalOpen, setLogoutModalOpen] = React.useState(false);
   const [loginName, setLoginName] = React.useState("");
+  const { fetchAdminProfile, callApi }: any = useApiStore();
 
   const [changePasswordModalOpen, setChangePasswordModalOpen] =
     React.useState(false);
@@ -55,19 +60,17 @@ export default function AccountMenu() {
   const handleChangePasswordConfirm = () => {
     setChangePasswordModalOpen(false);
   };
-
-  React.useEffect(() => {
-    const userData = Cookies.get("userData");
-    if (userData) {
-      try {
-        const parsed = JSON.parse(userData);
-        setLoginName(parsed.user_name);
-        console.log(parsed);
-      } catch (error) {
-        console.error("Invalid userData in cookies", error);
-      }
-    }
-  }, []); // <-- empty dependency array, run only once
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["profile"],
+    queryFn: () => callApi(fetchAdminProfile),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  });
 
   return (
     <>
@@ -88,20 +91,18 @@ export default function AccountMenu() {
             },
           }}
         >
-          <Avatar
-            alt="Alex Morgan"
-            sx={{ width: 32, height: 32, marginRight: "8px" }}
-          />
+          <Image src={imageUrl + user?.picture} alt="" width={32} height={32} />
 
           <span
             style={{
               fontSize: "17px",
               fontWeight: "600",
               color: "#000",
+              marginLeft: "8px",
               textTransform: "capitalize",
             }}
           >
-            {loginName || "User"}
+            {user?.full_name || "User"}
           </span>
           <KeyboardArrowDown sx={{ marginLeft: "8px", color: "#000" }} />
         </Button>

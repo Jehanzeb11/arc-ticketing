@@ -27,7 +27,7 @@ import { useApiStore } from "@/lib/api/apiStore";
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
 
-const CreateTicket = ({ closeModal }) => {
+const CreateTicket = ({ closeModal, getall }) => {
   const {
     callApi,
     createUniboxTicket,
@@ -112,6 +112,7 @@ const CreateTicket = ({ closeModal }) => {
       toast.success("Ticket created successfully!");
       queryClient.invalidateQueries({ queryKey: ["uniboxTickets"] });
       closeModal();
+      getall();
     },
     onError: (error) => {
       toast.error("Failed to create ticket: " + error.message);
@@ -196,6 +197,7 @@ const CreateTicket = ({ closeModal }) => {
         <Grid size={{ lg: 4, xs: 12 }}>
           <FormSelect
             label="Department"
+            className="modal-select"
             name="Department"
             value={watch("Department") || ""}
             onChange={(e) => register("Department").onChange(e)}
@@ -217,6 +219,7 @@ const CreateTicket = ({ closeModal }) => {
         <Grid size={{ lg: 4, xs: 12 }}>
           <FormSelect
             label="Status"
+            className="modal-select"
             name="Status"
             value={watch("Status") || ""}
             onChange={(e) => register("Status").onChange(e)}
@@ -239,6 +242,7 @@ const CreateTicket = ({ closeModal }) => {
           <FormSelect
             label="Priority"
             name="Priority"
+            className="modal-select"
             value={watch("Priority") || ""}
             onChange={(e) => register("Priority").onChange(e)}
             options={[
@@ -260,6 +264,7 @@ const CreateTicket = ({ closeModal }) => {
           <FormSelect
             label="Type"
             name="Type"
+            className="modal-select"
             value={watch("Type") || ""}
             onChange={(e) => register("Type").onChange(e)}
             options={[
@@ -283,6 +288,7 @@ const CreateTicket = ({ closeModal }) => {
           <FormSelect
             label="Assigned to"
             name="Assignedto"
+            className="modal-select"
             value={watch("Assignedto") || ""}
             onChange={(e) => register("Assignedto").onChange(e)}
             options={[

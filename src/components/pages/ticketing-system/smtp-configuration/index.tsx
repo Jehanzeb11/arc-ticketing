@@ -32,8 +32,7 @@ import EditEmailConf from "@/components/common/Form/smtp-configuration/EditEmail
 
 const SMTP = () => {
   const queryClient = useQueryClient();
-  const { callApi, fetchDepartments, deleteSmtp, updateUser, getAllSMTP }: any =
-    useApiStore();
+  const { callApi, updateSmtp, deleteSmtp, getAllSMTP }: any = useApiStore();
   const [addNewModalOpen, setAddNewModalOpen] = useState(false);
   const [editNewModalOpen, setEditNewModalOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -88,7 +87,7 @@ const SMTP = () => {
             </Typography>
             <IOSSwitch
               checked={user.secure === "SSL"}
-              onChange={(e) => handleSwitchChange(e, user.user_id)}
+              onChange={(e) => handleSwitchChange(e, user.id, user.secure)}
             />
           </Box>
         ),
@@ -155,17 +154,18 @@ const SMTP = () => {
   ];
 
   // Handle switch change for user status
-  const handleSwitchChange = async (e, id) => {
-    const newStatus = e.target.checked ? "Active" : "Inactive";
+  const handleSwitchChange = async (e, id, status) => {
+    const newStatus = status === "SSL" ? "TSL" : "SSL";
 
     try {
-      const formData = new FormData();
-      formData.append("requestType", `updateUser&user_id=${id}`);
-      formData.append("status", newStatus);
-
-      await callApi(updateUser, formData, true);
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success("User status updated successfully!");
+      await callApi(updateSmtp, {
+        requestType: "updateSMTP",
+        secure: newStatus,
+        id: id,
+        type: "SMTP",
+      });
+      queryClient.invalidateQueries({ queryKey: ["getAllSMTP"] });
+      toast.success("IMAP status updated successfully!");
     } catch (error) {
       toast.error("Failed to update user status: " + error.message);
     }
@@ -379,24 +379,6 @@ const SMTP = () => {
         />
       </div>
 
-      <MyModal
-        open={assignModal}
-        setOpen={setAssignModal}
-        customStyle="add-new-extension-modal"
-        modalHeader="true"
-        modalTitle="Add New User"
-        modalText="Enter the details for the new user."
-        iconSrc={addnewEntry}
-      >
-        <AddNewEntryAssignmentModule
-          userData={selectedUser}
-          getall={() => queryClient.invalidateQueries({ queryKey: ["users"] })}
-          onCloseModal={() => {
-            setAddNewModalOpen(false);
-            setSelectedUser(null);
-          }}
-        />
-      </MyModal>
       <MyModal
         open={addNewModalOpen}
         setOpen={setAddNewModalOpen}

@@ -183,7 +183,15 @@ export default function AddNewEntry() {
     },
   ];
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      style={{
+        width: "100%",
+        backgroundColor: "white",
+        padding: "30px",
+        borderRadius: "10px",
+      }}
+    >
       <Grid container spacing={2}>
         <Grid size={{ xs: 6 }}>
           <GlobalInput

@@ -1194,7 +1194,87 @@ button.calling-popup-btn {
 .my-select .autocomplete-select .MuiAutocomplete-input {
   color: #797979;
   background-color: #fff !important;
+  padding-left: 10px !important;
 }
+
+.Low .autocomplete-select .MuiAutocomplete-input {
+  color: #888888 !important;
+
+  background-color: #f4f4f4 !important;
+  border: none !important;
+}
+
+.Urgent .autocomplete-select .MuiAutocomplete-input {
+  color: #F65160 !important;
+
+  border: none !important;
+  background-color: #f6515f5b !important;
+}
+
+.Medium .autocomplete-select .MuiAutocomplete-input {
+  color: #FDC748 !important;
+  border: none !important;
+
+  background-color: #FDC74826 !important;
+}
+
+.High .autocomplete-select .MuiAutocomplete-input {
+  border: none !important;
+  color: #32AAB1 !important;
+
+  background-color: #32AAB126 !important;
+}
+
+
+
+
+
+.Open .autocomplete-select .MuiAutocomplete-input {
+  color: #F65160 !important;
+  border: none !important;
+
+  background-color: #f6515f5b !important;
+}
+
+.Resolved .autocomplete-select .MuiAutocomplete-input {
+  border: none !important;
+  color: #3F8CFF !important;
+
+  background-color: #e2eeff !important;
+}
+
+.In-progress .autocomplete-select .MuiAutocomplete-input {
+  border: none !important;
+  color: #C26616 !important;
+
+  background-color: #f6e8dc !important;
+}
+
+.Closed .autocomplete-select .MuiAutocomplete-input {
+  color: #AFAFAF !important;
+  border: none !important;
+
+  background-color: #f3f3f3 !important;
+}
+
+
+
+.Assignee .autocomplete-select .MuiAutocomplete-input {
+  border: none !important;
+  color: #3F8CFF !important;
+  border: 1px solid var(--pri-color) !important;
+  background-color: #e2eeff !important;
+}
+
+.Department .autocomplete-select .MuiAutocomplete-input {
+  border: 1px solid var(--pri-color) !important;
+}
+
+.Type .autocomplete-select .MuiAutocomplete-input {
+  border: 1px solid var(--pri-color) !important;
+}
+
+
 
 .modal-select .autocomplete-select .MuiAutocomplete-input {
   color: #797979;
@@ -1259,9 +1339,9 @@ button.calling-popup-btn {
 }
 
 .custom-autocomplete-popper li.MuiAutocomplete-option[aria-selected="true"]:first-child {
-  background: var(--pri-light-color) !important;
+  /* background: var(--pri-light-color) !important; */
   border-radius: 5px;
-  color: var(--pri-color);
+  /* color: var(--pri-color); */
 }
 
 /* status-filter */

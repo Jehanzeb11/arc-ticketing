@@ -130,6 +130,7 @@ export default function UniBoxTickets() {
       queryClient.invalidateQueries({ queryKey: ["uniboxTicketsArchive"] });
       setArchiveModal(false);
       toast.success("Ticket updated successfully!");
+      SetUpdate(!update);
     },
     onError: (error) => {
       console.error("Failed to update ticket:", error);
@@ -174,6 +175,7 @@ export default function UniBoxTickets() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["uniboxTicketsArchive"] });
       setArchiveModal(false);
+      SetUpdate(!update);
       setSelectedTicket(null);
     },
     onError: (error) => {
@@ -423,7 +425,7 @@ export default function UniBoxTickets() {
       filterOptions: [
         { value: "All", label: "All Departments" },
         ...(departments?.map((dept: any) => ({
-          value: dept.name,
+          value: dept.id,
           label: dept.name,
         })) || []),
       ],
@@ -447,7 +449,7 @@ export default function UniBoxTickets() {
       filterOptions: [
         { value: "All", label: "All Assignees" },
         ...(users?.map((user: any) => ({
-          value: user.full_name,
+          value: user.user_id,
           label: user.full_name,
           icon: AssigneeIcon,
         })) || []),

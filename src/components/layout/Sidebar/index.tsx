@@ -184,6 +184,7 @@ export default function Sidebar() {
               setOpen={setOpen}
               drawerWidth={drawerWidth}
               handleDrawerClose={handleDrawerClose}
+              user={user}
             />
           </DrawerHeader>
           <Navigation

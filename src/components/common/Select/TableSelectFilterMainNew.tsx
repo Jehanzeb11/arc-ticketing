@@ -2,7 +2,7 @@
 import { Autocomplete, TextField, Box, Popper, MenuItem } from "@mui/material";
 import React from "react";
 import Image from "next/image";
-
+import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 interface Option {
   value: string;
   label: string;
@@ -39,8 +39,30 @@ export default function TableSelectFilterMainNew({
     );
   };
 
+  const getPriorityColor = (label: string) => {
+    switch (label) {
+      case "Low":
+        return "#9e9e9e";
+      case "Medium":
+        return "#fbc02d";
+      case "High":
+        return "#1976d2";
+      case "Urgent":
+        return "#d32f2f";
+      default:
+        return "inherit";
+    }
+  };
+
+  console.log(selectedOption);
+
   return (
-    <Box className={`my-select ${className ? className : ""}`} sx={{ ...sx }}>
+    <Box
+      className={`my-select ${name} ${selectedOption?.value} ${
+        className ? className : ""
+      }`}
+      sx={{ ...sx }}
+    >
       <Autocomplete
         disableClearable={true}
         options={options || []}
@@ -67,42 +89,71 @@ export default function TableSelectFilterMainNew({
             margin="normal"
             InputProps={{
               ...params.InputProps,
-              startAdornment: selectedOption?.icon ? (
-                <Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-                  <Image
-                    src={selectedOption.icon}
-                    alt={`${selectedOption.label} icon`}
-                    style={{ objectFit: "contain" }}
-                  />
-                </Box>
-              ) : null,
+              // startAdornment: selectedOption?.icon ? (
+              //   <Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
+              //     <Image
+              //       src={selectedOption.icon}
+              //       alt={`${selectedOption.label} icon`}
+              //       style={{ objectFit: "contain" }}
+              //     />
+              //   </Box>
+              // ) : null,
               endAdornment: params.InputProps.endAdornment,
             }}
           />
         )}
-        renderOption={(props, option) => (
-          <MenuItem
-            {...props}
-            key={option.value}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              ...menuItemSx,
-            }}
-          >
-            {option.icon && (
-              <Image
-                src={option.icon}
-                alt={`${option.label} icon`}
-                width={20}
-                height={20}
-                style={{ objectFit: "contain" }}
-              />
-            )}
-            {option.label}
-          </MenuItem>
-        )}
+        renderOption={(props, option, { selected }) => {
+          // Priority colors
+
+          return (
+            <MenuItem
+              {...props}
+              key={option.value}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                color:
+                  name === "Priority"
+                    ? getPriorityColor(option.label)
+                    : selected &&
+                      popperClassName?.split(" ")[0] == "ticket-table-dropdown"
+                    ? "#3F8CFF"
+                    : "inherit",
+
+                fontWeight: selected ? 600 : 400,
+                ...menuItemSx,
+              }}
+            >
+              {/* Blue checkmark only if selected */}
+              {selected &&
+                name != "Assignee" &&
+                popperClassName?.split(" ")[0] == "ticket-table-dropdown" && (
+                  <CheckOutlinedIcon
+                    sx={{
+                      fontSize: 18,
+                      color:
+                        name === "Priority"
+                          ? getPriorityColor(option.label)
+                          : "#3F8CFF",
+                    }}
+                  />
+                )}
+
+              {option.icon && (
+                <Image
+                  src={option.icon}
+                  alt={`${option.label} icon`}
+                  width={20}
+                  height={20}
+                  style={{ objectFit: "contain" }}
+                />
+              )}
+
+              {option.label}
+            </MenuItem>
+          );
+        }}
         isOptionEqualToValue={(option, val) => option.value === val.value}
         className="autocomplete-select"
       />

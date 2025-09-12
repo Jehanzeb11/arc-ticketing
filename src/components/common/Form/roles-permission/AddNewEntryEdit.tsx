@@ -45,7 +45,7 @@ export default function AddNewEntryEdit() {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["roles"],
+    queryKey: ["single_role"],
     queryFn: () =>
       callApi(fetchRoleById, {
         requestType: "getRoleById",
@@ -354,7 +354,7 @@ export default function AddNewEntryEdit() {
           // onClick={onCloseModal}
         />
         <ButtonCustom
-          text={isSubmitting ? "Saving..." : "Save Role"}
+          text={isSubmitting ? "Updateing..." : "Update Role"}
           type="submit"
           disabled={isSubmitting}
         />

@@ -25,11 +25,12 @@ import icon1 from "@/assets/icons/navigation/ticket-nav.png";
 import icon2 from "@/assets/icons/navigation/icon2.svg";
 import icon3 from "@/assets/icons/navigation/icon3.svg";
 import icon4 from "@/assets/icons/navigation/icon4.svg";
-import icon5 from "@/assets/icons/navigation/icon5.svg";
+import icon5 from "@/assets/icons/navigation/mail.png";
 import activeicon1 from "@/assets/icons/navigation/ticket-nav-active.png";
 import activeicon2 from "@/assets/icons/navigation/users-active.png";
 import activeicon3 from "@/assets/icons/navigation/dpt-active.png";
 import activeicon4 from "@/assets/icons/navigation/analytics-active.png";
+import activeicon5 from "@/assets/icons/navigation/active-mail.png";
 
 import phoneIcon from "@/assets/icons/navigation/phone.svg";
 import aiAgnetIcon from "@/assets/icons/navigation/ai-agent-icon.svg";
@@ -113,8 +114,8 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
       i18nKey: "Email",
       href: "javascript:void(0)",
       pathname: "#",
-      icon: icon1,
-      activeIcon: activeicon1,
+      icon: icon5,
+      activeIcon: activeicon5,
       subItems: [
         {
           i18nKey: "SMTP Configuration",

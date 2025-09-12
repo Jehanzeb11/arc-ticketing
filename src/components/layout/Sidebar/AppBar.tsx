@@ -1,35 +1,36 @@
-import React from 'react'
-import { styled } from '@mui/material/styles'
-import MenuIcon from '@mui/icons-material/Menu'
-import Typography from '@mui/material/Typography'
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import IconButton from '@mui/material/IconButton'
-import { Badge, Box } from '@mui/material'
-import NotificationsIcon from '@mui/icons-material/Notifications'
-import MailIcon from '@mui/icons-material/Mail'
-import AccountMenu from './AccountMenu'
-import SearchBar from './Search'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import Image from 'next/image'
+import React from "react";
+import { styled } from "@mui/material/styles";
+import MenuIcon from "@mui/icons-material/Menu";
+import Typography from "@mui/material/Typography";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import { Badge, Box } from "@mui/material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import MailIcon from "@mui/icons-material/Mail";
+import AccountMenu from "./AccountMenu";
+import SearchBar from "./Search";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import Image from "next/image";
 
-export default function AppBar ({
+export default function AppBar({
   open,
   setOpen,
   drawerWidth,
-  handleDrawerClose
+  handleDrawerClose,
+  user,
 }: any) {
   interface AppBarProps extends MuiAppBarProps {
-    open?: boolean
+    open?: boolean;
   }
 
   const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: prop => prop !== 'open'
+    shouldForwardProp: (prop) => prop !== "open",
   })<AppBarProps>(({ theme }) => ({
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+      duration: theme.transitions.duration.leavingScreen,
     }),
     variants: [
       {
@@ -37,24 +38,24 @@ export default function AppBar ({
         style: {
           marginLeft: drawerWidth,
           width: `calc(100% - ${drawerWidth}px)`,
-          transition: theme.transitions.create(['width', 'margin'], {
+          transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-          })
-        }
-      }
-    ]
-  }))
+            duration: theme.transitions.duration.enteringScreen,
+          }),
+        },
+      },
+    ],
+  }));
 
   return (
     <AppBar
-      position='fixed'
+      position="fixed"
       open={open}
       sx={{
-        background: 'transparent',
+        background: "transparent",
         py: 1,
-        boxShadow: 'none',
-        display: 'none'
+        boxShadow: "none",
+        display: "none",
       }}
     >
       <Toolbar>
@@ -63,7 +64,7 @@ export default function AppBar ({
         </Typography> */}
         {/* <SearchBar /> */}
         <Box sx={{ flexGrow: 1 }}></Box>
-        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+        <Box sx={{ display: { xs: "none", md: "flex" } }}>
           {/* <IconButton
             size='large'
             aria-label='show 4 new mails'
@@ -87,5 +88,5 @@ export default function AppBar ({
         </Box>
       </Toolbar>
     </AppBar>
-  )
+  );
 }

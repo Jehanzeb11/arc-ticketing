@@ -262,13 +262,13 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
           <Controller
             name="status"
             control={control}
-            defaultValue="Inactive"
+            defaultValue=""
             render={({ field }) => (
               <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <IOSSwitch
                   checked={field.value === "Active"}
                   onChange={(e) =>
-                    field.onChange(e.target.checked ? "Active" : "Inactive")
+                    field.onChange(e.target.checked ? "Active" : "")
                   }
                 />
                 <Typography

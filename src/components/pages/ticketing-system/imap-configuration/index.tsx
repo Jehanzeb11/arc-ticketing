@@ -30,11 +30,11 @@ import { imageUrl } from "@/lib/constants/variables";
 import AddNewEntryEmailConf from "@/components/common/Form/smtp-configuration/AddNewEntry";
 import EditEmailConf from "@/components/common/Form/smtp-configuration/EditEmailConf";
 import AddNewEntryIMAPConf from "@/components/common/Form/imap-configuration/AddNewEntry";
+import EditIMAPConf from "@/components/common/Form/imap-configuration/EditIMAPConf";
 
 const IMAP = () => {
   const queryClient = useQueryClient();
-  const { callApi, fetchDepartments, deleteSmtp, updateUser, getAllSMTP }: any =
-    useApiStore();
+  const { callApi, updateSmtp, deleteSmtp, getAllSMTP }: any = useApiStore();
   const [addNewModalOpen, setAddNewModalOpen] = useState(false);
   const [editNewModalOpen, setEditNewModalOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -89,7 +89,7 @@ const IMAP = () => {
             </Typography>
             <IOSSwitch
               checked={user.secure === "SSL"}
-              onChange={(e) => handleSwitchChange(e, user.user_id)}
+              onChange={(e) => handleSwitchChange(e, user.id, user.secure)}
             />
           </Box>
         ),
@@ -156,17 +156,18 @@ const IMAP = () => {
   ];
 
   // Handle switch change for user status
-  const handleSwitchChange = async (e, id) => {
-    const newStatus = e.target.checked ? "Active" : "Inactive";
+  const handleSwitchChange = async (e, id, status) => {
+    const newStatus = status === "SSL" ? "TSL" : "SSL";
 
     try {
-      const formData = new FormData();
-      formData.append("requestType", `updateUser&user_id=${id}`);
-      formData.append("status", newStatus);
-
-      await callApi(updateUser, formData, true);
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success("User status updated successfully!");
+      await callApi(updateSmtp, {
+        requestType: "updateSMTP",
+        secure: newStatus,
+        id: id,
+        type: "IMAP",
+      });
+      queryClient.invalidateQueries({ queryKey: ["getAllIMAP"] });
+      toast.success("IMAP status updated successfully!");
     } catch (error) {
       toast.error("Failed to update user status: " + error.message);
     }
@@ -406,7 +407,7 @@ const IMAP = () => {
         modalText="Update the IMAP"
         iconSrc={editnewEntry}
       >
-        <EditEmailConf
+        <EditIMAPConf
           userData={selectedUser}
           getall={() =>
             queryClient.invalidateQueries({ queryKey: ["getAllIMAP"] })

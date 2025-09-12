@@ -70,6 +70,8 @@ export default function FormSelect({
             : options.find((opt) => opt.value === value) || null
         }
         PopperComponent={CustomPopper}
+        disableClearable // 👈 removes the clear icon
+        clearIcon={null}
         onChange={(event, newValue) => {
           if (multiple) {
             // For multi-select -> array of values

@@ -136,6 +136,7 @@ export default function UniBoxTickets() {
       queryClient.invalidateQueries({ queryKey: ["uniboxTickets"] });
       setArchiveModal(false);
       toast.success("Ticket updated successfully!");
+      SetUpdate(!update);
     },
     onError: (error) => {
       console.error("Failed to update ticket:", error);
@@ -238,7 +239,7 @@ export default function UniBoxTickets() {
           <div onClick={(e) => e.stopPropagation()}>
             <TableSelectFilterMainNew
               sx={sx}
-              popperClassName="ticket-table-dropdown"
+              popperClassName="ticket-table-dropdown priority-table-dropdown"
               value={ticket.priority || "Low"}
               name="Priority"
               options={[
@@ -250,7 +251,7 @@ export default function UniBoxTickets() {
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "priority", e.target.value)
               }
-              className="table-dropdown-select"
+              className="table-dropdown-select priority-table-dropdown"
             />
           </div>
         ),
@@ -488,7 +489,7 @@ export default function UniBoxTickets() {
         spacing={2}
       >
         {filters.map((filter: any, index: number) => (
-          <Grid size={{ lg: 1.4, xs: 12 }} key={index}>
+          <Grid size={{ lg: 1.55, xs: 12 }} key={index}>
             <TableSelectFilterMainNew
               value={filter.value || ""}
               name={filter.name}
@@ -511,7 +512,7 @@ export default function UniBoxTickets() {
           maxDate={new Date(2025, 11, 31)}
         />
 
-        <Grid size={{ lg: 3, xs: 12 }}>
+        <Grid size={{ lg: 2.5, xs: 12 }}>
           <Box sx={{ display: "flex", gap: "10px" }} className="ticket-button">
             <CustomButton
               customClass={"btn-outlined"}
@@ -549,7 +550,14 @@ export default function UniBoxTickets() {
         modalTitle="Create Ticket"
         iconSrc={createModalIcon}
       >
-        <CreateTicket closeModal={() => setAddModal(false)} />
+        <CreateTicket
+          closeModal={() => setAddModal(false)}
+          getall={() =>
+            queryClient.invalidateQueries({
+              queryKey: [`uniboxTickets_${update}`],
+            })
+          }
+        />
       </MyModal>
 
       <MyModal

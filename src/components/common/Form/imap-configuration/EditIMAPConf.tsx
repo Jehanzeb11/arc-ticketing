@@ -166,7 +166,7 @@ export default function EditIMAPConf({ getall, onCloseModal, userData }: any) {
                 <IOSSwitch
                   checked={field.value === "SSL"}
                   onChange={(e) =>
-                    field.onChange(e.target.checked ? "SSL" : "TSL")
+                    field.onChange(e.target.checked ? "SSL" : "")
                   }
                 />
 
