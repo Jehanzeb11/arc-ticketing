@@ -39,6 +39,7 @@ import resetIcon from "@/assets/icons/unibox/ticket/hugeicons_filter-reset.svg";
 import DashboardHeader from "../../DashboardHeader";
 import TicketsCards from "./TicketsCards";
 import toast from "react-hot-toast";
+import { usePermission } from "@/hooks/usePermission";
 
 export default function UniBoxTickets() {
   const {
@@ -68,6 +69,11 @@ export default function UniBoxTickets() {
     status: "All",
   });
   const [searchQuery, setSearchQuery] = useState("");
+
+  const canFilterTickets = usePermission("Search & Filter Tickets");
+  const canArchiveTickets = usePermission("Archive Tickets");
+  const editTicketFields = usePermission("Edit Ticket Fields");
+  const canViewTicket = usePermission("View Tickets");
 
   const {
     data: ticketKpiStats,
@@ -207,6 +213,8 @@ export default function UniBoxTickets() {
     },
   };
 
+  //  const canFilterTicket = usePermission("Search & Filter Tickets")
+
   const data =
     (uniboxTickets &&
       uniboxTickets?.map((ticket: any) => ({
@@ -222,11 +230,13 @@ export default function UniBoxTickets() {
               popperClassName="ticket-table-dropdown"
               value={ticket.status || "Open"}
               name="Status"
-              options={[
+              options={editTicketFields ? [
                 { value: "Open", label: "Open" },
                 { value: "In-progress", label: "In-progress" },
                 { value: "Resolved", label: "Resolved" },
                 { value: "Closed", label: "Closed" },
+              ] : [
+                { value: ticket.status, label: ticket.status || "Open" },
               ]}
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "status", e.target.value)
@@ -242,11 +252,13 @@ export default function UniBoxTickets() {
               popperClassName="ticket-table-dropdown priority-table-dropdown"
               value={ticket.priority || "Low"}
               name="Priority"
-              options={[
+              options={editTicketFields ? [
                 { value: "Low", label: "Low" },
                 { value: "Medium", label: "Medium" },
                 { value: "High", label: "High" },
                 { value: "Urgent", label: "Urgent" },
+              ] : [
+                { value: ticket.priority, label: ticket.priority || "Low" },
               ]}
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "priority", e.target.value)
@@ -262,11 +274,13 @@ export default function UniBoxTickets() {
               popperClassName="ticket-table-dropdown"
               value={ticket.type || "Support"}
               name="Type"
-              options={[
+              options={editTicketFields ? [
                 { value: "Support", label: "Support" },
                 { value: "Feature", label: "Feature" },
                 { value: "Bug", label: "Bug" },
                 { value: "Question", label: "Question" },
+              ] : [
+                { value: ticket.type, label: ticket.type || "Support" },
               ]}
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "type", e.target.value)
@@ -282,11 +296,12 @@ export default function UniBoxTickets() {
               popperClassName="ticket-table-dropdown"
               value={ticket.department_id || "Technical"}
               name="Department"
-              options={
-                departments?.map((dept: any) => ({
-                  value: dept.id,
-                  label: dept.name,
-                })) || []
+              options={editTicketFields ? (departments?.map((dept: any) => ({
+                value: dept.id,
+                label: dept.name,
+              })) || []) : [
+                { value: ticket.department_id, label: ticket.department_name || "N/A" },
+              ]
               }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "department_id", e.target.value)
@@ -302,13 +317,14 @@ export default function UniBoxTickets() {
               popperClassName="ticket-table-dropdown"
               value={ticket.assignee || "Unassigned"}
               name="Assignee"
-              options={
+              options={editTicketFields ?
                 users?.map((user: any) => ({
                   value: user.user_id,
                   label: user.full_name,
                   icon: AssigneeIcon,
-                })) || []
-              }
+                })) || [] : [
+                  { value: ticket.assignee, label: ticket.assignee || "Unassigned" },
+                ]}
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "assignee", e.target.value)
               }
@@ -331,12 +347,13 @@ export default function UniBoxTickets() {
       });
     }
   };
+
+
   const actions = [
-    {
+    canArchiveTickets && {
       className: "action-icon",
-      icon2: (row: any) => {
-        return archivedTickets.includes(row.id) ? unarchiveIcon : archiveIcon;
-      },
+      icon2: (row: any) =>
+        archivedTickets.includes(row.id) ? unarchiveIcon : archiveIcon,
       onClick: (row: any) => {
         if (row && row.id) {
           setSelectedTicket(row);
@@ -350,10 +367,11 @@ export default function UniBoxTickets() {
           ? "Unarchive Ticket"
           : "Archive Ticket",
     },
-  ];
+  ].filter(Boolean); // ✅ removes false when permission is missing
+
 
   const handleRowClick = (row: any) => {
-    router.push(`/ticketing-system/tickets/${row.id}`);
+   canViewTicket && router.push(`/ticketing-system/tickets/${row.id}`);
     setSelectedTicket(row);
   };
 
@@ -477,7 +495,7 @@ export default function UniBoxTickets() {
         handleSearch={handleSearch}
         searchQuery={searchQuery}
       />
-      <Grid
+      {canFilterTickets && <Grid
         container
         sx={{
           alignItems: "center",
@@ -525,7 +543,7 @@ export default function UniBoxTickets() {
             </Button>
           </Box>
         </Grid>
-      </Grid>
+      </Grid>}
 
       <div className="table-parent unibox-table">
         <ReusableTable

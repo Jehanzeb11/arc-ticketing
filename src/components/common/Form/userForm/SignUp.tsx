@@ -24,7 +24,7 @@ export default function UserSignUpForm() {
   } = useForm();
   const router = useRouter();
   const password = watch("password");
-  const { callApi, createUser }: any = useApiStore();
+  const { callApi, createGuest, setEmailToVerify }: any = useApiStore();
 
   useEffect(() => {
     const userData = Cookies.get("userData");
@@ -35,24 +35,19 @@ export default function UserSignUpForm() {
 
   const mutation = useMutation({
     mutationFn: (data: FieldValues) =>
-      callApi(
-        createUser,
-        {
-          user_name: data.username,
-          user_phone: data.phone,
-          user_password: data.password,
-          user_email: data.email,
-          user_company: data.companyName,
-          user_role: data.role || "user",
-          user_status: data.status || "pending",
-        },
-        {},
-        null,
-        { headers: { "X-Request-Source": "SignUpForm" } }
-      ),
-    onSuccess: () => {
+      callApi(createGuest, {
+        requestType: "register",
+        full_name: data.username,
+        phone: data.phone,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+        email: data.email,
+        // user_company: data.companyName,
+      }),
+    onSuccess: (data: any, vars) => {
+      setEmailToVerify(vars.email);
       toast.success("Sign-up successful!");
-      router.push("/auth/login");
+      // router.push("/auth/verify-otp");
     },
     onError: (error) => toast.error("Sign-up failed: " + error.message),
   });
@@ -78,7 +73,7 @@ export default function UserSignUpForm() {
           {errors.username.message as React.ReactNode}
         </p>
       )}
-      <AuthInput
+      {/* <AuthInput
         type="text"
         placeholder="Company Name*"
         srcImg={icon4}
@@ -94,7 +89,7 @@ export default function UserSignUpForm() {
         <p style={{ color: "#B80505", marginBottom: "10px" }}>
           {errors.companyName.message as React.ReactNode}
         </p>
-      )}
+      )} */}
       <AuthInput
         type="text"
         placeholder="Phone Number*"

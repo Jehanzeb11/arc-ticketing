@@ -85,7 +85,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Sidebar() {
-  const { fetchAdminProfile, callApi }: any = useApiStore();
+  const { fetchAdminProfile, callApi,setProfile }: any = useApiStore();
 
   const [open, setOpen] = React.useState(true);
   const isMobile = useCustomMediaQuery("(max-width:767px)");
@@ -94,17 +94,17 @@ export default function Sidebar() {
     {}
   );
 
-  const {
-    data: user,
-    isLoading,
-    error,
-  } = useQuery({
+   const { data: user, isLoading, error } = useQuery({
     queryKey: ["profile"],
-    queryFn: () => callApi(fetchAdminProfile),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    queryFn: fetchAdminProfile,
     staleTime: Infinity,
   });
+
+  React.useEffect(() => {
+    if (user) {
+      setProfile(user); // update Zustand global state
+    }
+  }, [user]);
 
   React.useEffect(() => {
     setIsNavVisible(!isMobile);

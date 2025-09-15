@@ -30,6 +30,7 @@ import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
 import { useRouter } from "next/navigation";
+import { usePermission } from "@/hooks/usePermission";
 
 const RolesAndPermission = () => {
   const router = useRouter();
@@ -41,6 +42,12 @@ const RolesAndPermission = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [selectedName, setSelectedName] = useState("");
   const [selectedRole, setSelectedRole] = useState(null);
+
+  const canCreateRole = usePermission("Create Role");
+  const canStattusUpdate = usePermission("Deactivate/Activate Role");
+  const canEditRole = usePermission("Edit Role");
+  const canDeleteRole = usePermission("Delete Role");
+  const canAssignRole = usePermission("Assign Permissions to Role");
 
   const {
     data: roles,
@@ -140,13 +147,13 @@ const RolesAndPermission = () => {
             }}
           >
             <Typography>{permission}</Typography>
-            <Button
+            {canAssignRole && <Button
               data-permission={permission}
               onClick={(e) => handleCancelPermission(e, roleId)}
               sx={{ minWidth: "auto", padding: 0 }}
             >
               <CloseIcon sx={{ fontSize: 16 }} />
-            </Button>
+            </Button>}
           </Box>
         ))}
       </Box>
@@ -180,10 +187,10 @@ const RolesAndPermission = () => {
             >
               {role.status}
             </Typography>
-            <IOSSwitch
+            {canStattusUpdate && <IOSSwitch
               checked={role.status === "Active"}
               onChange={(e) => handleSwitchChange(e, role.role_id)}
-            />
+            />}
           </Box>
         ),
       })) || [],
@@ -230,7 +237,7 @@ const RolesAndPermission = () => {
   ];
 
   const actions = [
-    {
+    canEditRole && {
       icon: editIcon,
       onClick: (row) => {
         router.push(
@@ -240,7 +247,7 @@ const RolesAndPermission = () => {
       className: "action-icon",
       tooltip: "Edit Role",
     },
-    {
+   canDeleteRole && {
       icon: DeleteIcon,
       onClick: (row) => {
         if (row && row.id) {
@@ -256,7 +263,7 @@ const RolesAndPermission = () => {
       className: "action-icon",
       tooltip: "Delete Role",
     },
-  ];
+  ].filter(Boolean); // Filter out any falsey actions
 
   const deleteMutation = useMutation({
     mutationFn: (id) =>
@@ -347,14 +354,14 @@ const RolesAndPermission = () => {
         <Typography variant="h5" className="header-title">
           Roles & Permissions
         </Typography>
-        <CustomButton
+        {canCreateRole && <CustomButton
           customClass="btn-add"
           text="Add New Role"
           onClick={() =>
             router.push("/ticketing-system/roles-permission/create-permissions")
           }
           libIcon={<AddCircleIcon sx={{ fontSize: "30px" }} />}
-        />
+        />}
       </Box>
 
       <Grid

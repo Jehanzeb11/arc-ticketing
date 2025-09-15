@@ -27,6 +27,7 @@ import { useApiStore } from "@/lib/api/apiStore";
 import EditUser from "@/components/common/Form/all-users/EditUser";
 import AddNewEntryAssignmentModule from "@/components/common/Form/modules/AddNew";
 import { imageUrl } from "@/lib/constants/variables";
+import { usePermission } from "@/hooks/usePermission";
 
 const AllUsers = () => {
   const queryClient = useQueryClient();
@@ -50,6 +51,13 @@ const AllUsers = () => {
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
+
+
+   // ✅ call the hook at the top of your component
+const canAssignModule = usePermission("Delete User");
+const canDeleteUser = usePermission("Delete User");
+const canEditUser = usePermission("Edit User");
+const canToggleStatus = usePermission("Deactivate/Activate User");
 
   const columns = [
     { key: "profile", title: "Profile", filterable: false },
@@ -106,14 +114,14 @@ const AllUsers = () => {
             >
               {user.status}
             </Typography>
-            <IOSSwitch
+              {canToggleStatus && <IOSSwitch
               checked={user.status === "Active"}
               onChange={(e) => handleSwitchChange(e, user.user_id)}
-            />
+            />}
           </Box>
         ),
       })) || [],
-    [users]
+    [users, canToggleStatus]
   );
 
   // Filter state
@@ -197,63 +205,66 @@ const AllUsers = () => {
     }
   };
 
-  const actions = [
-    {
-      icon: editIcon,
-      onClick: (row) => {
-        if (row && row.user_id) {
-          const user = users.find((u) => u.user_id === row.user_id);
-          if (user) {
-            setSelectedId(row.user_id);
-            setSelectedUser(user);
-            setEditNewModalOpen(true);
-          } else {
-            toast.error("User data not found");
-          }
-        } else {
-          toast.error("Invalid row or missing id");
-        }
-      },
-      className: "action-icon",
-      tooltip: "Edit User",
-    },
-    {
-      icon: DeleteIcon,
-      onClick: (row) => {
-        if (row && row.user_id) {
-          setSelectedId(row.user_id);
-          const user = users.find((u) => u.user_id === row.user_id);
-          const name = user?.full_name || user?.email || "User";
-          setSelectedName(name);
-          setDeleteModal(true);
-        } else {
-          toast.error("Cannot delete: User data is invalid.");
-        }
-      },
-      className: "action-icon",
-      tooltip: "Delete User",
-    },
-    {
-      icon: DeleteIcon,
-      onClick: (row) => {
-        if (row && row.user_id) {
-          setSelectedId(row.user_id);
-          const user = users.find((u) => u.user_id === row.user_id);
-          const name = user?.full_name || user?.email || "User";
-          setSelectedName(name);
-          setAssignModal(true);
 
-          if (user) {
-            setSelectedUser(user);
-          }
+
+const actions = [
+  canEditUser && {
+    icon: editIcon,
+    onClick: (row) => {
+      if (row && row.user_id) {
+        const user = users.find((u) => u.user_id === row.user_id);
+        if (user) {
+          setSelectedId(row.user_id);
+          setSelectedUser(user);
+          setEditNewModalOpen(true);
         } else {
-          toast.error("Cannot delete: User data is invalid.");
+          toast.error("User data not found");
         }
-      },
-      className: "action-icon",
-      tooltip: "Assign Module",
+      } else {
+        toast.error("Invalid row or missing id");
+      }
     },
-  ];
+    className: "action-icon",
+    tooltip: "Edit User",
+  },
+  canDeleteUser && {
+    icon: DeleteIcon,
+    onClick: (row) => {
+      if (row && row.user_id) {
+        setSelectedId(row.user_id);
+        const user = users.find((u) => u.user_id === row.user_id);
+        const name = user?.full_name || user?.email || "User";
+        setSelectedName(name);
+        setDeleteModal(true);
+      } else {
+        toast.error("Cannot delete: User data is invalid.");
+      }
+    },
+    className: "action-icon",
+    tooltip: "Delete User",
+  },
+  canAssignModule && {
+    icon: DeleteIcon, // <-- replace with correct icon
+    onClick: (row) => {
+      if (row && row.user_id) {
+        setSelectedId(row.user_id);
+        const user = users.find((u) => u.user_id === row.user_id);
+        const name = user?.full_name || user?.email || "User";
+        setSelectedName(name);
+        setAssignModal(true);
+
+        if (user) {
+          setSelectedUser(user);
+        }
+      } else {
+        toast.error("Cannot assign: User data is invalid.");
+      }
+    },
+    className: "action-icon",
+    tooltip: "Assign Module",
+  },
+].filter(Boolean); // ✅ removes `false` entries
+
 
   const deleteMutation = useMutation({
     mutationFn: (id) =>
@@ -361,14 +372,15 @@ const AllUsers = () => {
         <Typography variant="h5" className="header-title">
           All Users
         </Typography>
-        <CustomButton
+       {usePermission("Add User") && <CustomButton
           customClass="btn-add"
           text="Add New User"
           onClick={() => setAddNewModalOpen(true)}
           libIcon={<AddCircleIcon sx={{ fontSize: "30px" }} />}
-        />
+        />}
       </Box>
 
+      {usePermission("Search & Filter Users") && 
       <Grid
         container
         spacing={2}
@@ -416,6 +428,7 @@ const AllUsers = () => {
           </Box>
         </Grid>
       </Grid>
+          }
 
       <div className="table-parent">
         <ReusableTable

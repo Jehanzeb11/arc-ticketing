@@ -16,6 +16,7 @@ import AnalyticsProgressBarCard from "./AnalyticsProgressBarCard";
 import { useQuery } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
 import ReuseableDatePicker from "@/components/common/react-day-date-picker/ReuseableDatePicker";
+import { usePermission } from "@/hooks/usePermission";
 
 function Analytics() {
   const { callApi, getAllTickets, fetchDepartments, fetchUsers }: any =
@@ -34,6 +35,9 @@ function Analytics() {
     assignee: "All",
     status: "All",
   });
+
+  const canFilterAnalytics = usePermission("Filter Analytics"); 
+  const canViewAgentsPerformance = usePermission("View Agent Performance Metrics");
 
   const { data: departments } = useQuery({
     queryKey: ["departments"],
@@ -195,7 +199,7 @@ function Analytics() {
   return (
     <div className="main-analytics">
       <AnalyticsHeader />
-      <Grid
+      {canFilterAnalytics && <Grid
         container
         sx={{
           alignItems: "center",
@@ -246,7 +250,7 @@ function Analytics() {
             </Button>
           </Box>
         </Grid>
-      </Grid>
+      </Grid>}
       <Grid size={{ lg: 12, xs: 12 }} container spacing={2} sx={{ mb: "20px" }}>
         <Grid
           size={{ lg: 3, xs: 12 }}
@@ -468,7 +472,7 @@ function Analytics() {
           pageSize={10}
         />
       </div>
-      <AnalyticsProgressBarCard analyticsData={analytics || []} />
+     {canViewAgentsPerformance && <AnalyticsProgressBarCard analyticsData={analytics || []} />}
     </div>
   );
 }

@@ -14,3 +14,14 @@ export const isActivePath = (pathname: string, href: string): boolean => {
     normalizedPath.startsWith(normalizedHref + "/")
   );
 };
+
+export const checkPermission = (
+  userPermissions: string[],
+  requiredPermission?: string
+): boolean => {
+  if (!requiredPermission) return false;
+
+  const normalizedUserPerms = userPermissions.map((p) => p.trim());
+
+  return normalizedUserPerms.includes(requiredPermission.trim());
+};

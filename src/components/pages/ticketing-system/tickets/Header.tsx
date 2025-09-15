@@ -12,6 +12,7 @@ import Search from "@/components/common/search";
 import Button from "@/components/common/Button/Button";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import archiveIcon from "@/assets/icons/unibox/ticket/listpage/archive.svg";
+import { usePermission } from "@/hooks/usePermission";
 export default function TicketHeader({
   searchQuery,
   handleSearch,
@@ -20,6 +21,9 @@ export default function TicketHeader({
   archive,
   isdelete,
 }: any) {
+    const canFilterTickets = usePermission("Search & Filter Tickets");
+    const canCreateTickets = usePermission("Create Ticket");
+  
   return (
     <Grid
       container
@@ -41,7 +45,7 @@ export default function TicketHeader({
       <Grid size={{ lg: 6, xs: 12 }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Box sx={{ flexGrow: 1 }}>
-            <Search searchQuery={searchQuery} handleSearch={handleSearch} />
+            {canFilterTickets && <Search searchQuery={searchQuery} handleSearch={handleSearch} />}
           </Box>
           {!archive && !isdelete && (
             <Box>
@@ -49,11 +53,11 @@ export default function TicketHeader({
                 sx={{ display: "flex", gap: "10px" }}
                 className="ticket-button"
               >
-                <Button
+                {canCreateTickets && <Button
                   text="Add Ticket"
                   onClick={onClickAddTicket}
                   libIcon={<AddCircleIcon />}
-                />
+                />}
 
                 {/* <Button
                   btntrasnparent

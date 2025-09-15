@@ -47,6 +47,7 @@ import {
   updateSmtp,
   deleteSmtp,
   myData,
+  createGuest,
 } from "./apiCalls";
 
 export const useApiStore = create((set) => ({
@@ -73,6 +74,8 @@ export const useApiStore = create((set) => ({
   updateProfile,
   myData,
   // modules
+
+  createGuest,
 
   createModules,
   getUserModules,
@@ -113,6 +116,32 @@ export const useApiStore = create((set) => ({
   loading: false,
   error: null,
 
+  emailToVerify: null,
+  setEmailToVerify: (email: string) => {
+    set({ emailToVerify: email });
+  },
+
+  profile: null, // store user profile globally
+  setProfile: (profile: any) => {
+    let normalizedProfile = { ...profile };
+    try {
+      // Normalize permissions to always be an array
+      if (typeof profile?.role?.permissions === "string") {
+        normalizedProfile.role = {
+          ...profile.role,
+          permissions: JSON.parse(profile.role.permissions),
+        };
+      }
+    } catch (err) {
+      console.error("Failed to parse permissions:", err);
+      normalizedProfile.role = {
+        ...profile.role,
+        permissions: [],
+      };
+    }
+
+    set({ profile: normalizedProfile });
+  },
   callApi: async (fn, ...args) => {
     set({ loading: true, error: null });
     try {

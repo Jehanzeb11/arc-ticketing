@@ -22,6 +22,7 @@ import EditDepartmentEntry from "@/components/common/Form/department-old/EditDep
 import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
+import { usePermission } from "@/hooks/usePermission";
 
 const DepartmentPage = () => {
   const queryClient = useQueryClient();
@@ -33,6 +34,10 @@ const DepartmentPage = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [selectedName, setSelectedName] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState(null);
+
+const canCreateDept = usePermission("Add Department");
+const canEditDept = usePermission("Edit Department");
+const canDeleteDept = usePermission("Delete Department");
 
   const {
     data: departments,
@@ -142,7 +147,7 @@ const DepartmentPage = () => {
   ];
 
   const actions = [
-    {
+   canEditDept && {
       icon: editIcon,
       onClick: (row) => {
         if (row && row.id) {
@@ -161,7 +166,7 @@ const DepartmentPage = () => {
       className: "action-icon",
       tooltip: "Edit Department",
     },
-    {
+   canDeleteDept && {
       icon: DeleteIcon,
       onClick: (row) => {
         if (row && row.id) {
@@ -177,7 +182,7 @@ const DepartmentPage = () => {
       className: "action-icon",
       tooltip: "Delete Department",
     },
-  ];
+  ].filter(Boolean); // Filter out any falsey actions
 
   const deleteMutation = useMutation({
     mutationFn: (id) => {
@@ -281,12 +286,12 @@ const DepartmentPage = () => {
         <Typography variant="h5" className="header-title">
           Department Overview
         </Typography>
-        <CustomButton
+        {canCreateDept && <CustomButton
           text="Add New Department"
           customClass="btn-add"
           onClick={() => setAddNewModalOpen(true)}
           libIcon={<AddCircleIcon sx={{ fontSize: "30px" }} />}
-        />
+        />}
       </Box>
 
       <Grid

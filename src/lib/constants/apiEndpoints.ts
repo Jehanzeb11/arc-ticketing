@@ -1,6 +1,7 @@
 export const API_ENDPOINTS = {
   // Users
   USERS: (type) => `/users/multi-purpose?requestType=${type}`,
+  GUEST: `/guest/multi-purpose`,
   USER_BY_ID: (id) => `/users/multi-purpose?requestType=${id}`,
   PROFILE: "/profile",
   LOGIN: "/auth/login",

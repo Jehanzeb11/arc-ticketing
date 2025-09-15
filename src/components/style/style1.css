@@ -157,7 +157,6 @@ label {
 }
 
 .profile-form .MuiAutocomplete-inputRoot {
-  border: 1px solid var(--border-color);
 }
 
 .avatar-container {

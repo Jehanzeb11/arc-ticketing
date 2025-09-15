@@ -1,6 +1,6 @@
 "use client";
 import { Box, Grid, Typography, Alert } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { use, useRef, useState } from "react";
 import Image from "next/image";
 import placeholderImg from "@/assets/images/profile/placeholder.png";
 import GlobalInput from "@/components/common/Input/GlobalInput";
@@ -15,6 +15,7 @@ import Cookies from "js-cookie";
 import { imageUrl } from "@/lib/constants/variables";
 import { Controller } from "react-hook-form";
 import FormSelect from "@/components/common/Select";
+import { usePermission } from "@/hooks/usePermission";
 
 export default function AdminProfilePage({ title }) {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -25,6 +26,9 @@ export default function AdminProfilePage({ title }) {
   const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
   const fileInputRef = useRef(null);
   const queryClient = useQueryClient();
+
+  const canManageProfile = usePermission("Manage Own Profile");
+  const canResetPassword = usePermission("Reset Own Password");
 
   // Get logged-in user's email from cookie
   const token = Cookies.get("access_token");
@@ -342,13 +346,13 @@ export default function AdminProfilePage({ title }) {
                 // marginInline: "auto",
               }}
             >
-              <Button
+              {canResetPassword && <Button
                 type="button"
                 text="Change Password"
                 btntrasnparent
                 onClick={handleChangePasswordClick}
-              />
-              <Button type="submit" text="Save Changes" />
+              />}
+              {canManageProfile && <Button type="submit" text="Save Changes" />}
             </Grid>
           </Grid>
         </form>
