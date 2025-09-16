@@ -47,7 +47,7 @@ export default function UserSignUpForm() {
     onSuccess: (data: any, vars) => {
       setEmailToVerify(vars.email);
       toast.success("Sign-up successful!");
-      // router.push("/auth/verify-otp");
+      router.push("/auth/verify-otp");
     },
     onError: (error) => toast.error("Sign-up failed: " + error.message),
   });

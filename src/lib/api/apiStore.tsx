@@ -48,6 +48,7 @@ import {
   deleteSmtp,
   myData,
   createGuest,
+  fetchNotifications,
 } from "./apiCalls";
 
 export const useApiStore = create((set) => ({
@@ -112,6 +113,7 @@ export const useApiStore = create((set) => ({
   // company profile
   fetchCompanyProfile,
   updateCompanyProfile, // Add this
+  fetchNotifications,
   // State for API calls
   loading: false,
   error: null,
@@ -126,10 +128,10 @@ export const useApiStore = create((set) => ({
     let normalizedProfile = { ...profile };
     try {
       // Normalize permissions to always be an array
-      if (typeof profile?.role?.permissions === "string") {
+      if (typeof profile?.data?.role?.permissions === "string") {
         normalizedProfile.role = {
           ...profile.role,
-          permissions: JSON.parse(profile.role.permissions),
+          permissions: JSON.parse(profile.data.role.permissions),
         };
       }
     } catch (err) {

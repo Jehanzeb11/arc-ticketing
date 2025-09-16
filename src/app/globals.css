@@ -414,6 +414,9 @@ button.react-calendar__navigation__label {
   border-radius: 10px;
 }
 
+.main-sidebar {
+  z-index: 10 !important;
+}
 
 .main-sidebar .MuiListItemIcon-root img {
   width: 20px;
@@ -454,6 +457,17 @@ button.react-calendar__navigation__label {
 .btn-add {
   font-size: 18px;
   padding: 14px !important;
+}
+
+
+.notifications {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99;
+  background: linear-gradient(180deg, #ffffff69 0%, #32ABB179 100%);
 }
 
 /* abdul */

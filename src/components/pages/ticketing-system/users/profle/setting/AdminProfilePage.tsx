@@ -65,12 +65,12 @@ export default function AdminProfilePage({ title }) {
   // Populate form fields when profileData is available
   React.useEffect(() => {
     if (user) {
-      setName(user.full_name || "");
-      setEmail(user.email || "");
-      setPhoneNumber(user.phone || "");
-      setRole(user.roleId || "");
-      if (user.picture) {
-        setProfilePicture(user.picture);
+      setName(user?.data?.full_name || "");
+      setEmail(user?.data?.email || "");
+      setPhoneNumber(user?.data?.phone || "");
+      setRole(user?.data?.roleId || "");
+      if (user?.data?.picture) {
+        setProfilePicture(user?.data?.picture);
       }
     }
   }, [user]);
@@ -94,7 +94,8 @@ export default function AdminProfilePage({ title }) {
 
   // Handle form submission with useMutation
   const updateMutation = useMutation({
-    mutationFn: (updatedData) => callApi(updateUser, user?.id, updatedData),
+    mutationFn: (updatedData) =>
+      callApi(updateUser, user?.data.id, updatedData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success("Profile updated successfully!");
@@ -106,7 +107,7 @@ export default function AdminProfilePage({ title }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user?.id) {
+    if (!user?.data?.id) {
       toast.error("No user profile found to update");
       return;
     }
@@ -346,12 +347,14 @@ export default function AdminProfilePage({ title }) {
                 // marginInline: "auto",
               }}
             >
-              {canResetPassword && <Button
-                type="button"
-                text="Change Password"
-                btntrasnparent
-                onClick={handleChangePasswordClick}
-              />}
+              {canResetPassword && (
+                <Button
+                  type="button"
+                  text="Change Password"
+                  btntrasnparent
+                  onClick={handleChangePasswordClick}
+                />
+              )}
               {canManageProfile && <Button type="submit" text="Save Changes" />}
             </Grid>
           </Grid>

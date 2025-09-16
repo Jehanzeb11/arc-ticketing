@@ -64,6 +64,7 @@ interface EnhancedTableProps {
   onFilterApply?: (filters: { [key: string]: string }) => void;
   isLoading?: boolean;
   onRowClick?: (row: Row) => void; // Added prop for row click handling
+  maxContentWidth?: number;
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {

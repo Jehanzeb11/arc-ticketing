@@ -85,7 +85,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Sidebar() {
-  const { fetchAdminProfile, callApi,setProfile }: any = useApiStore();
+  const { fetchAdminProfile, callApi, setProfile }: any = useApiStore();
 
   const [open, setOpen] = React.useState(true);
   const isMobile = useCustomMediaQuery("(max-width:767px)");
@@ -94,7 +94,11 @@ export default function Sidebar() {
     {}
   );
 
-   const { data: user, isLoading, error } = useQuery({
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["profile"],
     queryFn: fetchAdminProfile,
     staleTime: Infinity,
@@ -213,12 +217,12 @@ export default function Sidebar() {
           >
             {" "}
             <Image
-              src={imageUrl + user?.picture}
+              src={imageUrl + user?.data?.picture}
               alt="Profile"
               width={20}
               height={20}
             />
-            {user?.full_name || "User"}
+            {user?.data?.full_name || "User"}
           </Link>
           <>
             <IconButton

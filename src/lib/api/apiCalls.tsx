@@ -66,6 +66,9 @@ export const updateSmtp = (data) =>
 export const deleteSmtp = (data) =>
   postbackend(`${API_ENDPOINTS.SMTP}?requestType=deleteSmtp`, data);
 
+// NOTIFICATIONS
+export const fetchNotifications = (data) =>
+  postbackend(`${API_ENDPOINTS.NOTIFICATIONS}`, data);
 // unibox_tickets
 export const fetchSingleTicket = (data) =>
   postbackend(API_ENDPOINTS.TICKETS, data);

@@ -91,7 +91,12 @@ export default function AccountMenu() {
             },
           }}
         >
-          <Image src={imageUrl + user?.picture} alt="" width={32} height={32} />
+          <Image
+            src={imageUrl + user?.data?.picture}
+            alt=""
+            width={32}
+            height={32}
+          />
 
           <span
             style={{
@@ -102,7 +107,7 @@ export default function AccountMenu() {
               textTransform: "capitalize",
             }}
           >
-            {user?.full_name || "User"}
+            {user?.data?.full_name || "User"}
           </span>
           <KeyboardArrowDown sx={{ marginLeft: "8px", color: "#000" }} />
         </Button>

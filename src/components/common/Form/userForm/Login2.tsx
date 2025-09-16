@@ -32,6 +32,10 @@ export default function LoginForm2() {
         secure: false,
         sameSite: "Lax",
       });
+      Cookies.set("access_role", data.user_type, {
+        secure: false,
+        sameSite: "Lax",
+      });
       router.push("/ticketing-system/tickets");
     },
     onError: (err) => {

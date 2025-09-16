@@ -4,6 +4,7 @@ export const API_ENDPOINTS = {
   GUEST: `/guest/multi-purpose`,
   USER_BY_ID: (id) => `/users/multi-purpose?requestType=${id}`,
   PROFILE: "/profile",
+  NOTIFICATIONS: "/notification/multi-purpose",
   LOGIN: "/auth/login",
   ME: "/auth/me",
   VERIFY_2FA: "/auth/verify-2fa",
