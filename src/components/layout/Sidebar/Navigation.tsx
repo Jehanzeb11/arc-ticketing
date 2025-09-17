@@ -77,8 +77,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
       ],
     },
 
-    (canViewUsers ||
-      canViewRoles) && {
+    (canViewUsers || canViewRoles) && {
       i18nKey: "User Management",
       href: "javascript:void(0)",
       pathname: "#",
@@ -134,6 +133,31 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
           i18nKey: "IMAP Configuration",
           href: "/ticketing-system/imap-configuration",
           pathname: "/ticketing-system/imap-configuration",
+        },
+      ],
+    },
+
+    {
+      i18nKey: "Scruber",
+      href: "javascript:void(0)",
+      pathname: "#",
+      icon: icon1,
+      activeIcon: activeicon1,
+      subItems: [
+        {
+          i18nKey: "Phone Scruber",
+          href: "/scruber/phone-scruber",
+          pathname: "/scruber/phone-scruber",
+        },
+        {
+          i18nKey: "Scrub History",
+          href: "/ticketing-system/tickets/archive",
+          pathname: "/ticketing-system/tickets/archive",
+        },
+        {
+          i18nKey: "Deleted Tickets",
+          href: "/ticketing-system/tickets/delete",
+          pathname: "/ticketing-system/tickets/delete",
         },
       ],
     },
@@ -196,14 +220,14 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                             : data.icon
                         }
                         alt="icon"
-                      // className={`nav-icon ${
-                      //   isActivePath(pathname, data.pathname) ? 'active' : ''
-                      // }`}
-                      // style={{
-                      //   filter: isActivePath(pathname, data.pathname)
-                      //     ? 'invert(1) brightness(0.9)'
-                      //     : 'none'
-                      // }}
+                        // className={`nav-icon ${
+                        //   isActivePath(pathname, data.pathname) ? 'active' : ''
+                        // }`}
+                        // style={{
+                        //   filter: isActivePath(pathname, data.pathname)
+                        //     ? 'invert(1) brightness(0.9)'
+                        //     : 'none'
+                        // }}
                       />
                     </Link>
                   </ListItem>
@@ -211,25 +235,26 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
               ) : (
                 <>
                   <ListItem
-                    className={`nav-item ${isActivePath(pathname, data.pathname) ||
+                    className={`nav-item ${
+                      isActivePath(pathname, data.pathname) ||
                       data.subItems.some((sub) => pathname === sub.pathname)
-                      ? "active"
-                      : ""
-                      }`}
+                        ? "active"
+                        : ""
+                    }`}
                     disablePadding
                     sx={{
                       display: "block",
                       background:
                         // openMenus[data.i18nKey] ||
                         isActivePath(pathname, data.pathname) ||
-                          data.subItems.some((sub) => pathname === sub.pathname)
+                        data.subItems.some((sub) => pathname === sub.pathname)
                           ? "linear-gradient(90deg, #32ABB1 0%, #3286BD 100%)"
                           : "",
                       borderRadius: open ? "30px" : "10px",
                       "& :hover": { borderRadius: open ? "10px" : "" },
                       color:
                         isActivePath(pathname, data.pathname) ||
-                          data.subItems.some((sub) => pathname === sub.pathname)
+                        data.subItems.some((sub) => pathname === sub.pathname)
                           ? "white"
                           : "#797979",
 
@@ -243,7 +268,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                         textDecoration: "none",
                         color:
                           isActivePath(pathname, data.pathname) ||
-                            data.subItems.some((sub) => pathname === sub.pathname)
+                          data.subItems.some((sub) => pathname === sub.pathname)
                             ? "white"
                             : "#797979",
                       }}
@@ -268,9 +293,9 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                               justifyContent: "center",
                               color:
                                 isActivePath(pathname, data.pathname) ||
-                                  data.subItems.some(
-                                    (sub) => pathname === sub.pathname
-                                  )
+                                data.subItems.some(
+                                  (sub) => pathname === sub.pathname
+                                )
                                   ? "currentColor"
                                   : "currentColor",
                             },
@@ -282,10 +307,10 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                             width={18}
                             src={
                               isActivePath(pathname, data.pathname) ||
-                                (data.subItems &&
-                                  data.subItems.some(
-                                    (sub) => pathname === sub.pathname
-                                  ))
+                              (data.subItems &&
+                                data.subItems.some(
+                                  (sub) => pathname === sub.pathname
+                                ))
                                 ? data.activeIcon
                                 : data.icon
                             }
@@ -310,9 +335,9 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                             sx={{
                               color:
                                 isActivePath(pathname, data.pathname) ||
-                                  data.subItems.some(
-                                    (sub) => pathname === sub.pathname
-                                  )
+                                data.subItems.some(
+                                  (sub) => pathname === sub.pathname
+                                )
                                   ? ""
                                   : "",
                             }}
@@ -322,9 +347,9 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                                 sx={{
                                   color:
                                     isActivePath(pathname, data.pathname) ||
-                                      data.subItems.some(
-                                        (sub) => pathname === sub.pathname
-                                      )
+                                    data.subItems.some(
+                                      (sub) => pathname === sub.pathname
+                                    )
                                       ? "white"
                                       : "",
                                 }}
@@ -334,9 +359,9 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                                 sx={{
                                   color:
                                     isActivePath(pathname, data.pathname) ||
-                                      data.subItems.some(
-                                        (sub) => pathname === sub.pathname
-                                      )
+                                    data.subItems.some(
+                                      (sub) => pathname === sub.pathname
+                                    )
                                       ? "white"
                                       : "",
                                 }}
@@ -451,22 +476,23 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                             : data.icon
                         }
                         alt="icon"
-                      // className={`nav-icon ${
-                      //   isActivePath(pathname, data.pathname) ? 'active' : ''
-                      // }`}
-                      // style={{
-                      //   filter: isActivePath(pathname, data.pathname)
-                      //     ? 'invert(1) brightness(0.9)'
-                      //     : 'none'
-                      // }}
+                        // className={`nav-icon ${
+                        //   isActivePath(pathname, data.pathname) ? 'active' : ''
+                        // }`}
+                        // style={{
+                        //   filter: isActivePath(pathname, data.pathname)
+                        //     ? 'invert(1) brightness(0.9)'
+                        //     : 'none'
+                        // }}
                       />
                     </Link>
                   </ListItem>
                 </Tooltip>
               ) : (
                 <ListItem
-                  className={`nav-item ${isActivePath(pathname, data.pathname) ? "active" : ""
-                    }`}
+                  className={`nav-item ${
+                    isActivePath(pathname, data.pathname) ? "active" : ""
+                  }`}
                   key={index}
                   disablePadding
                   sx={{
@@ -528,16 +554,16 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                               : data.icon
                           }
                           alt="icon"
-                        // className={`nav-icon ${
-                        //   isActivePath(pathname, data.pathname)
-                        //     ? 'active'
-                        //     : ''
-                        // }`}
-                        // style={{
-                        //   filter: isActivePath(pathname, data.pathname)
-                        //     ? 'invert(1) brightness(0.9)'
-                        //     : 'none'
-                        // }}
+                          // className={`nav-icon ${
+                          //   isActivePath(pathname, data.pathname)
+                          //     ? 'active'
+                          //     : ''
+                          // }`}
+                          // style={{
+                          //   filter: isActivePath(pathname, data.pathname)
+                          //     ? 'invert(1) brightness(0.9)'
+                          //     : 'none'
+                          // }}
                         />
                       </ListItemIcon>
                       <ListItemText

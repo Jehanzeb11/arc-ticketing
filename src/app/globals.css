@@ -471,3 +471,79 @@ button.react-calendar__navigation__label {
 }
 
 /* abdul */
+
+
+
+
+
+
+
+
+
+/* scruber */
+
+
+
+
+.card-scruber {
+  height: 262px;
+  width: 50%;
+  border-radius: 10px;
+  padding: 75px;
+  box-shadow: 0px 0px 50px 25px #56599213;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.card-scruber.active {
+  border: 2px dashed #2BBBAC;
+}
+
+.scrub-number-search {
+  background-color: #fff;
+  padding: 18px 24px;
+  border-radius: 5px;
+  border: 1px solid #0000003b;
+  outline: none;
+  width: 35%;
+  font-size: 16px;
+}
+
+.scrub-number-search-btn {
+  background-color: #32AAB1 !important;
+  padding: 0px 16px !important;
+  border-radius: 100px !important;
+  border: none !important;
+  color: white !important;
+  width: 12%;
+  font-size: 18px !important;
+  height: 50px;
+  text-transform: capitalize !important;
+}
+
+.table-scrub table thead {
+  background: linear-gradient(90deg, #fff 0%, #3286BDB2 100%) !important;
+
+}
+
+.scrub-show-all {
+  color: #32AAB1 !important;
+  text-transform: capitalize !important;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: underline !important;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+
+.scrub-checks .MuiFormControlLabel-root .MuiCheckbox-root svg {
+  border-radius: 50% !important;
+  padding: 1px !important;
+  height: 25px !important;
+  width: 25px !important;
+}
+
+.scrub-checks .css-12xagqm-MuiSwitchBase-root {
+  border-radius: 50% !important;
+}
