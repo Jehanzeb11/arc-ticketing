@@ -331,7 +331,7 @@ const SMTP = () => {
           <Search
             searchQuery={searchQuery}
             handleSearch={handleSearch}
-            placeholder="Search by full name"
+            placeholder="Search by SMTP hos"
           />
         </Grid>
         {filters.map((filter, index) => (

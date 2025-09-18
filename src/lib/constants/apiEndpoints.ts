@@ -9,6 +9,8 @@ export const API_ENDPOINTS = {
   ME: "/auth/me",
   VERIFY_2FA: "/auth/verify-2fa",
 
+  SCRUB: "/scrub",
+
   USER_MODULES: (type) => `/usermodules/multi-purpose${type}`,
 
   // tickets

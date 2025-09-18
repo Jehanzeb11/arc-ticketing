@@ -151,13 +151,13 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
         },
         {
           i18nKey: "Scrub History",
-          href: "/ticketing-system/tickets/archive",
-          pathname: "/ticketing-system/tickets/archive",
+          href: "/scruber/history-scruber",
+          pathname: "/scruber/history-scruber",
         },
         {
-          i18nKey: "Deleted Tickets",
-          href: "/ticketing-system/tickets/delete",
-          pathname: "/ticketing-system/tickets/delete",
+          i18nKey: "Scrub History Result",
+          href: "/scruber/history-scruber-result",
+          pathname: "/scruber/history-scruber-result",
         },
       ],
     },

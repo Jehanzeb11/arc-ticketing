@@ -6,7 +6,7 @@ import AddNewEntry from "@/components/common/Form/roles-permission/AddNewEntry";
 const CreateRolesPermissions = () => {
   return (
     <Box>
-      <DashboardHeader title="Roles Management" />
+      <DashboardHeader title="User Management" />
       <Box
         sx={{ display: "flex", justifyContent: "space-between", my: "16px" }}
       >

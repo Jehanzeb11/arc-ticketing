@@ -158,12 +158,12 @@ const ActivityLog = ({ activityData }) => {
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
               <Avatar
-                alt={activity.user.full_name}
-                src={imageUrl + activity.user.picture}
+                alt={activity?.user?.full_name}
+                src={imageUrl + activity?.user?.picture}
                 sx={{ width: 24, height: 24, mr: 1 }}
               />
               <Typography sx={{ color: "#666", fontSize: "14px" }}>
-                {activity.user.full_name}
+                {activity?.user?.full_name}
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>

@@ -147,13 +147,15 @@ const RolesAndPermission = () => {
             }}
           >
             <Typography>{permission}</Typography>
-            {canAssignRole && <Button
-              data-permission={permission}
-              onClick={(e) => handleCancelPermission(e, roleId)}
-              sx={{ minWidth: "auto", padding: 0 }}
-            >
-              <CloseIcon sx={{ fontSize: 16 }} />
-            </Button>}
+            {canAssignRole && (
+              <Button
+                data-permission={permission}
+                onClick={(e) => handleCancelPermission(e, roleId)}
+                sx={{ minWidth: "auto", padding: 0 }}
+              >
+                <CloseIcon sx={{ fontSize: 16 }} />
+              </Button>
+            )}
           </Box>
         ))}
       </Box>
@@ -187,10 +189,12 @@ const RolesAndPermission = () => {
             >
               {role.status}
             </Typography>
-            {canStattusUpdate && <IOSSwitch
-              checked={role.status === "Active"}
-              onChange={(e) => handleSwitchChange(e, role.role_id)}
-            />}
+            {canStattusUpdate && (
+              <IOSSwitch
+                checked={role.status === "Active"}
+                onChange={(e) => handleSwitchChange(e, role.role_id)}
+              />
+            )}
           </Box>
         ),
       })) || [],
@@ -247,7 +251,7 @@ const RolesAndPermission = () => {
       className: "action-icon",
       tooltip: "Edit Role",
     },
-   canDeleteRole && {
+    canDeleteRole && {
       icon: DeleteIcon,
       onClick: (row) => {
         if (row && row.id) {
@@ -347,21 +351,25 @@ const RolesAndPermission = () => {
 
   return (
     <Box>
-      <DashboardHeader title="Roles Management" />
+      <DashboardHeader title="User Management" />
       <Box
         sx={{ display: "flex", justifyContent: "space-between", my: "16px" }}
       >
         <Typography variant="h5" className="header-title">
           Roles & Permissions
         </Typography>
-        {canCreateRole && <CustomButton
-          customClass="btn-add"
-          text="Add New Role"
-          onClick={() =>
-            router.push("/ticketing-system/roles-permission/create-permissions")
-          }
-          libIcon={<AddCircleIcon sx={{ fontSize: "30px" }} />}
-        />}
+        {canCreateRole && (
+          <CustomButton
+            customClass="btn-add"
+            text="Add New Role"
+            onClick={() =>
+              router.push(
+                "/ticketing-system/roles-permission/create-permissions"
+              )
+            }
+            libIcon={<AddCircleIcon sx={{ fontSize: "30px" }} />}
+          />
+        )}
       </Box>
 
       <Grid

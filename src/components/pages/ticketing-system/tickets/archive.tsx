@@ -252,12 +252,16 @@ export default function UniBoxTickets() {
               popperClassName="ticket-table-dropdown"
               value={ticket.status || "Open"}
               name="Status"
-              options={canFilterTickets ? [
-                { value: "Open", label: "Open" },
-                { value: "In-progress", label: "In-progress" },
-                { value: "Resolved", label: "Resolved" },
-                { value: "Closed", label: "Closed" },
-              ] : [{ value: ticket.status, label: ticket.status }]}
+              options={
+                canFilterTickets
+                  ? [
+                      { value: "Open", label: "Open" },
+                      { value: "In-progress", label: "In-progress" },
+                      { value: "Resolved", label: "Resolved" },
+                      { value: "Closed", label: "Closed" },
+                    ]
+                  : [{ value: ticket.status, label: ticket.status }]
+              }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "status", e.target.value)
               }
@@ -272,13 +276,16 @@ export default function UniBoxTickets() {
               popperClassName="ticket-table-dropdown"
               value={ticket.priority || "Low"}
               name="Priority"
-              options={canFilterTickets ? [
-                { value: "Low", label: "Low" },
-                { value: "Medium", label: "Medium" },
-                { value: "High", label: "High" },
-                { value: "Urgent", label: "Urgent" },
-              ]
-                : [{ value: ticket.priority, label: ticket.priority }]}
+              options={
+                canFilterTickets
+                  ? [
+                      { value: "Low", label: "Low" },
+                      { value: "Medium", label: "Medium" },
+                      { value: "High", label: "High" },
+                      { value: "Urgent", label: "Urgent" },
+                    ]
+                  : [{ value: ticket.priority, label: ticket.priority }]
+              }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "priority", e.target.value)
               }
@@ -293,12 +300,16 @@ export default function UniBoxTickets() {
               popperClassName="ticket-table-dropdown"
               value={ticket.type || "Support"}
               name="Type"
-              options={canFilterTickets ? [
-                { value: "Support", label: "Support" },
-                { value: "Feature", label: "Feature" },
-                { value: "Bug", label: "Bug" },
-                { value: "Question", label: "Question" },
-              ] : [{ value: ticket.type, label: ticket.type }]}
+              options={
+                canFilterTickets
+                  ? [
+                      { value: "Support", label: "Support" },
+                      { value: "Feature", label: "Feature" },
+                      { value: "Bug", label: "Bug" },
+                      { value: "Question", label: "Question" },
+                    ]
+                  : [{ value: ticket.type, label: ticket.type }]
+              }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "type", e.target.value)
               }
@@ -313,11 +324,13 @@ export default function UniBoxTickets() {
               popperClassName="ticket-table-dropdown"
               value={ticket.Department || "Technical"}
               name="Department"
-              options={canFilterTickets ?
-                departments?.map((dept: any) => ({
-                  value: dept.name,
-                  label: dept.name,
-                })) || [] : [{ value: ticket.Department, label: ticket.Department }]
+              options={
+                canFilterTickets
+                  ? departments?.map((dept: any) => ({
+                      value: dept.name,
+                      label: dept.name,
+                    })) || []
+                  : [{ value: ticket.Department, label: ticket.Department }]
               }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "Department", e.target.id)
@@ -333,12 +346,14 @@ export default function UniBoxTickets() {
               popperClassName="ticket-table-dropdown"
               value={ticket.Assignee || "Unassigned"}
               name="Assignee"
-              options={canFilterTickets ?
-                users?.map((user: any) => ({
-                  value: user.user_id,
-                  label: user.full_name,
-                  icon: AssigneeIcon,
-                })) || [] : [{ value: ticket.Assignee, label: ticket.Assignee }]
+              options={
+                canFilterTickets
+                  ? users?.map((user: any) => ({
+                      value: user.user_id,
+                      label: user.full_name,
+                      icon: AssigneeIcon,
+                    })) || []
+                  : [{ value: ticket.Assignee, label: ticket.Assignee }]
               }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "assignee", e.target.value)
@@ -396,9 +411,8 @@ export default function UniBoxTickets() {
     },
   ].filter(Boolean); // removes `false` if permission not granted
 
-
   const handleRowClick = (row: any) => {
-   canViewTicket && router.push(`/tickets/${row.id}`);
+    canViewTicket && router.push(`/tickets/${row.id}`);
     setSelectedTicket(row);
   };
 
@@ -511,7 +525,7 @@ export default function UniBoxTickets() {
   return (
     <div>
       <DashboardHeader
-        title="Archived Tickets"
+        title="Tickets"
         text="Manage archived customer support tickets"
       />
       <TicketHeader
@@ -519,54 +533,59 @@ export default function UniBoxTickets() {
         handleSearch={handleSearch}
         searchQuery={searchQuery}
       />
-      {canFilterTickets && <Grid
-        container
-        sx={{
-          alignItems: "center",
-          background: "#fff",
-          p: 1.5,
-          mb: 2,
-          borderRadius: 3,
-        }}
-        spacing={2}
-      >
-        {filters.map((filter: any, index: number) => (
-          <Grid size={{ lg: 1.4, xs: 12 }} key={index}>
-            <TableSelectFilterMainNew
-              value={filter.value || ""}
-              name={filter.name}
-              options={filter.filterOptions}
-              popperClassName={filter.className}
-              defaultText="All"
-              className="table-dropdown-select"
-              onChange={handleFilterChange}
-              sx={{ border: "1px solid #DBDBDB", borderRadius: "30px" }}
-            />
+      {canFilterTickets && (
+        <Grid
+          container
+          sx={{
+            alignItems: "center",
+            background: "#fff",
+            p: 1.5,
+            mb: 2,
+            borderRadius: 3,
+          }}
+          spacing={2}
+        >
+          {filters.map((filter: any, index: number) => (
+            <Grid size={{ lg: 1.4, xs: 12 }} key={index}>
+              <TableSelectFilterMainNew
+                value={filter.value || ""}
+                name={filter.name}
+                options={filter.filterOptions}
+                popperClassName={filter.className}
+                defaultText="All"
+                className="table-dropdown-select"
+                onChange={handleFilterChange}
+                sx={{ border: "1px solid #DBDBDB", borderRadius: "30px" }}
+              />
+            </Grid>
+          ))}
+          <ReuseableDatePicker
+            value={selectedDate}
+            onChange={handleDateChange}
+            className={styles.customDatePicker}
+            minDate={new Date(2023, 0, 1)}
+            maxDate={new Date(2025, 11, 31)}
+            locale="en-US"
+            format="dd/MM/yyyy"
+          />
+          <Grid size={{ lg: 3, xs: 12 }}>
+            <Box
+              sx={{ display: "flex", gap: "10px" }}
+              className="ticket-button"
+            >
+              <CustomButton
+                customClass={"btn-outlined"}
+                text="Apply filter"
+                onClick={handleApplyFilter}
+              />
+              <Button className="reset-button" onClick={handleResetFilter}>
+                <Image src={resetIcon} alt="reset-icon" />
+                Reset Filter
+              </Button>
+            </Box>
           </Grid>
-        ))}
-        <ReuseableDatePicker
-          value={selectedDate}
-          onChange={handleDateChange}
-          className={styles.customDatePicker}
-          minDate={new Date(2023, 0, 1)}
-          maxDate={new Date(2025, 11, 31)}
-          locale="en-US"
-          format="dd/MM/yyyy"
-        />
-        <Grid size={{ lg: 3, xs: 12 }}>
-          <Box sx={{ display: "flex", gap: "10px" }} className="ticket-button">
-            <CustomButton
-              customClass={"btn-outlined"}
-              text="Apply filter"
-              onClick={handleApplyFilter}
-            />
-            <Button className="reset-button" onClick={handleResetFilter}>
-              <Image src={resetIcon} alt="reset-icon" />
-              Reset Filter
-            </Button>
-          </Box>
         </Grid>
-      </Grid>}
+      )}
 
       <div className="table-parent unibox-table">
         <ReusableTable
@@ -591,10 +610,14 @@ export default function UniBoxTickets() {
         modalTitle="Create Ticket"
         iconSrc={createModalIcon}
       >
-        <CreateTicket closeModal={() => setAddModal(false)} getall={() =>
+        <CreateTicket
+          closeModal={() => setAddModal(false)}
+          getall={() =>
             queryClient.invalidateQueries({
               queryKey: [`uniboxTicketsArchive_${update}`],
-            })}/>
+            })
+          }
+        />
       </MyModal>
 
       <MyModal

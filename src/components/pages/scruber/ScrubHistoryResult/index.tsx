@@ -1,0 +1,130 @@
+"use client";
+import ScrubCardTable from "@/components/Scrub/Card/Table";
+import ScruberKPIs from "@/components/Scrub/History/KPIs";
+import FilterSelect from "@/components/Scrub/Select";
+import ReusableTable from "@/components/Scrub/Table/ReusableTable";
+import { SearchOutlined } from "@mui/icons-material";
+import { Box, Button, Chip } from "@mui/material";
+import Image from "next/image";
+import React, { useState } from "react";
+import viewIcon from "@/assets/scruber/icons/view.png";
+import downloadIcon from "@/assets/scruber/icons/download.png";
+import deleteIcon from "@/assets/scruber/icons/delete.png";
+import ScruberKPIsResult from "@/components/Scrub/History/KPIs";
+
+const ScrubHistoryResult = () => {
+  const [status, setStatus] = useState("");
+
+  const handleChange = (event: any) => {
+    setStatus(event.target.value);
+  };
+
+  const columns = [
+    { key: "phoneNumber", label: "Phone Number", sortable: true },
+
+    {
+      key: "status",
+      label: "Status",
+      sortable: true,
+      render: (value: string) =>
+        value === "Valid" ? (
+          <Chip
+            label="Valid"
+            sx={{
+              backgroundColor: "#DBFCE7",
+              color: "#16C60C",
+              fontWeight: 500,
+            }}
+          />
+        ) : value === "Bad" ? (
+          <Chip
+            label="Bad"
+            sx={{
+              backgroundColor: "#FFF3EA",
+              color: "#D97C1E",
+              fontWeight: 500,
+            }}
+          />
+        ) : (
+          <Chip
+            label="TCPA Match"
+            sx={{
+              backgroundColor: "#FEF4FE",
+              color: "#FF5BFF",
+              fontWeight: 500,
+            }}
+          />
+        ),
+    },
+    { key: "reason", label: "Reason", sortable: true },
+  ];
+
+  const data = [
+    {
+      phoneNumber: "+1 (555) 123-4567",
+      status: "Valid",
+      reason: "Federal DNC",
+    },
+    {
+      phoneNumber: "+1 (555) 123-4567",
+      status: "Bad",
+      reason: "TCPA Troll Database",
+    },
+    {
+      phoneNumber: "+1 (555) 123-4567",
+      status: "TCPA Match",
+      reason: "DNS Complainers List",
+    },
+  ];
+
+  return (
+    <Box>
+      <ScruberKPIsResult />
+
+      <Box mt={4} mb={2}>
+        <ScrubCardTable
+          title={"Scrub History"}
+          desc={"View and manage your previous scrub jobs"}
+          filters={
+            <>
+              <FilterSelect
+                value={status}
+                onChange={handleChange}
+                options={[
+                  { label: "Valid", value: "Valid" },
+                  { label: "Bad", value: "Bad" },
+                  { label: "TCPA Match", value: "TCPA Match" },
+                ]}
+              />
+
+              <Box
+                sx={{
+                  p: 1.3,
+                  border: "1px solid #0000003d",
+                  borderRadius: "100px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <SearchOutlined sx={{ color: "#787878", fontSize: "28px" }} />
+
+                <input
+                  type="text"
+                  placeholder="Search Phone Number"
+                  style={{ border: "none", outline: "none", fontSize: "16px" }}
+                />
+              </Box>
+            </>
+          }
+        >
+          <Box sx={{ mt: 3 }}>
+            <ReusableTable columns={columns} data={data} />
+          </Box>
+        </ScrubCardTable>
+      </Box>
+    </Box>
+  );
+};
+
+export default ScrubHistoryResult;

@@ -19,9 +19,6 @@ import deleteIcon from "@/assets/scruber/icons/delete.png";
 import Image from "next/image";
 import ScrubCardTable from "@/components/Scrub/Card/Table";
 import ReusableTable from "@/components/Scrub/Table/ReusableTable";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DownloadIcon from "@mui/icons-material/Download";
-import DeleteIcon from "@mui/icons-material/Delete";
 import FileUploader from "@/components/Scrub/DragDrop";
 import FilterSelect from "@/components/Scrub/Select";
 import { SearchOutlined } from "@mui/icons-material";
@@ -291,7 +288,7 @@ const PhoneScrube = () => {
 
                     py: 1,
                     pr: 1,
-                    pl: 0.5,
+                    pl: 3,
                     borderRadius: "10px",
                     width: "240px",
                     color: checked.tcpA ? "white" : "#797979",
@@ -315,7 +312,7 @@ const PhoneScrube = () => {
 
                     py: 1,
                     pr: 1,
-                    pl: 0.5,
+                    pl: 3,
                     borderRadius: "10px",
                     color: checked.dns ? "white" : "#797979",
                     border: "1px solid #32ABB1",
@@ -338,7 +335,7 @@ const PhoneScrube = () => {
 
                     py: 1,
                     pr: 1,
-                    pl: 0.5,
+                    pl: 3,
                     borderRadius: "10px",
                     color: checked.federalDNC ? "white" : "#797979",
                     border: "1px solid #32ABB1",
@@ -361,7 +358,7 @@ const PhoneScrube = () => {
 
                     py: 1,
                     pr: 1,
-                    pl: 0.5,
+                    pl: 3,
                     borderRadius: "10px",
                     color: checked.stateDNC ? "white" : "#797979",
                     border: "1px solid #32ABB1",
@@ -384,7 +381,7 @@ const PhoneScrube = () => {
 
                     py: 1,
                     pr: 1,
-                    pl: 0.5,
+                    pl: 3,
                     borderRadius: "10px",
                     color: checked.verizonWireless ? "white" : "#797979",
                     border: "1px solid #32ABB1",
@@ -407,7 +404,7 @@ const PhoneScrube = () => {
 
                     py: 1,
                     pr: 1,
-                    pl: 0.5,
+                    pl: 3,
                     borderRadius: "10px",
                     color: checked.telnyxOCN ? "white" : "#797979",
                     border: "1px solid #32ABB1",
@@ -430,7 +427,7 @@ const PhoneScrube = () => {
 
                     py: 1,
                     pr: 1,
-                    pl: 0.5,
+                    pl: 3,
                     borderRadius: "10px",
                     color: checked.dncTrolls ? "white" : "#797979",
                     border: "1px solid #32ABB1",

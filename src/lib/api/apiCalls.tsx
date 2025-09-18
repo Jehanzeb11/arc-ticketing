@@ -33,6 +33,7 @@ export const createUser = (data) =>
   postbackend(`${API_ENDPOINTS.USERS(data?.get("requestType"))}`, data);
 export const updateUser = (data) =>
   postbackend(`${API_ENDPOINTS.USERS(data?.get("requestType"))}`, data);
+
 export const departmentUser = (data) =>
   postbackend(`${API_ENDPOINTS.USERS(data?.requestType)}`, data);
 export const updateProfile = (data) =>
@@ -110,6 +111,11 @@ export const updateDepartment = (data) =>
   postbackend(API_ENDPOINTS.DEPARTMENTS, data);
 export const deleteDepartment = (data) =>
   postbackend(API_ENDPOINTS.DEPARTMENTS, data);
+
+// scrub
+
+export const searchSingleNumber = (data) =>
+  postbackend(`${API_ENDPOINTS.SCRUB}`, data);
 
 // roles
 export const fetchRoles = (data) => postbackend(API_ENDPOINTS.ROLES, data);

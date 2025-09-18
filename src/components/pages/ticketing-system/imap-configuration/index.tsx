@@ -333,7 +333,7 @@ const IMAP = () => {
           <Search
             searchQuery={searchQuery}
             handleSearch={handleSearch}
-            placeholder="Search by full name"
+            placeholder="Search by IMAP host"
           />
         </Grid>
         {filters.map((filter, index) => (

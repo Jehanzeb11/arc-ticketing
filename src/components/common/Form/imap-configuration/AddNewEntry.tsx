@@ -238,7 +238,7 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
             rules={{ required: "Department is required" }}
             render={({ field }) => (
               <FormSelect
-                label="Department"
+                label="Assign to Department"
                 name="dept"
                 defaultText="Select Department"
                 className="modal-select"

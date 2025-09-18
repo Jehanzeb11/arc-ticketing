@@ -33,23 +33,35 @@ export default function MainContent({
               placeholder="Search tickets"
             />
           </Box>
-
-          {allTickets?.length > 0 ? (
-            allTickets.map((ticket, index) => (
-              <TicketCard
-                key={index}
-                ticketId={ticket.ticket_reference}
-                status={ticket.status}
-                priority={ticket.priority}
-                title={ticket.subject}
-                name={ticket.assignee}
-                date={new Date(ticket.created_at).toLocaleString()}
-                imageUrl={ticket.imageUrl}
-              />
-            ))
-          ) : (
-            <Typography>No ticket data available</Typography>
-          )}
+          <Box
+            sx={{ height: "100vh", display: "flex", flexDirection: "column" }}
+          >
+            <Box
+              sx={{
+                maxWidth: "100%",
+                overflowY: "scroll",
+                height: "100%",
+              }}
+            >
+              {allTickets?.length > 0 ? (
+                allTickets.map((ticket, index) => (
+                  <TicketCard
+                    key={index}
+                    id={ticket.id}
+                    ticketId={ticket.ticket_reference}
+                    status={ticket.status}
+                    priority={ticket.priority}
+                    title={ticket.subject}
+                    name={ticket.assignee}
+                    date={new Date(ticket.created_at).toLocaleString()}
+                    imageUrl={ticket.imageUrl}
+                  />
+                ))
+              ) : (
+                <Typography>No ticket data available</Typography>
+              )}
+            </Box>
+          </Box>
         </Box>
       </Grid>
       <Grid
@@ -57,9 +69,9 @@ export default function MainContent({
         sx={{ display: "flex", flexDirection: "column", gap: "20px" }}
       >
         <ReplyForm
-          ticketId={ticketData.id}
-          tomails={ticketData.to_email}
-          c_mail={ticketData.customer_email}
+          ticketId={ticketData?.id}
+          tomails={ticketData?.to_email}
+          c_mail={ticketData?.customer_email}
         />
         <Alert
           severity="error"

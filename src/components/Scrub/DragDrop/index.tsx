@@ -54,7 +54,7 @@ export default function FileUploader() {
           justifyContent: "space-between",
           cursor: "pointer",
           transition: "all 0.2s ease-in-out",
-          bgcolor: isDragActive ? "grey.50" : "inherit",
+          bgcolor: "#FAFAFA",
         }}
       >
         <input {...getInputProps()} />
@@ -88,7 +88,7 @@ export default function FileUploader() {
       {/* File Info */}
       <Stack
         direction="row"
-        spacing={3}
+        spacing={fileName ? 3 : 0}
         alignItems="center"
         sx={{ mt: 2, width: "100%" }}
       >
@@ -96,13 +96,44 @@ export default function FileUploader() {
           variant="body2"
           color="#183C58"
           sx={{
-            p: 1,
             background: "#FAFAFA",
-            borderRadius: "16px",
+            borderRadius: "12px",
             fontSize: "12px",
           }}
         >
-          <strong>File Extension:</strong> xls, xlsx, csv
+          {fileName && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                maxWidth: "900px",
+                p: 1.2,
+                position: "relative",
+              }}
+            >
+              <Typography variant="body2" sx={{ p: 0, fontSize: "12px" }}>
+                <strong>Selected File: </strong> {fileName}
+              </Typography>
+              <IconButton
+                size="small"
+                onClick={() => setFileName(null)}
+                sx={{
+                  position: "absolute",
+                  top: -7,
+                  right: -7,
+                  color: "white",
+                  background: "#E33629",
+                  borderRadius: "50%",
+                  width: "20px",
+                  height: "20px",
+                }}
+              >
+                <DeleteIcon sx={{ fontSize: "16px" }} />
+              </IconButton>
+            </Box>
+          )}
         </Typography>
         <Link
           component="button"
@@ -111,38 +142,17 @@ export default function FileUploader() {
           sx={{
             p: 1,
             background: "#FAFAFA",
-            borderRadius: "16px",
+            borderRadius: "10px",
             fontSize: "12px",
             display: "flex",
             alignItems: "center",
-            gap: 0.5,
+            gap: 1,
           }}
         >
-          <Image src={infoicon} width={14} height={14} alt="info-icon" /> File
+          <Image src={infoicon} width={16} height={16} alt="info-icon" /> File
           Instruction!
         </Link>
       </Stack>
-
-      {/* Selected File with Remove Option */}
-      {fileName && (
-        <Stack
-          direction="row"
-          alignItems="center"
-          spacing={1}
-          sx={{ mt: 1, width: "100%", maxWidth: "900px" }}
-        >
-          <Typography variant="body2" color="text.primary">
-            <strong>Selected File:</strong> {fileName}
-          </Typography>
-          <IconButton
-            size="small"
-            color="error"
-            onClick={() => setFileName(null)}
-          >
-            <DeleteIcon fontSize="small" />
-          </IconButton>
-        </Stack>
-      )}
     </Box>
   );
 }

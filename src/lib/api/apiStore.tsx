@@ -49,6 +49,9 @@ import {
   myData,
   createGuest,
   fetchNotifications,
+
+  // scrub
+  searchSingleNumber,
 } from "./apiCalls";
 
 export const useApiStore = create((set) => ({
@@ -144,6 +147,10 @@ export const useApiStore = create((set) => ({
 
     set({ profile: normalizedProfile });
   },
+
+  // scrub
+  searchSingleNumber,
+
   callApi: async (fn, ...args) => {
     set({ loading: true, error: null });
     try {

@@ -36,7 +36,11 @@ export default function LoginForm2() {
         secure: false,
         sameSite: "Lax",
       });
-      router.push("/ticketing-system/tickets");
+      data.user_type === "user"
+        ? router.push("/ticketing-system/tickets")
+        : data.user_type === "guest"
+        ? router.push("/ticketing-system/guest/tickets")
+        : router.push("/ticketing-system/guest/tickets");
     },
     onError: (err) => {
       console.error("Login error:", err);

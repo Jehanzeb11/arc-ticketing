@@ -76,7 +76,7 @@ const TicketConversation = ({ conversationData }: any) => {
       </Box>
 
       {/* Conversation Messages */}
-      {conversationData.map((message) => (
+      {conversationData?.map((message) => (
         <Box
           key={message.id}
           sx={{

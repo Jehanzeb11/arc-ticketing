@@ -13,6 +13,7 @@ export default function Logout({ open }) {
 
   const handleLogout = () => {
     Cookies.remove("access_token");
+    Cookies.remove("access_role");
     toast.success("Logout Successful!");
     setTimeout(() => {
       window.location.reload();
