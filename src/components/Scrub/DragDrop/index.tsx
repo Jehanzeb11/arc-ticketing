@@ -16,14 +16,18 @@ import DeleteIcon from "@mui/icons-material/Close"; // close "x" icon
 import infoicon from "@/assets/scruber/icons/info-icon.png";
 import Image from "next/image";
 import Upload from "@/assets/scruber/icons/upload.png";
-export default function FileUploader() {
+export default function FileUploader({ handleFileUpload }: any) {
   const [fileName, setFileName] = useState<string | null>(null);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      setFileName(acceptedFiles[0].name);
-    }
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length > 0) {
+        setFileName(acceptedFiles[0].name);
+        handleFileUpload(acceptedFiles[0]);
+      }
+    },
+    [handleFileUpload]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

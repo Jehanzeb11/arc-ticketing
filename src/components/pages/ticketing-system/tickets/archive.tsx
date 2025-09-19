@@ -242,9 +242,9 @@ export default function UniBoxTickets() {
       uniboxTickets?.map((ticket: any) => ({
         id: ticket.id,
         ticketId: ticket.ticket_reference || "N/A",
-        Requester: ticket.customer_name || "N/A",
+        Requester: ticket.customer_name.slice(0, 15) + "..." || "N/A",
         Title: ticket.subject.slice(0, 15) + "..." || "N/A",
-        Details: ticket.details || "N/A",
+        Details: ticket.details.slice(0, 15) + "..." || "N/A",
         Status: (
           <div onClick={(e) => e.stopPropagation()}>
             <TableSelectFilterMainNew
@@ -393,7 +393,7 @@ export default function UniBoxTickets() {
       tooltip: (row: any) =>
         archivedTickets.includes(row.id)
           ? "Unarchive Ticket"
-          : "Archive Ticket",
+          : "UnArchive Ticket",
     },
 
     canDeleteTickets && {
@@ -634,10 +634,10 @@ export default function UniBoxTickets() {
               alt="archive-modal-icon"
               width={50}
             />
-            <Typography variant="h6">Archive Ticket</Typography>
+            <Typography variant="h6">Un Archive Ticket</Typography>
           </Box>
           <Typography variant="body1" sx={{ fontSize: "20px", mb: 1 }}>
-            Are you sure want to archive ticket {selectedTicket?.ticketId}?
+            Are you sure want to unarchive ticket {selectedTicket?.ticketId}?
           </Typography>
           <Typography variant="body1" sx={{ fontSize: "15px", mb: 2 }}>
             This action cannot be revert

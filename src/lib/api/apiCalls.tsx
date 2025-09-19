@@ -115,7 +115,13 @@ export const deleteDepartment = (data) =>
 // scrub
 
 export const searchSingleNumber = (data) =>
-  postbackend(`${API_ENDPOINTS.SCRUB}`, data);
+  postbackend(`${API_ENDPOINTS.SCRUB}?requestType=processJob`, data);
+export const searchBulkNumber = (data) =>
+  postbackend(`${API_ENDPOINTS.SCRUB}?requestType=createJob`, data);
+export const jobHistory = (data) =>
+  postbackend(`${API_ENDPOINTS.SCRUB}?requestType=jobHistory`, data);
+export const scrubHistory = (data) =>
+  postbackend(`${API_ENDPOINTS.SCRUB}?requestType=scrubHistory`, data);
 
 // roles
 export const fetchRoles = (data) => postbackend(API_ENDPOINTS.ROLES, data);

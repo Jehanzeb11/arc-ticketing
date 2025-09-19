@@ -10,7 +10,7 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import singleSeach from "@/assets/scruber/icons/single-search.png";
 import bulkSeach from "@/assets/scruber/icons/bulk-search.png";
 import viewIcon from "@/assets/scruber/icons/view.png";
@@ -22,10 +22,53 @@ import ReusableTable from "@/components/Scrub/Table/ReusableTable";
 import FileUploader from "@/components/Scrub/DragDrop";
 import FilterSelect from "@/components/Scrub/Select";
 import { SearchOutlined } from "@mui/icons-material";
+import { useApiStore } from "@/lib/api/apiStore";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { getSocket } from "@/utils/socket";
+import MyScruberModal from "@/components/Scrub/Modal";
+import matchIcon from "@/assets/scruber/icons/status-close.png";
+import clearIcon from "@/assets/scruber/icons/status-check.png";
+import Link from "next/link";
+
 const PhoneScrube = () => {
-  const [tab, setTab] = React.useState(0);
-  const [status, setStatus] = React.useState("");
-  const [checked, setChecked] = React.useState({
+  const {
+    searchSingleNumber,
+    searchBulkNumber,
+    callApi,
+    profile,
+    scrubHistory,
+  }: any = useApiStore();
+
+  const filterLabels: Record<string, string> = {
+    tcpA: "TCPA Troll",
+    dns: "DNS Complainers",
+    federalDNC: "Federal DNC",
+    stateDNC: "State DNC",
+    verizonWireless: "Verizon Wireless",
+    telnyxOCN: "Telnyx OCN",
+    dncTrolls: "DNC Trolls",
+  };
+  const [open, setOpen] = useState(false);
+
+  const [tab, setTab] = useState(0);
+  const [status, setStatus] = useState("");
+  const [responseType, setResponseType] = useState("");
+  const [numberStatus, setNumberStatus] = useState(null);
+
+  const [file, setFile] = useState(null);
+  const [search, setSearch] = useState("");
+
+  const {
+    data: scrubData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [`scrubHistory`],
+    queryFn: () => callApi(scrubHistory),
+  });
+
+  const [checked, setChecked] = useState({
     tcpA: false,
     dns: false,
     federalDNC: false,
@@ -34,6 +77,26 @@ const PhoneScrube = () => {
     telnyxOCN: false,
     dncTrolls: false,
   });
+
+  const [currentJobId, setCurrentJobId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!profile?.data?.user_id) return;
+
+    const socket = getSocket();
+
+    socket.emit("registerUser", profile?.data?.user_id);
+
+    socket.on("scrubJobCompleted", (data) => {
+      console.log("🟢 Scrub Job Completed:", data);
+      setOpen(true);
+      setNumberStatus(data.numbers[0]?.validator);
+    });
+
+    return () => {
+      socket.removeAllListeners("scrubJobCompleted");
+    };
+  }, [profile?.data?.user_id, currentJobId]);
 
   const handleChangeCheck = (event) => {
     setChecked({
@@ -56,7 +119,7 @@ const PhoneScrube = () => {
       label: "Status",
       sortable: true,
       render: (value: string) =>
-        value === "Completed" ? (
+        value === "completed" ? (
           <Chip
             icon={
               <Box
@@ -73,6 +136,27 @@ const PhoneScrube = () => {
             sx={{
               backgroundColor: "#DBFCE7",
               color: "#16C60C",
+              fontWeight: 500,
+              pl: 1,
+            }}
+          />
+        ) : value === "failed" ? (
+          <Chip
+            icon={
+              <Box
+                sx={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  backgroundColor: "#be0000ff",
+                  ml: 1,
+                }}
+              />
+            }
+            label="Failed"
+            sx={{
+              backgroundColor: "#be00002d",
+              color: "#be0000ff",
               fontWeight: 500,
               pl: 1,
             }}
@@ -102,41 +186,118 @@ const PhoneScrube = () => {
     },
   ];
 
-  const data = [
+  const data = scrubData?.history?.slice(0, 4)?.map((item) => ({
+    jobId: item.jobId,
+    scrubHistory: item?.createdAt,
+    uploadedFile: "cold_leads.csv",
+    scrubAgainst: JSON.parse(item?.filters)?.join(", "),
+    totalNumbers: item.totalNumbers,
+    badNumbers: item.badNumbers,
+    status: item.status,
+  }));
+
+  const singleNumberMutation = useMutation({
+    mutationFn: (data) => callApi(searchSingleNumber, data),
+    onSuccess: (res: any) => {
+      // ✅ res is your API response here
+
+      if (res?.jobId) {
+        setCurrentJobId(res.jobId); // save jobId for socket listener
+      }
+
+      toast.success("Numbers Searched successfully.");
+      setResponseType("single");
+    },
+    onError: (error: any) => {
+      toast.error("Failed to upload numbers: " + error.message);
+    },
+  });
+  const bulkNumberMutation = useMutation({
+    mutationFn: (data) => callApi(searchBulkNumber, data),
+    onSuccess: (res: any) => {
+      // ✅ res is your API response here
+
+      if (res?.jobId) {
+        setCurrentJobId(res.jobId); // save jobId for socket listener
+      }
+
+      toast.success("Numbers uploaded successfully.");
+      setResponseType("bulk");
+    },
+    onError: (error: any) => {
+      toast.error("Failed to upload numbers: " + error.message);
+    },
+  });
+
+  const handleFileUpload = (files: any) => {
+    if (!files) {
+      return;
+    }
+    console.log(files);
+
+    setFile(files);
+  };
+
+  const StartScrub = () => {
+    if (tab == 1) {
+      const filters = Object.keys(checked)
+        .filter((key) => checked[key]) // only true ones
+        .map((key) => filterLabels[key]);
+
+      const formData: any = new FormData();
+      formData.append("file", file);
+      filters?.forEach((filter) => {
+        formData.append("filters[]", filter);
+      });
+      bulkNumberMutation.mutate(formData);
+    }
+
+    if (tab == 0) {
+      const payload = {
+        number: search,
+        filters: [
+          "TCPA Troll",
+          "DNS Complainers",
+          "Federal DNC",
+          "State DNC",
+          "Verizon Wireless",
+          "Telnyx OCN",
+          "DNC Trolls",
+        ],
+      };
+      singleNumberMutation.mutate(payload);
+    }
+  };
+
+  const statusArr = [
+    { name: "tcpa" },
     {
-      scrubHistory: "2024-01-15 14:30",
-      uploadedFile: "leads_batch_001.csv",
-      scrubAgainst: "All Validators",
-      totalNumbers: 5000,
-      badNumbers: 342,
-      status: "Completed",
+      name: "dnc_complainers",
     },
     {
-      scrubHistory: "2024-01-15 12:15",
-      uploadedFile: "marketing_list.xlsx",
-      scrubAgainst: "TCPA, Federal DNC",
-      totalNumbers: 2500,
-      badNumbers: 156,
-      status: "Completed",
+      name: "Federal DNC",
     },
     {
-      scrubHistory: "2024-01-15 10:45",
-      uploadedFile: "+1 (555) 123-4567",
-      scrubAgainst: "All Validators",
-      totalNumbers: 1,
-      badNumbers: 0,
-      status: "Completed",
+      name: "state_dnc",
     },
     {
-      scrubHistory: "2024-01-15 09:30",
-      uploadedFile: "cold_leads.csv",
-      scrubAgainst: "All Validators",
-      totalNumbers: 8000,
-      badNumbers: 0,
-      status: "In Progress",
+      name: "Verizon Wireless",
+    },
+    {
+      name: "Telnyx OCN",
+    },
+    {
+      name: "DNC Trolls",
     },
   ];
 
+  const validatorArr = numberStatus
+    ? numberStatus?.split(",").map((v) => v.trim().toLowerCase())
+    : [];
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <Box mt={4}>
       <ScrubCard
@@ -251,8 +412,12 @@ const PhoneScrube = () => {
               type="text"
               placeholder="Enter Phone Number"
               className="scrub-number-search"
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
             />{" "}
-            <Button className="scrub-number-search-btn">Start Scrub</Button>
+            <Button className="scrub-number-search-btn" onClick={StartScrub}>
+              Start Scrub
+            </Button>
           </Box>
         </ScrubCard>
       )}
@@ -263,7 +428,7 @@ const PhoneScrube = () => {
             desc={"Upload your file for bulk processing"}
           >
             <Box mt={6}>
-              <FileUploader />
+              <FileUploader handleFileUpload={handleFileUpload} />
             </Box>
           </ScrubCard>
           <ScrubCard
@@ -309,7 +474,6 @@ const PhoneScrube = () => {
                       ? "linear-gradient(90deg, #32ABB1 0%, #3286BD 100%)"
                       : "white",
                     width: "240px",
-
                     py: 1,
                     pr: 1,
                     pl: 3,
@@ -444,7 +608,11 @@ const PhoneScrube = () => {
               </FormGroup>
             </Box>
 
-            <Button className="scrub-number-search-btn" sx={{ mt: 3, ml: 0 }}>
+            <Button
+              className="scrub-number-search-btn"
+              sx={{ mt: 3, ml: 0 }}
+              onClick={StartScrub}
+            >
               Start Scrub
             </Button>
           </ScrubCard>
@@ -460,9 +628,9 @@ const PhoneScrube = () => {
               value={status}
               onChange={handleChange}
               options={[
-                { label: "Active", value: "active" },
-                { label: "Pending", value: "pending" },
-                { label: "Completed", value: "completed" },
+                { label: "In Progress", value: "In Progress" },
+                { label: "Completed", value: "Completed" },
+                { label: "Failed", value: "Failed" },
               ]}
             />
 
@@ -491,44 +659,106 @@ const PhoneScrube = () => {
           <ReusableTable
             columns={columns}
             data={data}
-            actions={(row) => (
-              <>
-                <Button
-                  sx={{ p: 0, mx: 1, width: "fit-content", minWidth: "10px" }}
-                  title="View"
-                >
-                  <Image src={viewIcon} width={22} height={22} alt="download" />
-                </Button>
-                <Button
-                  sx={{ p: 0, mx: 1, width: "fit-content", minWidth: "10px" }}
-                  title="Download"
-                >
-                  <Image
-                    src={downloadIcon}
-                    width={16}
-                    height={16}
-                    alt="download"
-                  />
-                </Button>
-                <Button
-                  sx={{ p: 0, mx: 1, width: "fit-content", minWidth: "10px" }}
-                  title="Delete"
-                >
-                  <Image
-                    src={deleteIcon}
-                    width={15}
-                    height={18}
-                    alt="download"
-                  />
-                </Button>
-              </>
-            )}
+            actions={(row) => {
+              console.log(row);
+              return (
+                <>
+                  <Link
+                    href={`/scruber/history-scruber-result?id=${row.jobId}`}
+                    style={{
+                      padding: 0,
+                      margin: 1,
+                      width: "fit-content",
+                      minWidth: "10px",
+                    }}
+                    title="View"
+                  >
+                    <Image
+                      src={viewIcon}
+                      width={22}
+                      height={22}
+                      alt="download"
+                    />
+                  </Link>
+                  <Button
+                    sx={{ p: 0, mx: 1, width: "fit-content", minWidth: "10px" }}
+                    title="Download"
+                  >
+                    <Image
+                      src={downloadIcon}
+                      width={16}
+                      height={16}
+                      alt="download"
+                    />
+                  </Button>
+                  <Button
+                    sx={{ p: 0, mx: 1, width: "fit-content", minWidth: "10px" }}
+                    title="Delete"
+                  >
+                    <Image
+                      src={deleteIcon}
+                      width={15}
+                      height={18}
+                      alt="download"
+                    />
+                  </Button>
+                </>
+              );
+            }}
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
             <Button className="scrub-show-all">Show All</Button>
           </Box>
         </Box>
       </ScrubCardTable>
+      <MyScruberModal
+        modalHeader="true"
+        modalTitle="Scrub Result -+1 (555) 123-4567"
+        modalText="Scrub Time: Today,2:45 PM"
+        statusBtn="Completed"
+        open={open}
+        setOpen={setOpen}
+      >
+        <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "20px",
+            }}
+          >
+            {statusArr?.map((item, index) => {
+              const exists = validatorArr.includes(item.name.toLowerCase());
+
+              return (
+                <Box key={index} className="scruber-status-box">
+                  <Image
+                    src={!exists ? matchIcon : clearIcon}
+                    width={60}
+                    height={60}
+                    alt="status"
+                  />
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      fontWeight: 600,
+                      textAlign: "center",
+                      color: !exists ? "#FF293D" : "#7AC899",
+                    }}
+                  >
+                    {!exists ? "Match" : "Clear"}
+                  </Typography>
+                  <Typography
+                    sx={{ fontSize: "14px", mt: 1, textAlign: "center" }}
+                  >
+                    {item.name}
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Box>
+        </Box>
+      </MyScruberModal>
     </Box>
   );
 };

@@ -216,9 +216,9 @@ export default function UniBoxTickets() {
       uniboxTickets?.map((ticket: any) => ({
         id: ticket.id,
         ticketId: ticket.ticket_reference || "N/A",
-        Requester: ticket.customer_name || "N/A",
+        Requester: ticket.customer_name.slice(0, 15) + "..." || "N/A",
         Title: ticket.subject.slice(0, 15) + "..." || "N/A",
-        Details: ticket.details || "N/A",
+        Details: ticket.details.slice(0, 15) + "..." || "N/A",
         Status: (
           <div onClick={(e) => e.stopPropagation()}>
             <TableSelectFilterMainNew

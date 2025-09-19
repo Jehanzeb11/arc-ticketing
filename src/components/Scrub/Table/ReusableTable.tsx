@@ -29,6 +29,7 @@ interface ReusableTableProps {
   data: any[];
   actions?: (row: any) => React.ReactNode;
   rowsPerPage?: number;
+  Pagination?: React.ReactNode;
 }
 
 type Order = "asc" | "desc";
@@ -37,6 +38,7 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
   columns,
   data,
   actions,
+  Pagination,
   rowsPerPage = 8, // default page size
 }) => {
   const [orderBy, setOrderBy] = useState<string | null>(null);
@@ -66,9 +68,9 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
   }, [data, orderBy, order]);
 
   // Pagination logic
-  const startIndex = page * rowsPerPage;
-  const endIndex = Math.min(startIndex + rowsPerPage, sortedData.length);
-  const paginatedData = sortedData.slice(startIndex, endIndex);
+  const startIndex = page * rowsPerPage || 0;
+  const endIndex = Math.min(startIndex + rowsPerPage, sortedData?.length) || 0;
+  const paginatedData = sortedData?.slice(startIndex, endIndex);
 
   const handleNext = () => {
     if (endIndex < sortedData.length) setPage((prev) => prev + 1);
@@ -118,7 +120,7 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
           </TableHead>
 
           <TableBody>
-            {paginatedData.map((row, rowIndex) => (
+            {paginatedData?.map((row, rowIndex) => (
               <TableRow key={rowIndex} hover>
                 {columns.map((col) => (
                   <TableCell
@@ -136,34 +138,36 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
       </TableContainer>
 
       {/* Pagination Footer */}
-      <Box sx={{ display: "flex", justifyContent: "end" }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            mt: 2,
-            gap: 1,
-            background: "#f5f9fc",
-            width: "fit-content",
-            pl: 2,
-            borderRadius: "10px",
-          }}
-        >
-          <Typography sx={{ fontSize: "14px", color: "#374151" }}>
-            {`${startIndex + 1}-${endIndex} of ${sortedData.length}`}
-          </Typography>
-          <IconButton onClick={handlePrev} disabled={page === 0}>
-            <ArrowBackIosNewIcon fontSize="small" />
-          </IconButton>
-          <IconButton
-            onClick={handleNext}
-            disabled={endIndex >= sortedData.length}
+      {Pagination && (
+        <Box sx={{ display: "flex", justifyContent: "end" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              mt: 2,
+              gap: 1,
+              background: "#f5f9fc",
+              width: "fit-content",
+              pl: 2,
+              borderRadius: "10px",
+            }}
           >
-            <ArrowForwardIosIcon fontSize="small" />
-          </IconButton>
+            <Typography sx={{ fontSize: "14px", color: "#374151" }}>
+              {`${startIndex + 1}-${endIndex} of ${sortedData.length}`}
+            </Typography>
+            <IconButton onClick={handlePrev} disabled={page === 0}>
+              <ArrowBackIosNewIcon fontSize="small" />
+            </IconButton>
+            <IconButton
+              onClick={handleNext}
+              disabled={endIndex >= sortedData.length}
+            >
+              <ArrowForwardIosIcon fontSize="small" />
+            </IconButton>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 };

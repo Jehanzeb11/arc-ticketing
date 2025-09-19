@@ -240,9 +240,9 @@ export default function DeletedUniBoxTickets() {
       uniboxTickets?.map((ticket: any) => ({
         id: ticket.id,
         ticketId: ticket.ticket_reference || "N/A",
-        Requester: ticket.customer_name || "N/A",
+        Requester: ticket.customer_name.slice(0, 15) + "..." || "N/A",
         Title: ticket.subject.slice(0, 15) + "..." || "N/A",
-        Details: ticket.details || "N/A",
+        Details: ticket.details.slice(0, 15) + "..." || "N/A",
         Status: (
           <div onClick={(e) => e.stopPropagation()}>
             <TableSelectFilterMainNew
@@ -250,14 +250,16 @@ export default function DeletedUniBoxTickets() {
               popperClassName="ticket-table-dropdown"
               value={ticket.status || "Open"}
               name="Status"
-              options={canFilterTickets ? [
-                { value: "Open", label: "Open" },
-                { value: "In-progress", label: "In-progress" },
-                { value: "Resolved", label: "Resolved" },
-                { value: "Closed", label: "Closed" },
-              ] : [
-                { value: ticket.status, label: ticket.status },
-              ]}
+              options={
+                canFilterTickets
+                  ? [
+                      { value: "Open", label: "Open" },
+                      { value: "In-progress", label: "In-progress" },
+                      { value: "Resolved", label: "Resolved" },
+                      { value: "Closed", label: "Closed" },
+                    ]
+                  : [{ value: ticket.status, label: ticket.status }]
+              }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "status", e.target.value)
               }
@@ -272,14 +274,16 @@ export default function DeletedUniBoxTickets() {
               popperClassName="ticket-table-dropdown"
               value={ticket.priority || "Low"}
               name="Priority"
-              options={canFilterTickets ? [
-                { value: "Low", label: "Low" },
-                { value: "Medium", label: "Medium" },
-                { value: "High", label: "High" },
-                { value: "Urgent", label: "Urgent" },
-              ] : [
-                { value: ticket.priority, label: ticket.priority },
-              ]}
+              options={
+                canFilterTickets
+                  ? [
+                      { value: "Low", label: "Low" },
+                      { value: "Medium", label: "Medium" },
+                      { value: "High", label: "High" },
+                      { value: "Urgent", label: "Urgent" },
+                    ]
+                  : [{ value: ticket.priority, label: ticket.priority }]
+              }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "priority", e.target.value)
               }
@@ -294,14 +298,16 @@ export default function DeletedUniBoxTickets() {
               popperClassName="ticket-table-dropdown"
               value={ticket.type || "Support"}
               name="Type"
-              options={canFilterTickets ? [
-                { value: "Support", label: "Support" },
-                { value: "Feature", label: "Feature" },
-                { value: "Bug", label: "Bug" },
-                { value: "Question", label: "Question" },
-              ] : [
-                { value: ticket.type, label: ticket.type },
-              ]}
+              options={
+                canFilterTickets
+                  ? [
+                      { value: "Support", label: "Support" },
+                      { value: "Feature", label: "Feature" },
+                      { value: "Bug", label: "Bug" },
+                      { value: "Question", label: "Question" },
+                    ]
+                  : [{ value: ticket.type, label: ticket.type }]
+              }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "type", e.target.value)
               }
@@ -317,12 +323,12 @@ export default function DeletedUniBoxTickets() {
               value={ticket.Department || "Technical"}
               name="Department"
               options={
-                canFilterTickets ? departments?.map((dept: any) => ({
-                  value: dept.name,
-                  label: dept.name,
-                })) || [] : [
-                  { value: ticket.Department, label: ticket.Department },
-                ]
+                canFilterTickets
+                  ? departments?.map((dept: any) => ({
+                      value: dept.name,
+                      label: dept.name,
+                    })) || []
+                  : [{ value: ticket.Department, label: ticket.Department }]
               }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "Department", e.target.id)
@@ -339,13 +345,13 @@ export default function DeletedUniBoxTickets() {
               value={ticket.Assignee || "Unassigned"}
               name="Assignee"
               options={
-                canFilterTickets ? users?.map((user: any) => ({
-                  value: user.user_id,
-                  label: user.full_name,
-                  icon: AssigneeIcon,
-                })) || [] : [
-                  { value: ticket.Assignee, label: ticket.Assignee },
-                ]
+                canFilterTickets
+                  ? users?.map((user: any) => ({
+                      value: user.user_id,
+                      label: user.full_name,
+                      icon: AssigneeIcon,
+                    })) || []
+                  : [{ value: ticket.Assignee, label: ticket.Assignee }]
               }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "assignee", e.target.value)
@@ -370,7 +376,6 @@ export default function DeletedUniBoxTickets() {
     }
   };
   const actions = [
-
     canArchiveTickets && {
       className: "action-icon",
       icon: restoreIcon,
@@ -508,54 +513,59 @@ export default function DeletedUniBoxTickets() {
         handleSearch={handleSearch}
         searchQuery={searchQuery}
       />
-      {canFilterTickets && <Grid
-        container
-        sx={{
-          alignItems: "center",
-          background: "#fff",
-          p: 1.5,
-          mb: 2,
-          borderRadius: 3,
-        }}
-        spacing={2}
-      >
-        {filters.map((filter: any, index: number) => (
-          <Grid size={{ lg: 1.4, xs: 12 }} key={index}>
-            <TableSelectFilterMainNew
-              value={filter.value || ""}
-              name={filter.name}
-              options={filter.filterOptions}
-              popperClassName={filter.className}
-              defaultText="All"
-              className="table-dropdown-select"
-              onChange={handleFilterChange}
-              sx={{ border: "1px solid #DBDBDB", borderRadius: "30px" }}
-            />
+      {canFilterTickets && (
+        <Grid
+          container
+          sx={{
+            alignItems: "center",
+            background: "#fff",
+            p: 1.5,
+            mb: 2,
+            borderRadius: 3,
+          }}
+          spacing={2}
+        >
+          {filters.map((filter: any, index: number) => (
+            <Grid size={{ lg: 1.4, xs: 12 }} key={index}>
+              <TableSelectFilterMainNew
+                value={filter.value || ""}
+                name={filter.name}
+                options={filter.filterOptions}
+                popperClassName={filter.className}
+                defaultText="All"
+                className="table-dropdown-select"
+                onChange={handleFilterChange}
+                sx={{ border: "1px solid #DBDBDB", borderRadius: "30px" }}
+              />
+            </Grid>
+          ))}
+          <ReuseableDatePicker
+            value={selectedDate}
+            onChange={handleDateChange}
+            className={styles.customDatePicker}
+            minDate={new Date(2023, 0, 1)}
+            maxDate={new Date(2025, 11, 31)}
+            locale="en-US"
+            format="dd/MM/yyyy"
+          />
+          <Grid size={{ lg: 3, xs: 12 }}>
+            <Box
+              sx={{ display: "flex", gap: "10px" }}
+              className="ticket-button"
+            >
+              <CustomButton
+                customClass={"btn-outlined"}
+                text="Apply filter"
+                onClick={handleApplyFilter}
+              />
+              <Button className="reset-button" onClick={handleResetFilter}>
+                <Image src={resetIcon} alt="reset-icon" />
+                Reset Filter
+              </Button>
+            </Box>
           </Grid>
-        ))}
-        <ReuseableDatePicker
-          value={selectedDate}
-          onChange={handleDateChange}
-          className={styles.customDatePicker}
-          minDate={new Date(2023, 0, 1)}
-          maxDate={new Date(2025, 11, 31)}
-          locale="en-US"
-          format="dd/MM/yyyy"
-        />
-        <Grid size={{ lg: 3, xs: 12 }}>
-          <Box sx={{ display: "flex", gap: "10px" }} className="ticket-button">
-            <CustomButton
-              customClass={"btn-outlined"}
-              text="Apply filter"
-              onClick={handleApplyFilter}
-            />
-            <Button className="reset-button" onClick={handleResetFilter}>
-              <Image src={resetIcon} alt="reset-icon" />
-              Reset Filter
-            </Button>
-          </Box>
         </Grid>
-      </Grid>}
+      )}
 
       <div className="table-parent unibox-table">
         <ReusableTable
@@ -580,10 +590,14 @@ export default function DeletedUniBoxTickets() {
         modalTitle="Create Ticket"
         iconSrc={createModalIcon}
       >
-        <CreateTicket closeModal={() => setAddModal(false)} getall={() =>
-          queryClient.invalidateQueries({
-            queryKey: [`uniboxTicketsDelete_${update}`],
-          })} />
+        <CreateTicket
+          closeModal={() => setAddModal(false)}
+          getall={() =>
+            queryClient.invalidateQueries({
+              queryKey: [`uniboxTicketsDelete_${update}`],
+            })
+          }
+        />
       </MyModal>
 
       <MyModal
@@ -637,11 +651,11 @@ export default function DeletedUniBoxTickets() {
       >
         <Box sx={{ display: "flex", gap: "15px", alignItems: "center", mb: 2 }}>
           <Image src={DeleteModalIcon} alt="delete-modal-icon" width={50} />
-          <Typography variant="h6">Confirm Deletion</Typography>
+          <Typography variant="h6">Ticket Restore</Typography>
         </Box>
         <Typography mb={2}>
-          Are you sure you want to permanently delete {selectedTicket?.ticketId}
-          ? This action cannot be undone.
+          Are you sure you want to Restore {selectedTicket?.ticketId}? This
+          action cannot be undone.
         </Typography>
         <Box sx={{ display: "flex", gap: "15px" }} className="ticket-button">
           <CustomButton
@@ -655,8 +669,8 @@ export default function DeletedUniBoxTickets() {
           />
           <CustomButton
             btnDelete={true}
-            text="Delete"
-            icon={deleteModalDeleteIcon}
+            text="Restore"
+            // icon={deleteModalDeleteIcon}
             style={{ padding: "10px 36px", width: "unset" }}
             onClick={() => {
               handleFieldDelete(selectedTicket?.id, 1);

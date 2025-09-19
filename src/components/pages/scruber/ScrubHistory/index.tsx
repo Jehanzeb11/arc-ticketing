@@ -126,23 +126,23 @@ const ScrubHistory = () => {
       type: "Clear",
     },
     {
-      name: "TCPA Troll",
+      name: "Federal DNC",
       type: "Match",
     },
     {
-      name: "DNS Complainers",
+      name: "State DNC",
       type: "Clear",
     },
     {
-      name: "DNS Complainers",
+      name: "Verizon Wireless",
       type: "Clear",
     },
     {
-      name: "DNS Complainers",
+      name: "Telnyx OCN",
       type: "Clear",
     },
     {
-      name: "TCPA Troll",
+      name: "DNC Trolls",
       type: "Match",
     },
   ];
@@ -252,7 +252,13 @@ const ScrubHistory = () => {
         onCloseModal={() => setOpen(false)}
       >
         <Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "20px",
+            }}
+          >
             {statusArr?.map((item, index) => (
               <Box key={index} className="scruber-status-box">
                 <Image

@@ -11,10 +11,21 @@ import viewIcon from "@/assets/scruber/icons/view.png";
 import downloadIcon from "@/assets/scruber/icons/download.png";
 import deleteIcon from "@/assets/scruber/icons/delete.png";
 import ScruberKPIsResult from "@/components/Scrub/History/KPIs";
+import { useApiStore } from "@/lib/api/apiStore";
+import { useQuery } from "@tanstack/react-query";
 
 const ScrubHistoryResult = () => {
+  const { jobHistory, callApi } = useApiStore();
   const [status, setStatus] = useState("");
-
+  const jobId = new URLSearchParams(window.location.search).get("id");
+  const {
+    data: jobData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [`jobHistory`],
+    queryFn: () => callApi(jobHistory, { jobId: jobId }),
+  });
   const handleChange = (event: any) => {
     setStatus(event.target.value);
   };
@@ -27,7 +38,7 @@ const ScrubHistoryResult = () => {
       label: "Status",
       sortable: true,
       render: (value: string) =>
-        value === "Valid" ? (
+        value === "valid" ? (
           <Chip
             label="Valid"
             sx={{
@@ -36,7 +47,7 @@ const ScrubHistoryResult = () => {
               fontWeight: 500,
             }}
           />
-        ) : value === "Bad" ? (
+        ) : value === "bad" ? (
           <Chip
             label="Bad"
             sx={{
@@ -59,27 +70,15 @@ const ScrubHistoryResult = () => {
     { key: "reason", label: "Reason", sortable: true },
   ];
 
-  const data = [
-    {
-      phoneNumber: "+1 (555) 123-4567",
-      status: "Valid",
-      reason: "Federal DNC",
-    },
-    {
-      phoneNumber: "+1 (555) 123-4567",
-      status: "Bad",
-      reason: "TCPA Troll Database",
-    },
-    {
-      phoneNumber: "+1 (555) 123-4567",
-      status: "TCPA Match",
-      reason: "DNS Complainers List",
-    },
-  ];
+  const data = jobData?.numbers?.map((item) => ({
+    phoneNumber: item.number,
+    status: item.status,
+    reason: item.validator,
+  }));
 
   return (
     <Box>
-      <ScruberKPIsResult />
+      <ScruberKPIsResult validatorCounts={jobData?.validatorCounts} />
 
       <Box mt={4} mb={2}>
         <ScrubCardTable

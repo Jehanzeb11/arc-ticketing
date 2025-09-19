@@ -11,7 +11,7 @@ import icon8 from "@/assets/scruber/icons/8.png";
 import icon9 from "@/assets/scruber/icons/7.svg";
 import icon10 from "@/assets/scruber/icons/10.png";
 import Image from "next/image";
-const ScruberKPIsResult = () => {
+const ScruberKPIsResult = ({ validatorCounts }) => {
   return (
     <Grid
       container

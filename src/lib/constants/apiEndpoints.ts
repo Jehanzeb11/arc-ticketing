@@ -9,7 +9,7 @@ export const API_ENDPOINTS = {
   ME: "/auth/me",
   VERIFY_2FA: "/auth/verify-2fa",
 
-  SCRUB: "/scrub",
+  SCRUB: "/scrub/multi-purpose",
 
   USER_MODULES: (type) => `/usermodules/multi-purpose${type}`,
 
