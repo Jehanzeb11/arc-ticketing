@@ -59,9 +59,9 @@ const RolesAndPermission = () => {
       callApi(fetchRoles, {
         requestType: "getAllRoles",
       }),
-   refetchOnMount: true, // allow refetch when remounting
-  refetchOnWindowFocus: false,
-  staleTime: 0,
+    refetchOnMount: true, // allow refetch when remounting
+    refetchOnWindowFocus: false,
+    staleTime: 0,
   });
 
   const columns = [
@@ -205,7 +205,7 @@ const RolesAndPermission = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterValues, setFilterValues] = useState({
     status: "AllStatus",
-    permissions: "AllPermissions",
+    roles: "AllRoles",
   });
   const [filteredData, setFilteredData] = useState(data);
 
@@ -216,13 +216,8 @@ const RolesAndPermission = () => {
   ];
 
   const permissionOptions = [
-    { value: "AllPermissions", label: "All Permissions" },
-    { value: "View Reports", label: "View Reports" },
-    { value: "Manage Users", label: "Manage Users" },
-    { value: "System Settings", label: "System Settings" },
-    { value: "Delete Records", label: "Delete Records" },
-    { value: "Create Tickets", label: "Create Tickets" },
-    { value: "Assign Roles", label: "Assign Roles" },
+    { value: "AllRoles", label: "All Roles" },
+    ...roles.map((role) => ({ value: role.role_id, label: role.role_name })),
   ];
 
   const filters = [
@@ -233,8 +228,8 @@ const RolesAndPermission = () => {
       filterOptions: statusOptions,
     },
     {
-      name: "permissions",
-      value: filterValues.permissions,
+      name: "roles",
+      value: filterValues.roles,
       className: "permissions-filter",
       filterOptions: permissionOptions,
     },
@@ -298,19 +293,14 @@ const RolesAndPermission = () => {
 
     if (filterValues.status && filterValues.status !== "AllStatus") {
       result = result.filter((row) => {
-        const originalRole = roles.find((role) => role.id === row.id);
+        const originalRole = roles.find((role) => role.role_id === row.role_id);
         return originalRole?.status === filterValues.status;
       });
     }
 
-    if (
-      filterValues.permissions &&
-      filterValues.permissions !== "AllPermissions"
-    ) {
-      result = result.filter((row) => {
-        const originalRole = roles.find((role) => role.id === row.id);
-        return originalRole?.permissions?.includes(filterValues.permissions);
-      });
+    // Fix for Role Filter - matching by role_id
+    if (filterValues.roles && filterValues.roles !== "AllRoles") {
+      result = result.filter((row) => row.role_id === filterValues.roles);
     }
 
     setFilteredData(result);
@@ -332,9 +322,10 @@ const RolesAndPermission = () => {
   const handleResetFilter = () => {
     setFilterValues({
       status: "AllStatus",
-      permissions: "AllPermissions",
+      roles: "AllRoles",
     });
     setSearchQuery("");
+    applyFilters();
   };
 
   if (error) {
@@ -343,11 +334,20 @@ const RolesAndPermission = () => {
 
   useEffect(() => {
     if (roles && data && data.length > 0) {
-      applyFilters();
+      // applyFilters();
     } else {
       setFilteredData([]);
     }
-  }, [roles, data, searchQuery, filterValues.status, filterValues.permissions]);
+  }, [roles, data, searchQuery, filterValues.status, filterValues.roles]);
+
+  useEffect(() => {
+    if (
+      filterValues.status == "AllStatus" &&
+      filterValues.roles == "AllRoles"
+    ) {
+      applyFilters();
+    }
+  }, [roles, filterValues]);
 
   return (
     <Box>
@@ -408,7 +408,7 @@ const RolesAndPermission = () => {
             <CustomButton
               text="Apply Filter"
               customClass={"btn-outlined"}
-              onClick={handleApplyFilter}
+              onClick={applyFilters}
             />
             <Tooltip title="Reset Filter" arrow>
               <Button className="reset-button" onClick={handleResetFilter}>

@@ -1,80 +1,152 @@
 import React from "react";
 import {
-  OutlinedInput,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  ListItemText,
-  Select,
+  Autocomplete,
+  TextField,
+  Box,
+  Popper,
+  CircularProgress,
   Checkbox,
 } from "@mui/material";
-import { SelectChangeEvent } from "@mui/material/Select";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import Image from "next/image";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-type Props = {
-  options: string[];
-  label?: string; // optional
-  placeholder?: string;
-  value: string[];
-  onChange: (value: string[]) => void;
-  sx?: object;
-  disabled?: boolean; // Added disabled prop
-};
+interface Option {
+  label: string;
+  value: string;
+  description?: string;
+  icon?: any; // Icon source (e.g., SVG import)
+}
 
-export default function MultiOptionsSelect({
-  options = [], // ✅ default empty array
-  label,
-  placeholder = "Select...",
-  value,
+interface MultiSelectProps {
+  onChange: (event: any) => void;
+  value?: string[]; // Value as an array of selected values for multi-select
+  label?: string;
+  name?: string;
+  description?: string;
+  options?: Option[];
+  className?: string;
+  explanationText?: string | boolean;
+  defaultText?: string;
+  loading?: boolean;
+  disabled?: boolean;
+  sx?: any;
+}
+
+export default function MultiSelect({
   onChange,
-  sx = {},
-  disabled = false, // Default to false
-}: Props) {
-  const handleChange = (event: SelectChangeEvent<typeof value>) => {
-    const {
-      target: { value: selected },
-    } = event;
-    onChange(typeof selected === "string" ? selected.split(",") : selected);
+  value = [],
+  label = "",
+  name = "",
+  description = "",
+  options = [],
+  className = "",
+  explanationText = false,
+  defaultText = "",
+  loading = false,
+  disabled = false,
+  sx,
+}: MultiSelectProps) {
+  const CustomPopper = (props: any) => {
+    return (
+      <Popper
+        {...props}
+        placement="top-start"
+        modifiers={[]}
+        style={{
+          ...props.style,
+          top: "auto",
+          bottom: `calc(100% + 8px)`, // Push it above the input
+          transform: "none", // cancel Popper.js's transform
+        }}
+      />
+    );
+  };
+
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: Option[]) => {
+    onChange({
+      target: {
+        name,
+        value: newValue.map((nv: Option) => nv.value),
+      },
+    });
   };
 
   return (
-    <FormControl sx={{ m: 1, width: 300, ...sx }} disabled={disabled}>
-      {/* Only show label if provided */}
-      {label && (
-        <InputLabel shrink={false} id="multi-select-label">
-          {label}
-        </InputLabel>
-      )}
-      <Select
-        labelId="multi-select-label"
+    <Box className={`my-select ${className}`} sx={{ ...sx }}>
+      <span className="select-label">{label}</span>
+      <Autocomplete
         multiple
-        value={value}
+        disableCloseOnSelect
+        options={options || []}
+        getOptionLabel={(option) => option.label || defaultText}
+        value={options.filter((opt) => value.includes(opt.value))} // This ensures the value array is correctly mapped
+        PopperComponent={CustomPopper}
+        disableClearable
         onChange={handleChange}
-        displayEmpty
-        input={<OutlinedInput notched={false} />} // remove floating effect
-        renderValue={(selected) =>
-          selected.length === 0 ? placeholder : selected.join(", ")
-        }
-        MenuProps={MenuProps}
-        disabled={disabled} // Pass disabled prop to Select
-      >
-        {options.map((name) => (
-          <MenuItem key={name} value={name} disabled={disabled}>
-            <Checkbox checked={value.includes(name)} disabled={disabled} />
-            <ListItemText primary={name} />
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            placeholder={defaultText}
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            disabled={disabled || loading}
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <>
+                  {loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </>
+              ),
+            }}
+          />
+        )}
+        renderOption={(props, option, { selected }) => (
+          <li
+            {...props}
+            key={option.value}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <Checkbox
+              icon={icon}
+              checkedIcon={checkedIcon}
+              checked={selected} // Use selected here to set checked state
+              style={{ marginRight: 8 }}
+            />
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              {option.icon && (
+                <Image
+                  src={option.icon.src}
+                  alt={`${option.label} icon`}
+                  width={20}
+                  height={20}
+                />
+              )}
+              <span>{option.label}</span>
+            </Box>
+            {option.description && (
+              <span style={{ color: "#00000033" }}>({option.description})</span>
+            )}
+          </li>
+        )}
+        isOptionEqualToValue={(option, val) => option.value === val}
+        disabled={disabled || loading}
+      />
+      {explanationText && (
+        <p
+          className="explanation-text"
+          style={{ color: "#666", marginTop: "4px", fontSize: "12px" }}
+        >
+          {explanationText}
+        </p>
+      )}
+    </Box>
   );
 }

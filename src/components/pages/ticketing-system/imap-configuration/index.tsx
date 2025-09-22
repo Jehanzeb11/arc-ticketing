@@ -58,6 +58,7 @@ const IMAP = () => {
 
   const columns = [
     { key: "host", title: "IMAP Host", filterable: false },
+    { key: "email", title: "IMAP Email", filterable: false },
     { key: "port", title: "IMAP Port", filterable: false },
     { key: "ssl", title: "TLS/SSL", filterable: false },
     { key: "dept", title: "Department", filterable: false },
@@ -70,14 +71,15 @@ const IMAP = () => {
       smtps?.map((user) => ({
         id: user.id,
         host: user.host || "--",
+        email: user.username || "--",
         port: String(user.port) || "--",
         ssl: user.secure || "--",
-        dept: user.dept || "--",
+        dept: user.departments?.join(", ") || "--",
         status: (
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Typography
               sx={{
-                color:"#0000006d",
+                color: "#0000006d",
                 fontSize: "15px",
                 // lineHeight: "20px",
                 // padding: "4px 12px",

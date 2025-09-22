@@ -50,7 +50,7 @@ export default function TicketsCards({ ticketKpiStats }) {
 
     {
       img: cardBg6,
-      title: "High/Urgent",
+      title: "High",
       value: ticketKpiStats?.counts?.highPriority,
       percent: parseFloat(ticketKpiStats?.percentageChange?.highPriority),
       vs: "vs yestarday",

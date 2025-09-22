@@ -53,9 +53,7 @@ const ActivityLog = ({ activityData }) => {
             options={[
               { value: "all", label: "All" },
               { value: "replies", label: "Replies" },
-              { value: "status", label: "Ticket" },
-              { value: "assignment", label: "Assignment" },
-              { value: "files", label: "Files" },
+              { value: "ticket", label: "Ticket" },
             ]}
             popperClassName="department-filter"
             defaultText="All"
@@ -77,42 +75,50 @@ const ActivityLog = ({ activityData }) => {
         </Button> */}
       </Grid>
 
-      {activityData?.map((activity) => (
-        <Box
-          key={activity.id}
-          sx={{
-            backgroundColor: "var(--pri-light-color)",
-            borderRadius: "10px",
-            p: 1.8,
-            mb: 1.6,
-            display: "flex",
-            // alignItems: "center",
-            border: "1px solid var(--pri-light-color)",
-          }}
-        >
-          {/* Icon */}
+      {activityData
+        .filter((log) =>
+          filter === "ticket"
+            ? log.description.startsWith("Ticket")
+            : filter === "replies"
+            ? log.description.startsWith("Reply")
+            : true
+        )
+        ?.map((activity) => (
           <Box
+            key={activity.id}
             sx={{
-              width: 35,
-              height: 35,
-              borderRadius: "50%",
-              backgroundColor: "var(--pri-color)",
+              backgroundColor: "var(--pri-light-color)",
+              borderRadius: "10px",
+              p: 1.8,
+              mb: 1.6,
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              mr: 1.5,
-              color: "#fff",
-              padding: "9px",
+              // alignItems: "center",
+              border: "1px solid var(--pri-light-color)",
             }}
           >
-            {/* {activity.type === 'TicketCreated' && ( */}
-            <Image
-              src={icon1}
-              alt="icon"
-              style={{ maxWidth: "100%", height: "auto" }}
-            />
-            {/* )} */}
-            {/* {activity.type === 'TicketAssigned' && (
+            {/* Icon */}
+            <Box
+              sx={{
+                width: 35,
+                height: 35,
+                borderRadius: "50%",
+                backgroundColor: "var(--pri-color)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                mr: 1.5,
+                color: "#fff",
+                padding: "9px",
+              }}
+            >
+              {/* {activity.type === 'TicketCreated' && ( */}
+              <Image
+                src={icon1}
+                alt="icon"
+                style={{ maxWidth: "100%", height: "auto" }}
+              />
+              {/* )} */}
+              {/* {activity.type === 'TicketAssigned' && (
               <Image
                 src={icon2}
                 alt='icon'
@@ -147,34 +153,34 @@ const ActivityLog = ({ activityData }) => {
                 style={{ maxWidth: '100%', height: 'auto' }}
               />
             )} */}
-          </Box>
+            </Box>
 
-          {/* Content */}
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography
-              sx={{ fontSize: "16px", fontWeight: "500", color: "#000" }}
-            >
-              {activity.description}
-            </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
-              <Avatar
-                alt={activity?.user?.full_name}
-                src={imageUrl + activity?.user?.picture}
-                sx={{ width: 24, height: 24, mr: 1 }}
-              />
-              <Typography sx={{ color: "#666", fontSize: "14px" }}>
-                {activity?.user?.full_name}
+            {/* Content */}
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography
+                sx={{ fontSize: "16px", fontWeight: "500", color: "#000" }}
+              >
+                {activity.description}
               </Typography>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
-              <CalendarTodayIcon
-                sx={{ fontSize: 16, color: "#666", mr: 0.5 }}
-              />
-              <Typography sx={{ color: "#666", fontSize: "12px" }}>
-                {new Date(activity.updatedAt).toDateString()}
-              </Typography>
-            </Box>
-            {/* {activity.fileName && (
+              <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
+                <Avatar
+                  alt={activity?.user?.full_name}
+                  src={imageUrl + activity?.user?.picture}
+                  sx={{ width: 24, height: 24, mr: 1 }}
+                />
+                <Typography sx={{ color: "#666", fontSize: "14px" }}>
+                  {activity?.user?.full_name}
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
+                <CalendarTodayIcon
+                  sx={{ fontSize: 16, color: "#666", mr: 0.5 }}
+                />
+                <Typography sx={{ color: "#666", fontSize: "12px" }}>
+                  {new Date(activity.updatedAt).toDateString()}
+                </Typography>
+              </Box>
+              {/* {activity.fileName && (
               <Typography
                 sx={{
                   backgroundColor: '#EDFEFF',
@@ -206,9 +212,9 @@ const ActivityLog = ({ activityData }) => {
                 />
               </Box>
             )} */}
+            </Box>
           </Box>
-        </Box>
-      ))}
+        ))}
     </Box>
   );
 };

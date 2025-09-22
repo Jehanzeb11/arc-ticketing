@@ -35,9 +35,9 @@ const DepartmentPage = () => {
   const [selectedName, setSelectedName] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState(null);
 
-const canCreateDept = usePermission("Add Department");
-const canEditDept = usePermission("Edit Department");
-const canDeleteDept = usePermission("Delete Department");
+  const canCreateDept = usePermission("Add Department");
+  const canEditDept = usePermission("Edit Department");
+  const canDeleteDept = usePermission("Delete Department");
 
   const {
     data: departments,
@@ -53,6 +53,42 @@ const canDeleteDept = usePermission("Delete Department");
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
+
+  const assignedUsersOptions = useMemo(() => {
+    // Calculate min and max user counts
+    let minUsers = Infinity;
+    let maxUsers = -Infinity;
+
+    departments?.forEach((dept) => {
+      const userCount = dept.userCount || 0;
+      minUsers = Math.min(minUsers, userCount);
+      maxUsers = Math.max(maxUsers, userCount);
+    });
+
+    // Create dynamic filter options based on user count ranges
+    let options = [
+      { value: "AllAssignedUsers", label: "All Assigned Users" },
+      { value: "0-10", label: "0 - 10 Users" },
+    ];
+
+    // Create ranges based on the max users
+    const rangeStep = 10; // Define your range step (10 users per range, for example)
+    let start = 10;
+    while (start < maxUsers) {
+      let end = start + rangeStep - 1;
+      options.push({
+        value: `${start}-${end}`,
+        label: `${start} - ${end} Users`,
+      });
+      start = end + 1;
+    }
+
+    if (maxUsers > start) {
+      options.push({ value: `${start}+`, label: `${start}+ Users` });
+    }
+
+    return options;
+  }, [departments]);
 
   const columns = [
     { key: "name", title: "Department Name", filterable: false },
@@ -84,7 +120,7 @@ const canDeleteDept = usePermission("Delete Department");
         id: dept.id,
         name: dept.name || "--",
         description: dept.description || "--",
-        assignedUsers: dept.assignedUsers || "0",
+        assignedUsers: dept.userCount || 0,
         status: (
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Typography
@@ -124,13 +160,6 @@ const canDeleteDept = usePermission("Delete Department");
     { value: "Inactive", label: "Inactive" },
   ];
 
-  const assignedUsersOptions = [
-    { value: "AllAssignedUsers", label: "All Assigned Users" },
-    { value: "0", label: "0 Users" },
-    { value: "1", label: "1 User" },
-    { value: "2+", label: "2+ Users" },
-  ];
-
   const filters = [
     {
       name: "status",
@@ -147,7 +176,7 @@ const canDeleteDept = usePermission("Delete Department");
   ];
 
   const actions = [
-   canEditDept && {
+    canEditDept && {
       icon: editIcon,
       onClick: (row) => {
         if (row && row.id) {
@@ -166,7 +195,7 @@ const canDeleteDept = usePermission("Delete Department");
       className: "action-icon",
       tooltip: "Edit Department",
     },
-   canDeleteDept && {
+    canDeleteDept && {
       icon: DeleteIcon,
       onClick: (row) => {
         if (row && row.id) {
@@ -228,10 +257,17 @@ const canDeleteDept = usePermission("Delete Department");
       result = result.filter((row) => {
         const originalDept = departments.find((dept) => dept.id === row.id);
         const userCount = parseInt(originalDept?.assignedUsers || "0");
-        if (filterValues.assignedUsers === "2+") {
-          return userCount >= 2;
+
+        const [rangeStart, rangeEnd] = filterValues.assignedUsers
+          .split("-")
+          .map(Number);
+
+        // Handle range filtering logic
+        if (filterValues.assignedUsers.includes("+")) {
+          return userCount >= rangeStart;
         }
-        return originalDept?.assignedUsers === filterValues.assignedUsers;
+
+        return userCount >= rangeStart && userCount <= rangeEnd;
       });
     }
 
@@ -257,6 +293,7 @@ const canDeleteDept = usePermission("Delete Department");
       assignedUsers: "AllAssignedUsers",
     });
     setSearchQuery("");
+    applyFilters();
   };
 
   if (error) {
@@ -265,7 +302,7 @@ const canDeleteDept = usePermission("Delete Department");
 
   useEffect(() => {
     if (departments && data && data.length > 0) {
-      applyFilters();
+      // applyFilters();
     } else {
       setFilteredData([]);
     }
@@ -277,6 +314,15 @@ const canDeleteDept = usePermission("Delete Department");
     filterValues.assignedUsers,
   ]);
 
+  useEffect(() => {
+    if (
+      filterValues.assignedUsers === "AllAssignedUsers" &&
+      filterValues.status === "AllStatus"
+    ) {
+      applyFilters();
+    }
+  }, [departments, filterValues]);
+
   return (
     <Box>
       <DashboardHeader title="Departments Management" />
@@ -286,12 +332,14 @@ const canDeleteDept = usePermission("Delete Department");
         <Typography variant="h5" className="header-title">
           Department Overview
         </Typography>
-        {canCreateDept && <CustomButton
-          text="Add New Department"
-          customClass="btn-add"
-          onClick={() => setAddNewModalOpen(true)}
-          libIcon={<AddCircleIcon sx={{ fontSize: "30px" }} />}
-        />}
+        {canCreateDept && (
+          <CustomButton
+            text="Add New Department"
+            customClass="btn-add"
+            onClick={() => setAddNewModalOpen(true)}
+            libIcon={<AddCircleIcon sx={{ fontSize: "30px" }} />}
+          />
+        )}
       </Box>
 
       <Grid
@@ -330,7 +378,7 @@ const canDeleteDept = usePermission("Delete Department");
             <CustomButton
               text="Apply Filter"
               customClass={"btn-outlined"}
-              onClick={handleApplyFilter}
+              onClick={applyFilters}
             />
             <Tooltip title="Reset Filter" arrow>
               <Button className="reset-button" onClick={handleResetFilter}>

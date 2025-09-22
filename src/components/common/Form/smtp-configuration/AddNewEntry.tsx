@@ -10,6 +10,9 @@ import GlobalPasswordInput from "@/components/common/Input/GlobalPasswordInput";
 import FormSelect from "@/components/common/Select";
 import { useApiStore } from "@/lib/api/apiStore";
 import IOSSwitch from "../../switch";
+import MultiOptionsSelect from "../../Select/MultiOptionsSelect";
+import CheckboxesTags from "../../Select/MultiOptionsSelect";
+import MultiSelect from "../../Select/MultiOptionsSelect";
 
 export default function AddNewEntryEmailConf({ getall, onCloseModal }: any) {
   const { callApi, createSMTP, fetchRoles, fetchDepartments }: any =
@@ -121,7 +124,6 @@ export default function AddNewEntryEmailConf({ getall, onCloseModal }: any) {
   //   })) || [];
 
   console.log("departments", watch("dept"));
-  
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -210,8 +212,8 @@ export default function AddNewEntryEmailConf({ getall, onCloseModal }: any) {
                   strength === "Weak"
                     ? "red"
                     : strength === "Medium"
-                      ? "orange"
-                      : "green",
+                    ? "orange"
+                    : "green",
               }}
             >
               Strength: {strength}
@@ -228,8 +230,8 @@ export default function AddNewEntryEmailConf({ getall, onCloseModal }: any) {
                     strength === "Weak"
                       ? "red"
                       : strength === "Medium"
-                        ? "orange"
-                        : "green",
+                      ? "orange"
+                      : "green",
                 },
               }}
             />
@@ -237,7 +239,7 @@ export default function AddNewEntryEmailConf({ getall, onCloseModal }: any) {
         )}
 
         {/* Status */}
-        <Grid size={{ xs: 12 }}>
+        {/* <Grid size={{ xs: 12 }}>
           <Controller
             name="dept"
             control={control}
@@ -263,8 +265,35 @@ export default function AddNewEntryEmailConf({ getall, onCloseModal }: any) {
               {errors.dept.message}
             </Typography>
           )}
+        </Grid> */}
+        {/* <MultiOptionsSelect options={roleOptions} label="Assign to Role" /> */}
+        <Grid size={12}>
+          <Controller
+            name="department" // Form field name
+            control={control} // `control` from react-hook-form
+            rules={{ required: "Department is required" }} // Validation rule
+            render={({ field }) => (
+              <MultiSelect
+                label="Assign to Department"
+                name="department"
+                rules={{ required: "Department is required" }}
+                defaultText="Select Department"
+                className="modal-select"
+                value={field.value || []} // Ensure field.value is an array
+                onChange={(e) => field.onChange(e.target.value)} // Pass selected values back to form
+                options={departments?.map((dept) => ({
+                  label: dept.name,
+                  value: dept.id,
+                }))}
+              />
+            )}
+          />
+          {errors.dept && (
+            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
+              {errors.dept.message}
+            </Typography>
+          )}
         </Grid>
-
         <Grid size={{ xs: 12 }}>
           <Controller
             name="status"

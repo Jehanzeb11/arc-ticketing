@@ -32,7 +32,8 @@ import EditEmailConf from "@/components/common/Form/smtp-configuration/EditEmail
 
 const SMTP = () => {
   const queryClient = useQueryClient();
-  const { callApi, updateSmtp, deleteSmtp, getAllSMTP }: any = useApiStore();
+  const { callApi, updateSmtp, deleteSmtp, getAllSMTP, fetchDepartments }: any =
+    useApiStore();
   const [addNewModalOpen, setAddNewModalOpen] = useState(false);
   const [editNewModalOpen, setEditNewModalOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -54,8 +55,24 @@ const SMTP = () => {
     staleTime: Infinity,
   });
 
+  const {
+    data: departments,
+    isLoading: departmentsLoading,
+    error: departmentsError,
+  } = useQuery({
+    queryKey: ["departments"],
+    queryFn: () =>
+      callApi(fetchDepartments, {
+        requestType: "getAllDepartments",
+      }),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  });
+
   const columns = [
     { key: "host", title: "SMTP Host", filterable: false },
+    { key: "email", title: "SMTP Email", filterable: false },
     { key: "port", title: "SMTP Port", filterable: false },
     { key: "ssl", title: "TLS/SSL", filterable: false },
     { key: "dept", title: "Department", filterable: false },
@@ -68,14 +85,15 @@ const SMTP = () => {
       smtps?.map((user) => ({
         id: user.id,
         host: user.host || "--",
+        email: user.username || "--",
         port: String(user.port) || "--",
         ssl: user.secure || "--",
-        dept: user.dept || "--",
+        dept: user.departments?.join(",") || "--",
         status: (
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Typography
               sx={{
-                color:  "#0000006d",
+                color: "#0000006d",
                 fontSize: "15px",
                 // lineHeight: "20px",
                 // padding: "4px 12px",

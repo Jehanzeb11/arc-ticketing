@@ -31,7 +31,14 @@ import { usePermission } from "@/hooks/usePermission";
 
 const AllUsers = () => {
   const queryClient = useQueryClient();
-  const { callApi, fetchUsers, deleteUser, updateUser }: any = useApiStore();
+  const {
+    callApi,
+    fetchUsers,
+    deleteUser,
+    updateUser,
+    fetchRoles,
+    fetchDepartments,
+  }: any = useApiStore();
   const [addNewModalOpen, setAddNewModalOpen] = useState(false);
   const [editNewModalOpen, setEditNewModalOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -52,12 +59,41 @@ const AllUsers = () => {
     staleTime: Infinity,
   });
 
+  const {
+    data: departments,
+    isLoading: departmentsLoading,
+    error: departmentsError,
+  } = useQuery({
+    queryKey: ["departments"],
+    queryFn: () =>
+      callApi(fetchDepartments, {
+        requestType: "getAllDepartments",
+      }),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  });
 
-   // ✅ call the hook at the top of your component
-const canAssignModule = usePermission("Delete User");
-const canDeleteUser = usePermission("Delete User");
-const canEditUser = usePermission("Edit User");
-const canToggleStatus = usePermission("Deactivate/Activate User");
+  const {
+    data: roles,
+    isLoading: rolesLoading,
+    error: rolesError,
+  } = useQuery({
+    queryKey: ["roles"],
+    queryFn: () =>
+      callApi(fetchRoles, {
+        requestType: "getAllRoles",
+      }),
+    refetchOnMount: true, // allow refetch when remounting
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+  });
+
+  // ✅ call the hook at the top of your component
+  const canAssignModule = usePermission("Delete User");
+  const canDeleteUser = usePermission("Delete User");
+  const canEditUser = usePermission("Edit User");
+  const canToggleStatus = usePermission("Deactivate/Activate User");
 
   const columns = [
     { key: "profile", title: "Profile", filterable: false },
@@ -73,6 +109,8 @@ const canToggleStatus = usePermission("Deactivate/Activate User");
     () =>
       users?.map((user) => ({
         user_id: user.user_id,
+        role_id: user.roleId,
+        department_id: user.departmentId,
         profile: (
           <Box
             sx={{
@@ -97,7 +135,7 @@ const canToggleStatus = usePermission("Deactivate/Activate User");
         ),
         fullName: user.full_name || "--",
         email: user.email.toLowerCase() || "--",
-        role: user.role || "--",
+        role: user.roleId || "--",
         department: user.phone || "--",
         status: (
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -114,10 +152,12 @@ const canToggleStatus = usePermission("Deactivate/Activate User");
             >
               {user.status}
             </Typography>
-              {canToggleStatus && <IOSSwitch
-              checked={user.status === "Active"}
-              onChange={(e) => handleSwitchChange(e, user.user_id)}
-            />}
+            {canToggleStatus && (
+              <IOSSwitch
+                checked={user.status === "Active"}
+                onChange={(e) => handleSwitchChange(e, user.user_id)}
+              />
+            )}
           </Box>
         ),
       })) || [],
@@ -146,19 +186,18 @@ const canToggleStatus = usePermission("Deactivate/Activate User");
 
   const roleOptions = [
     { value: "AllRole", label: "All Roles" },
-    { value: "admin", label: "Admin" },
-    { value: "user", label: "User" },
-    { value: "Manager", label: "Manager" },
-    { value: "Agent", label: "Agent" },
+    ...(roles?.map((role) => ({
+      value: +role.role_id,
+      label: role.role_name,
+    })) || []),
   ];
 
   const departmentOptions = [
     { value: "AllDepartment", label: "All Departments" },
-    { value: "IT", label: "IT" },
-    { value: "Sales", label: "Sales" },
-    { value: "Support", label: "Support" },
-    { value: "Marketing", label: "Marketing" },
-    { value: "HR", label: "HR" },
+    ...(departments?.map((department) => ({
+      value: +department.id,
+      label: department.name,
+    })) || []),
   ];
 
   const statusOptions = [
@@ -188,6 +227,8 @@ const canToggleStatus = usePermission("Deactivate/Activate User");
     },
   ];
 
+  console.log("filterValues.role", filterValues.role);
+
   // Handle switch change for user status
   const handleSwitchChange = async (e, id) => {
     const newStatus = e.target.checked ? "Active" : "Inactive";
@@ -205,66 +246,63 @@ const canToggleStatus = usePermission("Deactivate/Activate User");
     }
   };
 
-
-
-const actions = [
-  canEditUser && {
-    icon: editIcon,
-    onClick: (row) => {
-      if (row && row.user_id) {
-        const user = users.find((u) => u.user_id === row.user_id);
-        if (user) {
-          setSelectedId(row.user_id);
-          setSelectedUser(user);
-          setEditNewModalOpen(true);
+  const actions = [
+    canEditUser && {
+      icon: editIcon,
+      onClick: (row) => {
+        if (row && row.user_id) {
+          const user = users.find((u) => u.user_id === row.user_id);
+          if (user) {
+            setSelectedId(row.user_id);
+            setSelectedUser(user);
+            setEditNewModalOpen(true);
+          } else {
+            toast.error("User data not found");
+          }
         } else {
-          toast.error("User data not found");
+          toast.error("Invalid row or missing id");
         }
-      } else {
-        toast.error("Invalid row or missing id");
-      }
+      },
+      className: "action-icon",
+      tooltip: "Edit User",
     },
-    className: "action-icon",
-    tooltip: "Edit User",
-  },
-  canDeleteUser && {
-    icon: DeleteIcon,
-    onClick: (row) => {
-      if (row && row.user_id) {
-        setSelectedId(row.user_id);
-        const user = users.find((u) => u.user_id === row.user_id);
-        const name = user?.full_name || user?.email || "User";
-        setSelectedName(name);
-        setDeleteModal(true);
-      } else {
-        toast.error("Cannot delete: User data is invalid.");
-      }
-    },
-    className: "action-icon",
-    tooltip: "Delete User",
-  },
-  canAssignModule && {
-    icon: DeleteIcon, // <-- replace with correct icon
-    onClick: (row) => {
-      if (row && row.user_id) {
-        setSelectedId(row.user_id);
-        const user = users.find((u) => u.user_id === row.user_id);
-        const name = user?.full_name || user?.email || "User";
-        setSelectedName(name);
-        setAssignModal(true);
-
-        if (user) {
-          setSelectedUser(user);
+    canDeleteUser && {
+      icon: DeleteIcon,
+      onClick: (row) => {
+        if (row && row.user_id) {
+          setSelectedId(row.user_id);
+          const user = users.find((u) => u.user_id === row.user_id);
+          const name = user?.full_name || user?.email || "User";
+          setSelectedName(name);
+          setDeleteModal(true);
+        } else {
+          toast.error("Cannot delete: User data is invalid.");
         }
-      } else {
-        toast.error("Cannot assign: User data is invalid.");
-      }
+      },
+      className: "action-icon",
+      tooltip: "Delete User",
     },
-    className: "action-icon",
-    tooltip: "Assign Module",
-  },
-].filter(Boolean); // ✅ removes `false` entries
+    canAssignModule && {
+      icon: DeleteIcon, // <-- replace with correct icon
+      onClick: (row) => {
+        if (row && row.user_id) {
+          setSelectedId(row.user_id);
+          const user = users.find((u) => u.user_id === row.user_id);
+          const name = user?.full_name || user?.email || "User";
+          setSelectedName(name);
+          setAssignModal(true);
 
+          if (user) {
+            setSelectedUser(user);
+          }
+        } else {
+          toast.error("Cannot assign: User data is invalid.");
+        }
+      },
+      className: "action-icon",
+      tooltip: "Assign Module",
+    },
+  ].filter(Boolean); // ✅ removes `false` entries
 
   const deleteMutation = useMutation({
     mutationFn: (id) =>
@@ -293,7 +331,7 @@ const actions = [
 
     // Apply role filter
     if (filterValues.role && filterValues.role !== "AllRole") {
-      result = result.filter((row) => row.role === filterValues.role);
+      result = result.filter((row) => row.role_id === filterValues.role);
     }
 
     // Apply department filter
@@ -302,21 +340,19 @@ const actions = [
       filterValues.department !== "AllDepartment"
     ) {
       result = result.filter(
-        (row) => row.department === filterValues.department
+        (row) => row.department_id === filterValues.department
       );
     }
 
     // Apply status filter
     if (filterValues.status && filterValues.status !== "AllStatus") {
       result = result.filter((row) => {
-        // For status filtering, we need to match against the original user data
-        // Find the original user to get the actual status value
-        const originalUser = users.find((user) => user.id === row.id);
-        return originalUser?.user_status === filterValues.status;
+        const originalUser = users.find((user) => user.user_id === row.user_id);
+        return originalUser?.status === filterValues.status;
       });
     }
 
-    setFilteredData(result);
+    setFilteredData(result); // Update filtered data
   };
 
   const handleFilterChange = (event) => {
@@ -340,6 +376,7 @@ const actions = [
       status: "AllStatus",
     });
     setSearchQuery("");
+    applyFilters();
     // The filters will be applied automatically through the useEffect
   };
 
@@ -349,7 +386,7 @@ const actions = [
 
   useEffect(() => {
     if (users && data && data.length > 0) {
-      applyFilters();
+      // applyFilters();
     } else {
       // If no users or data, set filteredData to empty array
       setFilteredData([]);
@@ -363,6 +400,17 @@ const actions = [
     filterValues.status,
   ]);
 
+  useEffect(() => {
+    // Apply filters when users data changes
+    if (
+      filterValues.role == "AllRole" &&
+      filterValues.department == "AllDepartment" &&
+      filterValues.status == "AllStatus"
+    ) {
+      applyFilters();
+    }
+  }, [users, filterValues]);
+
   return (
     <Box>
       <DashboardHeader title="Users Management" />
@@ -372,63 +420,68 @@ const actions = [
         <Typography variant="h5" className="header-title">
           All Users
         </Typography>
-       {usePermission("Add User") && <CustomButton
-          customClass="btn-add"
-          text="Add New User"
-          onClick={() => setAddNewModalOpen(true)}
-          libIcon={<AddCircleIcon sx={{ fontSize: "30px" }} />}
-        />}
+        {usePermission("Add User") && (
+          <CustomButton
+            customClass="btn-add"
+            text="Add New User"
+            onClick={() => setAddNewModalOpen(true)}
+            libIcon={<AddCircleIcon sx={{ fontSize: "30px" }} />}
+          />
+        )}
       </Box>
 
-      {usePermission("Search & Filter Users") && 
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          mb: "20px",
-          backgroundColor: "#fff",
-          padding: "20px",
-          borderRadius: "10px",
-        }}
-      >
-        <Grid size={{ lg: 4, xs: 12 }}>
-          <Search
-            searchQuery={searchQuery}
-            handleSearch={handleSearch}
-            placeholder="Search by full name"
-          />
-        </Grid>
-        {filters.map((filter, index) => (
-          <Grid size={{ lg: 1.5, xs: 12 }} key={index}>
-            <TableSelectFilterMainNew
-              value={filter.value || ""}
-              name={filter.name}
-              options={filter.filterOptions}
-              popperClassName={filter.className}
-              defaultText={filter.filterOptions[0].label}
-              className="table-dropdown-select"
-              onChange={handleFilterChange}
-              sx={{ border: "1px solid #DBDBDB", borderRadius: "30px" }}
+      {usePermission("Search & Filter Users") && (
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            mb: "20px",
+            backgroundColor: "#fff",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+        >
+          <Grid size={{ lg: 4, xs: 12 }}>
+            <Search
+              searchQuery={searchQuery}
+              handleSearch={handleSearch}
+              placeholder="Search by full name"
             />
           </Grid>
-        ))}
-        <Grid size={{ lg: 3, xs: 12 }}>
-          <Box sx={{ display: "flex", gap: "10px" }} className="ticket-button">
-            <CustomButton
-              text="Apply Filter"
-              customClass={"btn-outlined"}
-              onClick={handleApplyFilter}
-            />
-            <Tooltip title="Reset Filter" arrow>
-              <Button className="reset-button" onClick={handleResetFilter}>
-                <Image src={resetIcon} alt="reset-icon" />
-                Reset Filter
-              </Button>
-            </Tooltip>
-          </Box>
+          {filters.map((filter, index) => (
+            <Grid size={{ lg: 1.5, xs: 12 }} key={index}>
+              <TableSelectFilterMainNew
+                value={filter.value || ""}
+                name={filter.name}
+                options={filter.filterOptions}
+                popperClassName={filter.className}
+                defaultText={filter.filterOptions[0].label}
+                className="table-dropdown-select"
+                onChange={handleFilterChange}
+                sx={{ border: "1px solid #DBDBDB", borderRadius: "30px" }}
+              />
+            </Grid>
+          ))}
+          <Grid size={{ lg: 3, xs: 12 }}>
+            <Box
+              sx={{ display: "flex", gap: "10px" }}
+              className="ticket-button"
+            >
+              <CustomButton
+                text="Apply Filter"
+                customClass={"btn-outlined"}
+                onClick={applyFilters}
+              />
+              <Tooltip title="Reset Filter" arrow>
+                <Button className="reset-button" onClick={handleResetFilter}>
+                  <Image src={resetIcon} alt="reset-icon" />
+                  Reset Filter
+                </Button>
+              </Tooltip>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
-          }
+      )}
 
       <div className="table-parent">
         <ReusableTable

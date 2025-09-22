@@ -1963,6 +1963,7 @@ span.MuiTypography-root.MuiTypography-caption.MuiDayCalendar-weekDayLabel.css-1l
 .unibox-table .MuiTableContainer-root {
   overflow-x: scroll !important;
   scrollbar-width: thin;
+  scrollbar-color: #32abb1 #f5f8fb;
 }
 
 /* Dashboard */

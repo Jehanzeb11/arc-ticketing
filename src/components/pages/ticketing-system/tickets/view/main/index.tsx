@@ -44,19 +44,27 @@ export default function MainContent({
               }}
             >
               {allTickets?.length > 0 ? (
-                allTickets?.filter((ticket)=> !searchQuery || ticket.subject.toLowerCase().includes(searchQuery.toLowerCase())).map((ticket, index) => (
-                  <TicketCard
-                    key={index}
-                    id={ticket.id}
-                    ticketId={ticket.ticket_reference}
-                    status={ticket.status}
-                    priority={ticket.priority}
-                    title={ticket.subject}
-                    name={ticket.assignee}
-                    date={new Date(ticket.created_at).toLocaleString()}
-                    imageUrl={ticket.imageUrl}
-                  />
-                ))
+                allTickets
+                  ?.filter(
+                    (ticket) =>
+                      !searchQuery ||
+                      ticket.subject
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())
+                  )
+                  .map((ticket, index) => (
+                    <TicketCard
+                      key={index}
+                      id={ticket.id}
+                      ticketId={ticket.ticket_reference}
+                      status={ticket.status}
+                      priority={ticket.priority}
+                      title={ticket.subject}
+                      name={ticket.customer_name}
+                      date={new Date(ticket.created_at).toLocaleString()}
+                      imageUrl={ticket.imageUrl}
+                    />
+                  ))
               ) : (
                 <Typography>No ticket data available</Typography>
               )}
@@ -68,26 +76,50 @@ export default function MainContent({
         size={{ lg: 6, xs: 12 }}
         sx={{ display: "flex", flexDirection: "column", gap: "20px" }}
       >
-        <ReplyForm
-          ticketId={ticketData?.id}
-          tomails={ticketData?.to_email}
-          c_mail={ticketData?.customer_email}
-        />
-        <Alert
+        <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+          <Box
+            sx={{
+              maxWidth: "100%",
+              overflowY: "scroll",
+              height: "100%",
+            }}
+          >
+            <ReplyForm
+              ticketId={ticketData?.id}
+              tomails={ticketData?.to_email}
+              c_mail={ticketData?.customer_email}
+            />
+            {/* <Alert
           severity="error"
           sx={{ borderRadius: "10px", border: "1px solid #FF4242" }}
-        >
+          >
           <AlertTitle>Auto-resolve scheduled</AlertTitle>
           This ticket will be automatically resolved on 2025-01-10 10:15 if no
           activity occurs.
-        </Alert>
-        <TicketConversation conversationData={ticketData?.replies} />
+          </Alert> */}
+            <TicketConversation
+              ticketData={ticketData}
+              conversationData={ticketData?.replies}
+            />
+          </Box>
+        </Box>
       </Grid>
+
       <Grid
         size={{ lg: 3, xs: 12 }}
         sx={{ position: "sticky", top: "20px", height: "fit-content" }}
       >
-        <ActivityLog activityData={ticketData?.logs} />
+        <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+          <Box
+            sx={{
+              maxWidth: "100%",
+              overflowY: "scroll",
+              height: "100%",
+            }}
+          >
+            <ActivityLog activityData={ticketData?.logs} />
+          </Box>
+        </Box>
       </Grid>
     </Grid>
   );

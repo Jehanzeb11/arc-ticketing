@@ -81,7 +81,7 @@ export const updateUniboxTicket = (data) =>
   postbackend(API_ENDPOINTS.TICKETS, data);
 
 export const replyUniboxTicket = (data) =>
-  postbackend(API_ENDPOINTS.TICKETS, data);
+  postbackend(`${API_ENDPOINTS.TICKETS}?requestType=ticketReply`, data);
 
 export const getAllTickets = (data) => postbackend(API_ENDPOINTS.TICKETS, data);
 export const loginUser = (data) => postbackend(API_ENDPOINTS.LOGIN, data);

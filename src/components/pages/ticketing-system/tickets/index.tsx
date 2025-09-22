@@ -210,7 +210,6 @@ export default function UniBoxTickets() {
   };
 
   const dateFormat = (isoDate: string) => {
-
     const date = new Date(isoDate);
 
     const formatted = date.toLocaleString("en-GB", {
@@ -220,18 +219,16 @@ export default function UniBoxTickets() {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
-      timeZone: "UTC"  // keep this if you want to preserve original UTC time
+      timeZone: "UTC", // keep this if you want to preserve original UTC time
     });
 
-    console.log(formatted);  // ➜ "19/09/25, 19:16"
+    console.log(formatted); // ➜ "19/09/25, 19:16"
 
     // Replace `/` and `,` to match your desired format
     const cleanFormat = formatted.replace(/\//g, "-").replace(",", "");
 
     return cleanFormat;
-
-  }
-
+  };
 
   //  const canFilterTicket = usePermission("Search & Filter Tickets")
 
@@ -253,11 +250,11 @@ export default function UniBoxTickets() {
               options={
                 editTicketFields
                   ? [
-                    { value: "Open", label: "Open" },
-                    { value: "In-progress", label: "In-progress" },
-                    { value: "Resolved", label: "Resolved" },
-                    { value: "Closed", label: "Closed" },
-                  ]
+                      { value: "Open", label: "Open" },
+                      { value: "In-progress", label: "In-progress" },
+                      { value: "Resolved", label: "Resolved" },
+                      { value: "Closed", label: "Closed" },
+                    ]
                   : [{ value: ticket.status, label: ticket.status || "Open" }]
               }
               onChange={(e: any) =>
@@ -277,17 +274,17 @@ export default function UniBoxTickets() {
               options={
                 editTicketFields
                   ? [
-                    { value: "Low", label: "Low" },
-                    { value: "Medium", label: "Medium" },
-                    { value: "High", label: "High" },
-                    { value: "Urgent", label: "Urgent" },
-                  ]
+                      { value: "Low", label: "Low" },
+                      { value: "Medium", label: "Medium" },
+                      { value: "High", label: "High" },
+                      // { value: "Urgent", label: "Urgent" },
+                    ]
                   : [
-                    {
-                      value: ticket.priority,
-                      label: ticket.priority || "Low",
-                    },
-                  ]
+                      {
+                        value: ticket.priority,
+                        label: ticket.priority || "Low",
+                      },
+                    ]
               }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "priority", e.target.value)
@@ -306,11 +303,11 @@ export default function UniBoxTickets() {
               options={
                 editTicketFields
                   ? [
-                    { value: "Support", label: "Support" },
-                    { value: "Feature", label: "Feature" },
-                    { value: "Bug", label: "Bug" },
-                    { value: "Question", label: "Question" },
-                  ]
+                      { value: "Support", label: "Support" },
+                      { value: "Feature", label: "Feature" },
+                      { value: "Bug", label: "Bug" },
+                      { value: "Question", label: "Question" },
+                    ]
                   : [{ value: ticket.type, label: ticket.type || "Support" }]
               }
               onChange={(e: any) =>
@@ -330,15 +327,15 @@ export default function UniBoxTickets() {
               options={
                 editTicketFields
                   ? departments?.map((dept: any) => ({
-                    value: dept.id,
-                    label: dept.name,
-                  })) || []
+                      value: dept.id,
+                      label: dept.name,
+                    })) || []
                   : [
-                    {
-                      value: ticket.department_id,
-                      label: ticket.department_name || "N/A",
-                    },
-                  ]
+                      {
+                        value: ticket.department_id,
+                        label: ticket.department_name || "N/A",
+                      },
+                    ]
               }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "department_id", e.target.value)
@@ -357,16 +354,16 @@ export default function UniBoxTickets() {
               options={
                 editTicketFields
                   ? users?.map((user: any) => ({
-                    value: user.user_id,
-                    label: user.full_name,
-                    icon: AssigneeIcon,
-                  })) || []
+                      value: user.user_id,
+                      label: user.full_name,
+                      icon: AssigneeIcon,
+                    })) || []
                   : [
-                    {
-                      value: ticket.assignee,
-                      label: ticket.assignee || "Unassigned",
-                    },
-                  ]
+                      {
+                        value: ticket.assignee,
+                        label: ticket.assignee || "Unassigned",
+                      },
+                    ]
               }
               onChange={(e: any) =>
                 handleFieldUpdate(ticket.id, "assignee", e.target.value)
@@ -438,7 +435,7 @@ export default function UniBoxTickets() {
         { value: "Low", label: "Low" },
         { value: "Medium", label: " Medium" },
         { value: "High", label: " High" },
-        { value: "Urgent", label: "Urgent" },
+        // { value: "Urgent", label: "Urgent" },
       ],
     },
     {

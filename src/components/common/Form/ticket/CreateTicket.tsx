@@ -167,7 +167,7 @@ const CreateTicket = ({ closeModal, getall }) => {
             </p>
           )}
         </Grid>
-        <Grid size={{ xs: 6 }}>
+        <Grid size={{ xs: 12 }}>
           <GlobalInput
             type="text"
             label="Title"
@@ -180,10 +180,10 @@ const CreateTicket = ({ closeModal, getall }) => {
             </p>
           )}
         </Grid>
-        <Grid size={{ xs: 6 }}>
+        <Grid size={{ xs: 12 }}>
           <GlobalTextarea
             label="Details"
-            rows={1}
+            rows={6}
             cols={30}
             {...register("message", { required: "Message is required" })}
           />

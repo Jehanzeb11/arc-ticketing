@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Box, Typography, Button, Chip, Grid } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -16,13 +16,22 @@ import { useApiStore } from "@/lib/api/apiStore";
 import { myData, replyUniboxTicket } from "@/lib/api/apiCalls";
 import addUserIcon from "@/assets/icons/unibox/ticket/viewpage/add-user.png";
 import toast from "react-hot-toast";
+import DownloadIcon from "@mui/icons-material/Download";
+import CloseIcon from "@mui/icons-material/Close";
 
 const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
   const queryClient = useQueryClient();
+  const fileInputRef = useRef(null);
+  const [selectedFiles, setSelectedFiles] = React.useState<File[]>([]);
 
   const { callApi, fetchDepartments }: any = useApiStore();
 
   const [ccInput, setCcInput] = React.useState("");
+
+  const handleButtonClick = () => {
+    // Trigger file input click
+    fileInputRef.current.click();
+  };
 
   const {
     register,
@@ -90,19 +99,14 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
       formData.append("department_id", data.department);
       formData.append("to_email", emailstosend);
 
-      return callApi(replyUniboxTicket, {
-        requestType: "ticketReply",
-        ticket_id: ticketId,
-        type: data.type,
-        priority: data.priority,
-        message: data.message,
-        cc_emails: data.ccEmails,
-        department_id: data.department,
-        to_email: emailstosend,
+      selectedFiles.forEach((file) => {
+        formData.append("files[]", file);
       });
+
+      return callApi(replyUniboxTicket, formData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["uniboxTickets"] });
+      queryClient.invalidateQueries({ queryKey: ["ticketDetail"] });
       toast.success("Ticket Replied successfully!");
     },
     onError: (error) => {
@@ -218,9 +222,7 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
             value={watch("department") || ""}
             onChange={(e) => register("department").onChange(e)}
             options={departmentOptionst}
-            {...register("department", {
-              required: "Department is required",
-            })}
+            {...register("department")}
           />
           {errors.department && (
             <p style={{ color: "#B80505", margin: "0px" }}>
@@ -243,7 +245,7 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
               { label: "Feature", value: "feature" },
               { label: "Bug", value: "bug" },
             ]}
-            {...register("type", { required: "Type is required" })}
+            {...register("type")}
           />
           {errors.type && (
             <p style={{ color: "#B80505", margin: "0px" }}>
@@ -266,7 +268,7 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
               { label: "Medium", value: "medium" },
               { label: "Low", value: "low" },
             ]}
-            {...register("priority", { required: "Priority is required" })}
+            {...register("priority")}
           />
           {errors.priority && (
             <p style={{ color: "#B80505", margin: "0px" }}>
@@ -292,9 +294,72 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
       </Grid>
 
       {/* Add Files */}
+      {selectedFiles.length > 0 && (
+        <Box
+          sx={{
+            mt: 2,
+            display: "flex",
+            flexDirection: "row",
+            gap: 1,
+            flexWrap: "wrap",
+          }}
+        >
+          {selectedFiles.map((file, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "#EAF2FE", // light blue background
+                borderRadius: "6px",
+                padding: "8px 12px",
+                width: "fit-content",
+                minWidth: "200px",
+              }}
+            >
+              <AttachFileIcon sx={{ color: "#555", mr: 1 }} />
+              <Typography
+                sx={{
+                  flexGrow: 1,
+                  fontSize: "14px",
+                  color: "#333",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {file.name}
+              </Typography>
+              <CloseIcon
+                sx={{
+                  color: "#e51e1eff",
+                  cursor: "pointer",
+                  ml: 1,
+                }}
+                onClick={() => {
+                  const updatedFiles = selectedFiles.filter(
+                    (_, i) => i !== index
+                  );
+                  setSelectedFiles(updatedFiles);
+                }}
+                // onClick={() => {
+                //   const url = URL.createObjectURL(file);
+                //   const link = document.createElement("a");
+                //   link.href = url;
+                //   link.setAttribute("download", file.name);
+                //   document.body.appendChild(link);
+                //   link.click();
+                //   document.body.removeChild(link);
+                // }}
+              />
+            </Box>
+          ))}
+        </Box>
+      )}
       <Button
         variant="outlined"
         startIcon={<AttachFileIcon />}
+        onClick={handleButtonClick}
         sx={{
           mt: 2,
           mb: 2,
@@ -308,6 +373,19 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
       >
         Add Files
       </Button>
+
+      {/* Hidden File Input */}
+      <input
+        type="file"
+        style={{ display: "none" }}
+        ref={fileInputRef}
+        multiple
+        onChange={(e) => {
+          const files = Array.from(e.target.files || []);
+          setSelectedFiles([...selectedFiles, ...files]);
+          console.log(files); // You can handle the files here
+        }}
+      />
 
       {/* Action Buttons */}
       <Box

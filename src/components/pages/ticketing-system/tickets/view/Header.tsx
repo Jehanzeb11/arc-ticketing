@@ -47,15 +47,13 @@ export default function UniBoxViewHeader({
             </Grid>
           ))}
           <Grid size={{ lg: 3, xs: 12 }}>
-            <Box
-              sx={{ display: "flex", gap: "10px" }}
-              className="ticket-button"
-            >
+            <Box sx={{ display: "flex" }} className="ticket-button">
               {/* <Button text='Open' btntrasnparent /> */}
               <Button
                 text="Apply filter"
                 btntrasnparent
                 onClick={onApplyFilter}
+                style={{ width: "170px" }}
               />
             </Box>
           </Grid>
