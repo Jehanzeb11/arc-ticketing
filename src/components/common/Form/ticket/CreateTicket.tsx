@@ -224,7 +224,6 @@ const CreateTicket = ({ closeModal, getall }) => {
             value={watch("Status") || ""}
             onChange={(e) => register("Status").onChange(e)}
             options={[
-              { label: "Select Status", value: "" },
               { label: "Open", value: "Open" },
               { label: "In-progress", value: "In-progress" },
               { label: "Resolved", value: "Resolved" },
@@ -246,7 +245,6 @@ const CreateTicket = ({ closeModal, getall }) => {
             value={watch("Priority") || ""}
             onChange={(e) => register("Priority").onChange(e)}
             options={[
-              { label: "Select Priority", value: "" },
               { label: "Low", value: "Low" },
               { label: "Medium", value: "Medium" },
               { label: "High", value: "High" },
@@ -268,7 +266,6 @@ const CreateTicket = ({ closeModal, getall }) => {
             value={watch("Type") || ""}
             onChange={(e) => register("Type").onChange(e)}
             options={[
-              { label: "Select Type", value: "" },
               { label: "Support", value: "Support" },
               { label: "Feature", value: "Feature" },
               { label: "Bug", value: "Bug" },

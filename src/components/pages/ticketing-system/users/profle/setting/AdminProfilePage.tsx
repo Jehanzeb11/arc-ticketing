@@ -175,7 +175,7 @@ export default function AdminProfilePage({ title }) {
           sx={{
             color: "#000",
             fontSize: "30px",
-            fontWeight: 700,
+            fontWeight: 600,
             lineHeight: "27px",
           }}
         >

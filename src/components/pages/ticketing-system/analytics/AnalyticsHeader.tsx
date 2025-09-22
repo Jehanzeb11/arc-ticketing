@@ -1,5 +1,5 @@
 'use client'
-import { Badge, Box, IconButton } from '@mui/material'
+import { Badge, Box, IconButton, Typography } from '@mui/material'
 import React from 'react'
 import NotificationsIcon from '@/assets/icons/dashboard/notificationIcon.svg'
 import AccountMenu from '@/components/layout/Sidebar/AccountMenu'
@@ -17,7 +17,8 @@ function AnalyticsHeader() {
           paddingBottom: '15px',
         }}
       >
-        <h1>Agent Performance Analytics</h1>
+        <Typography variant="h5" className="header-title">
+          Agent Performance Analytics          </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <IconButton
             size='large'

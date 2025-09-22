@@ -154,11 +154,6 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
           href: "/scruber/history-scruber",
           pathname: "/scruber/history-scruber",
         },
-        {
-          i18nKey: "Scrub History Result",
-          href: "/scruber/history-scruber-result",
-          pathname: "/scruber/history-scruber-result",
-        },
       ],
     },
   ].filter(Boolean);
@@ -209,6 +204,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                         justifyContent: "center",
                         width: "100%",
                         padding: "9px",
+                        
                       }}
                     >
                       <Image
@@ -256,9 +252,9 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                         isActivePath(pathname, data.pathname) ||
                         data.subItems.some((sub) => pathname === sub.pathname)
                           ? "white"
-                          : "#797979",
+                          : "#000",
 
-                      // mb: 1,
+                      mt: 1,
                       // overflow: 'hidden'
                     }}
                     onClick={() => handleMenuClick(data.i18nKey)}
@@ -270,7 +266,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                           isActivePath(pathname, data.pathname) ||
                           data.subItems.some((sub) => pathname === sub.pathname)
                             ? "white"
-                            : "#797979",
+                            : "#000",
                       }}
                     >
                       <ListItemButton
@@ -405,7 +401,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                               color:
                                 pathname === subItem.pathname
                                   ? "var(--pri-color)"
-                                  : "#797979",
+                                  : "#000",
                               fontWeight:
                                 pathname === subItem.pathname ? "bold" : "400",
                             }}
@@ -515,7 +511,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                       // fontWeight: 'bold',
                       color: isActivePath(pathname, data.pathname)
                         ? "white"
-                        : "#797979",
+                        : "#000",
                     }}
                   >
                     <ListItemButton
@@ -540,7 +536,7 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                             justifyContent: "center",
                             color: isActivePath(pathname, data.pathname)
                               ? "var(--pri-color)"
-                              : "#797979",
+                              : "#000",
                           },
                           open ? { mr: 2 } : { mr: "auto" },
                         ]}

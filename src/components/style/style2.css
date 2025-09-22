@@ -53,6 +53,10 @@ h6 {
   display: flex;
   align-items: center;
   margin-bottom: 15px;
+  width: 100% !important;
+  background-color: #fff;
+  border-radius: 5px !important;
+  border: 1px solid #dcdcdc;
 }
 
 .auth_form .form-group .icon-auth {
@@ -88,10 +92,11 @@ h6 {
 }
 
 .auth_form .form-group input {
-  border-radius: 5px !important;
-  border: 1px solid #dcdcdc;
+  /* border-radius: 5px !important; */
+  border: 1px solid transparent;
   background: #fff;
   padding: 18px;
+  width: 85%;
 }
 
 .MuiFormControlLabel-root .MuiCheckbox-root svg {
@@ -149,7 +154,7 @@ button.back-btn {
 }
 
 .modal-body label {
-  color: #00000060;
+  color: #000000;
   line-height: 26px;
 }
 
@@ -735,9 +740,9 @@ button.back-btn {
   height: 48px;
 }
 
-.add-new-extension-modal button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium.closeModal {
+/* .add-new-extension-modal button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium.closeModal {
   display: none;
-}
+} */
 
 .add-new-extension-modal .my-modal-content.MuiBox-root {
   width: 692px;

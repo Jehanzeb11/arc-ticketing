@@ -127,6 +127,7 @@ export default function AddNewEntry({ getall, onCloseModal }: any) {
           <GlobalInput
             type="text"
             label="Full Name"
+            placeholder="Enter full name"
             {...register("fullName", { required: "Full Name is required" })}
           />
           {errors.fullName && (
@@ -141,6 +142,7 @@ export default function AddNewEntry({ getall, onCloseModal }: any) {
           <GlobalInput
             type="email"
             label="Email"
+            placeholder="Enter email"
             {...register("email", {
               required: "Email is required",
               pattern: {
@@ -160,6 +162,7 @@ export default function AddNewEntry({ getall, onCloseModal }: any) {
           <GlobalInput
             type="tel"
             label="Phone"
+            placeholder="Enter phone number"
             {...register("phone", { required: "Phone is required" })}
           />
           {errors.phone && (
@@ -174,6 +177,7 @@ export default function AddNewEntry({ getall, onCloseModal }: any) {
           <GlobalPasswordInput
             name="password"
             label="Password"
+            placeholder="Enter password"
             {...register("password", {
               required: "Password is required",
               minLength: {

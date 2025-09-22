@@ -197,6 +197,7 @@ export default function AddNewEntry() {
           <GlobalInput
             type="text"
             label="Role Name"
+            placeholder="Enter role name"
             {...register("roleName", { required: "Role Name is required" })}
           />
           {errors.roleName && (
@@ -235,6 +236,7 @@ export default function AddNewEntry() {
             multiline
             type="text"
             label="Description"
+            placeholder="Enter description"
             {...register("description", {
               required: "Description is required",
             })}

@@ -295,9 +295,6 @@ const PhoneScrube = () => {
     ? numberStatus?.split(",").map((v) => v.trim().toLowerCase())
     : [];
 
-  const handleClose = () => {
-    setOpen(false);
-  };
   return (
     <Box mt={4}>
       <ScrubCard
@@ -706,9 +703,9 @@ const PhoneScrube = () => {
               );
             }}
           />
-          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
+          <Link style={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }} href="/scruber/history-scruber">
             <Button className="scrub-show-all">Show All</Button>
-          </Box>
+          </Link>
         </Box>
       </ScrubCardTable>
       <MyScruberModal

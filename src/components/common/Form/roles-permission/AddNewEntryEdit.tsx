@@ -2,7 +2,7 @@
 import { Box, Grid, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import ButtonCustom from "@/components/common/Button/Button";
 import GlobalInput from "@/components/common/Input/GlobalInput";
@@ -10,6 +10,7 @@ import FormSelect from "@/components/common/Select";
 import { useApiStore } from "@/lib/api/apiStore";
 import GlobalCheckBoxInput from "../../Input/GlobalCheckBoxInput";
 import { fetchRoleById, fetchRoles } from "@/lib/api/apiCalls";
+import { useRouter } from "next/navigation";
 
 // interface AddNewModalProps {
 //   getall: (data: any) => void
@@ -21,6 +22,9 @@ export default function AddNewEntryEdit() {
   // getall,
   // onCloseModal,
   // }: AddNewModalProps
+const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { callApi, createRole } = useApiStore();
   const {
     register,
@@ -71,15 +75,11 @@ export default function AddNewEntryEdit() {
     },
     onSuccess: (response, data) => {
       toast.success("Role Updated successfully!");
-      // getall(data)
+      queryClient.invalidateQueries({ queryKey: ["roles"] })
+      router.replace('/ticketing-system/roles-permission')
       // onCloseModal()
       refetch();
-      reset({
-        roleName: data.roleName,
-        description: data.description,
-        permissions: data.permissions,
-        status: data.status,
-      });
+      
     },
     onError: (error) => toast.error(`Failed to create role: ${error.message}`),
   });
@@ -354,7 +354,7 @@ export default function AddNewEntryEdit() {
           // onClick={onCloseModal}
         />
         <ButtonCustom
-          text={isSubmitting ? "Updateing..." : "Update Role"}
+          text={isSubmitting ? "Updating..." : "Update Role"}
           type="submit"
           disabled={isSubmitting}
         />

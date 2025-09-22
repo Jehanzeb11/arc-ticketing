@@ -34,7 +34,7 @@
 
 .table thead tr th {
   text-align: start;
-  padding: 0px 5px;
+  padding: 0px 10px;
 }
 
 .table thead tr th span {
@@ -51,7 +51,7 @@
   font-size: 14px;
   font-weight: 300;
   line-height: 20px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   padding: 0px 10px;
 }
 

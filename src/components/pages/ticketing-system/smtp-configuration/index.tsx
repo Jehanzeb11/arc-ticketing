@@ -75,20 +75,20 @@ const SMTP = () => {
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Typography
               sx={{
-                color: user.secure === "SSL" ? "#3286BD" : "#000",
+                color:  "#0000006d",
                 fontSize: "15px",
-                lineHeight: "20px",
-                padding: "4px 12px",
-                background: user.secure === "SSL" ? "#3286BD15" : "#24242415",
+                // lineHeight: "20px",
+                // padding: "4px 12px",
+                // background: user.secure === "SSL" ? "#3286BD15" : "#24242415",
                 borderRadius: "100px",
               }}
             >
-              {user.secure}
+              {user.secure == "SSL" ? "Active" : "Inactive"}
             </Typography>
-            <IOSSwitch
+            {/* <IOSSwitch
               checked={user.secure === "SSL"}
               onChange={(e) => handleSwitchChange(e, user.id, user.secure)}
-            />
+            /> */}
           </Box>
         ),
       })) || [],
@@ -189,7 +189,7 @@ const SMTP = () => {
         }
       },
       className: "action-icon",
-      tooltip: "Edit User",
+      tooltip: "Edit SMTP",
     },
     {
       icon: DeleteIcon,
@@ -203,7 +203,7 @@ const SMTP = () => {
         }
       },
       className: "action-icon",
-      tooltip: "Delete User",
+      tooltip: "Delete SMTP",
     },
   ];
 
@@ -331,7 +331,7 @@ const SMTP = () => {
           <Search
             searchQuery={searchQuery}
             handleSearch={handleSearch}
-            placeholder="Search by SMTP hos"
+            placeholder="Search by SMTP host"
           />
         </Grid>
         {filters.map((filter, index) => (

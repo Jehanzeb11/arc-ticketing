@@ -161,16 +161,36 @@ export default function UniBoxTickets() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["uniboxTicketsArchive"] });
-      setArchiveModal(false);
-      toast.success("Ticket updated successfully!");
+      setDeleteModal(false);
+      toast.success("Ticket deleted successfully!");
     },
     onError: (error) => {
       console.error("Failed to update ticket:", error);
     },
   });
 
-  console.log(uniboxTickets, "uniboxTicketsArchive");
+  const dateFormat = (isoDate: string) => {
 
+    const date = new Date(isoDate);
+
+    const formatted = date.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "UTC"  // keep this if you want to preserve original UTC time
+    });
+
+    console.log(formatted);  // ➜ "19/09/25, 19:16"
+
+    // Replace `/` and `,` to match your desired format
+    const cleanFormat = formatted.replace(/\//g, "-").replace(",", "");
+
+    return cleanFormat;
+
+  }
   const archiveTicketMutation = useMutation({
     mutationFn: ({ ticketId, archived }: any) => {
       const ticketData = uniboxTickets?.find((t: any) => t.id === ticketId);
@@ -362,8 +382,8 @@ export default function UniBoxTickets() {
             />
           </div>
         ),
-        Created: ticket.Created || "N/A",
-        LastReply: ticket.LastReply || "N/A",
+        Created: dateFormat(ticket.created_at) || "N/A",
+        LastReply: ticket.replies[0] ? dateFormat(ticket.replies[0]?.created_at) : "N/A",
       }))) ||
     [];
 

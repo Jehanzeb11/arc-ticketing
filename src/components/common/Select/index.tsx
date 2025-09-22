@@ -50,12 +50,23 @@ export default function FormSelect({
   loading = false,
   multiple = false, // 👈 default false
 }: FormSelectProps) {
-  const CustomPopper = (props: any) => (
+const CustomPopper = (props: any) => {
+  return (
     <Popper
       {...props}
+      placement="top-start"
       className={`custom-autocomplete-popper ${popperClassName || ""}`}
+      modifiers={[]}
+      style={{
+        ...props.style,
+        top: 'auto',
+        bottom: `calc(100% + 8px)`, // Push it above the input
+        transform: 'none', // cancel Popper.js's transform
+      }}
     />
   );
+};
+
 
   return (
     <Box className={`my-select ${className ? className : ""}`} sx={{ ...sx }}>
@@ -70,6 +81,7 @@ export default function FormSelect({
             : options.find((opt) => opt.value === value) || null
         }
         PopperComponent={CustomPopper}
+    
         disableClearable // 👈 removes the clear icon
         clearIcon={null}
         onChange={(event, newValue) => {

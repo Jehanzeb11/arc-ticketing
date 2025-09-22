@@ -96,7 +96,7 @@ const canToggleStatus = usePermission("Deactivate/Activate User");
           </Box>
         ),
         fullName: user.full_name || "--",
-        email: user.email || "--",
+        email: user.email.toLowerCase() || "--",
         role: user.role || "--",
         department: user.phone || "--",
         status: (

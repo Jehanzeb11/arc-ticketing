@@ -20,6 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
 import { imageUrl } from "@/lib/constants/variables";
 import Image from "next/image";
+import { usePermission } from "@/hooks/usePermission";
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -119,18 +120,18 @@ export default function AccountMenu() {
         onClick={handleClose}
         className="account-menu"
       >
-        <MenuItem onClick={handleClose}>
+       {usePermission("Manage Own Profile") && <MenuItem onClick={handleClose}>
           <Link
             href="/ticketing-system/admin-profile"
             style={{ textDecoration: "none", color: "black" }}
           >
             <Typography component={"span"}> My Profile</Typography>
           </Link>
-        </MenuItem>
+        </MenuItem>}
 
-        <MenuItem onClick={handleChangePasswordClick}>
+       {usePermission("Reset Own Password") && <MenuItem onClick={handleChangePasswordClick}>
           <Typography component={"span"}> Change Password</Typography>
-        </MenuItem>
+        </MenuItem>}
         <MenuItem onClick={handleLogoutClick}>
           <Typography component={"span"}> Logout</Typography>
         </MenuItem>
@@ -172,7 +173,7 @@ export default function AccountMenu() {
         iconSrc={LogoutIcon} // Replace with a password-specific icon if available
       >
         <ResetPassword />
-        <div className="md-modal-btns">
+        {/* <div className="md-modal-btns">
           <CustomButton
             type="button"
             text="Cancel"
@@ -185,7 +186,7 @@ export default function AccountMenu() {
             text="Change Password"
             onClick={handleChangePasswordConfirm}
           />
-        </div>
+        </div> */}
       </MyModal>
     </>
   );

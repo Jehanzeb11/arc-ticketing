@@ -70,7 +70,7 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
   // Pagination logic
   const startIndex = page * rowsPerPage || 0;
   const endIndex = Math.min(startIndex + rowsPerPage, sortedData?.length) || 0;
-  const paginatedData = sortedData?.slice(startIndex, endIndex);
+  const paginatedData = Pagination ? sortedData?.slice(startIndex, endIndex) : sortedData;
 
   const handleNext = () => {
     if (endIndex < sortedData.length) setPage((prev) => prev + 1);
@@ -154,14 +154,14 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
             }}
           >
             <Typography sx={{ fontSize: "14px", color: "#374151" }}>
-              {`${startIndex + 1}-${endIndex} of ${sortedData.length}`}
+              {`${startIndex + 1}-${endIndex} of ${sortedData?.length}`}
             </Typography>
             <IconButton onClick={handlePrev} disabled={page === 0}>
               <ArrowBackIosNewIcon fontSize="small" />
             </IconButton>
             <IconButton
               onClick={handleNext}
-              disabled={endIndex >= sortedData.length}
+              disabled={endIndex >= sortedData?.length}
             >
               <ArrowForwardIosIcon fontSize="small" />
             </IconButton>

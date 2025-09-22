@@ -78,7 +78,9 @@ const ScrubHistoryResult = () => {
 
   return (
     <Box>
-      <ScruberKPIsResult validatorCounts={jobData?.validatorCounts} />
+      <ScruberKPIsResult validatorCounts={jobData?.validatorCounts} totalNumbers={jobData?.totalNumbers}
+        badNumbers={jobData?.badNumbers}
+        goodNumbers={jobData?.goodNumbers} />
 
       <Box mt={4} mb={2}>
         <ScrubCardTable
@@ -118,7 +120,9 @@ const ScrubHistoryResult = () => {
           }
         >
           <Box sx={{ mt: 3 }}>
-            <ReusableTable columns={columns} data={data} />
+            <ReusableTable columns={columns} data={data} 
+            Pagination={true}
+            />
           </Box>
         </ScrubCardTable>
       </Box>

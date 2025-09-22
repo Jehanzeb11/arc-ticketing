@@ -58,7 +58,7 @@ export default function AddNewEntry({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <GlobalInput
             type="text"
             label="Department Name"
@@ -70,21 +70,8 @@ export default function AddNewEntry({
             </Typography>
           )}
         </Grid>
-        <Grid size={{ xs: 12 }}>
-          <GlobalInput
-            type="text"
-            label="Description"
-            {...register("Description", {
-              required: "Description is required",
-            })}
-          />
-          {errors.Description && (
-            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
-              {errors.Description.message as string}
-            </Typography>
-          )}
-        </Grid>
-        <Grid size={{ xs: 12 }}>
+        
+        <Grid size={{ xs: 6 }}>
           <Controller
             name="Status"
             control={control}
@@ -104,6 +91,23 @@ export default function AddNewEntry({
           {errors.Status && (
             <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
               {errors.Status.message as string}
+            </Typography>
+          )}
+        </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <GlobalInput
+            type="text"
+            label="Description"
+            multiline
+            rows={6}
+            {...register("Description", {
+              required: "Description is required",
+            })}
+          />
+          {errors.Description && (
+            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
+              {errors.Description.message as string}
             </Typography>
           )}
         </Grid>

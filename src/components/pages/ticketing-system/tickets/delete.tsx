@@ -168,8 +168,28 @@ export default function DeletedUniBoxTickets() {
     },
   });
 
-  console.log(uniboxTickets, "uniboxTicketsDelete");
+ const dateFormat = (isoDate: string) => {
 
+    const date = new Date(isoDate);
+
+    const formatted = date.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "UTC"  // keep this if you want to preserve original UTC time
+    });
+
+    console.log(formatted);  // ➜ "19/09/25, 19:16"
+
+    // Replace `/` and `,` to match your desired format
+    const cleanFormat = formatted.replace(/\//g, "-").replace(",", "");
+
+    return cleanFormat;
+
+  }
   const archiveTicketMutation = useMutation({
     mutationFn: ({ ticketId, archived }: any) => {
       const ticketData = uniboxTickets?.find((t: any) => t.id === ticketId);
@@ -360,8 +380,8 @@ export default function DeletedUniBoxTickets() {
             />
           </div>
         ),
-        Created: ticket.Created || "N/A",
-        LastReply: ticket.LastReply || "N/A",
+        Created: dateFormat(ticket.created_at) || "N/A",
+        LastReply: ticket.replies[0] ? dateFormat(ticket.replies[0]?.created_at) : "N/A",
       }))) ||
     [];
 
@@ -387,7 +407,7 @@ export default function DeletedUniBoxTickets() {
           console.error("Invalid row or missing id:", row);
         }
       },
-      tooltip: "Delete Ticket",
+      tooltip: "Restore Ticket",
     },
   ].filter(Boolean);
 

@@ -78,6 +78,7 @@ export default function LoginForm2() {
         {...register("password", {
           required: "Password is required",
         })}
+        sx={{width:"100% !important"}}
         srcImg={icon3}
       />
       {errors.password && (

@@ -59,9 +59,9 @@ const RolesAndPermission = () => {
       callApi(fetchRoles, {
         requestType: "getAllRoles",
       }),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+   refetchOnMount: true, // allow refetch when remounting
+  refetchOnWindowFocus: false,
+  staleTime: 0,
   });
 
   const columns = [

@@ -156,8 +156,7 @@ label {
   border: none !important;
 }
 
-.profile-form .MuiAutocomplete-inputRoot {
-}
+.profile-form .MuiAutocomplete-inputRoot {}
 
 .avatar-container {
   width: 366px;
@@ -1207,7 +1206,7 @@ button.calling-popup-btn {
   color: #F65160 !important;
 
   border: none !important;
-  background-color: #f6515f5b !important;
+  background-color: #f6515f3b !important;
 }
 
 .Medium .autocomplete-select .MuiAutocomplete-input {
@@ -1219,9 +1218,9 @@ button.calling-popup-btn {
 
 .High .autocomplete-select .MuiAutocomplete-input {
   border: none !important;
-  color: #32AAB1 !important;
+  color: #3F8CFF !important;
 
-  background-color: #32AAB126 !important;
+  background-color: #3F8CFF26 !important;
 }
 
 
@@ -1232,7 +1231,7 @@ button.calling-popup-btn {
   color: #F65160 !important;
   border: none !important;
 
-  background-color: #f6515f5b !important;
+  background-color: #f6515f3b !important;
 }
 
 .Resolved .autocomplete-select .MuiAutocomplete-input {
@@ -1273,10 +1272,8 @@ button.calling-popup-btn {
   border: 1px solid var(--pri-color) !important;
 }
 
-
-
 .modal-select .autocomplete-select .MuiAutocomplete-input {
-  color: #797979;
+  color: #000 !important;
   background-color: #cecece15 !important;
   border: 1px solid #CECECE;
   border-radius: 10px;
@@ -1390,11 +1387,11 @@ button.calling-popup-btn {
 }
 
 .status-filter ul li:nth-child(4) {
-  color: #32aab1;
+  color: #3F8CFF;
 }
 
 .status-filter ul li:nth-child(4)::before {
-  background: #32aab1;
+  background: #3F8CFF;
 }
 
 .status-filter ul li:nth-child(5) {

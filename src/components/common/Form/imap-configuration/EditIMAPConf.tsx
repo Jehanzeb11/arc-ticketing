@@ -36,15 +36,26 @@ export default function EditIMAPConf({ getall, onCloseModal, userData }: any) {
     control,
     formState: { errors, isSubmitting },
     reset,
+    watch
   } = useForm({
     defaultValues: {
       host: userData?.host || "",
       port: userData?.port?.toString() || "",
       status: userData?.secure || "",
-      dept: userData?.department_ids || "",
+      dept: userData?.department_ids
+        ? userData.department_ids.split(",").map(Number)
+        : [],
       email: userData?.username || "",
     },
   });
+
+
+console.log("userData?.department_ids?.split(", ")", userData.department_ids.split(",").map(Number));
+
+console.log("watch dept", watch("dept"));
+
+
+const depts = watch("dept")
 
   const mutation = useMutation({
     mutationFn: async (data: any) => {
@@ -55,7 +66,7 @@ export default function EditIMAPConf({ getall, onCloseModal, userData }: any) {
           host: data.host,
           port: data.port,
           username: data.email,
-          dept: data.dept,
+          department_ids: data.dept.join(","),
           secure: data.status ? "SSL" : "TLS",
           type: "IMAP",
           user_id: userData?.user_id,
@@ -75,7 +86,19 @@ export default function EditIMAPConf({ getall, onCloseModal, userData }: any) {
   });
 
   const onSubmit = (data: any) => mutation.mutate(data);
-  console.log(userData, " - > userData");
+React.useEffect(() => {
+  if (departments && userData?.department_ids) {
+    reset({
+      host: userData.host || "",
+      port: userData.port?.toString() || "",
+      status: userData.secure || "",
+      dept: userData.department_ids
+        .split(",")
+        .map((id: string) => Number(id.trim())),
+      email: userData.username || "",
+    });
+  }
+}, [departments, userData, reset]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -137,6 +160,7 @@ export default function EditIMAPConf({ getall, onCloseModal, userData }: any) {
             rules={{ required: "Department is required" }}
             render={({ field }) => (
               <FormSelect
+              multiple
                 label="Department"
                 name="dept"
                 defaultText="Select Department"

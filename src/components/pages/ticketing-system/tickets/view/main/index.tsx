@@ -44,7 +44,7 @@ export default function MainContent({
               }}
             >
               {allTickets?.length > 0 ? (
-                allTickets.map((ticket, index) => (
+                allTickets?.filter((ticket)=> !searchQuery || ticket.subject.toLowerCase().includes(searchQuery.toLowerCase())).map((ticket, index) => (
                   <TicketCard
                     key={index}
                     id={ticket.id}

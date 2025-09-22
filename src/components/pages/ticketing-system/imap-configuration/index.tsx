@@ -77,20 +77,20 @@ const IMAP = () => {
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Typography
               sx={{
-                color: user.secure === "SSL" ? "#3286BD" : "#000",
+                color:"#0000006d",
                 fontSize: "15px",
-                lineHeight: "20px",
-                padding: "4px 12px",
-                background: user.secure === "SSL" ? "#3286BD15" : "#24242415",
+                // lineHeight: "20px",
+                // padding: "4px 12px",
+                // background: user.secure === "SSL" ? "#3286BD15" : "#24242415",
                 borderRadius: "100px",
               }}
             >
-              {user.secure}
+              {user.secure == "SSL" ? "Active" : "Inactive"}
             </Typography>
-            <IOSSwitch
+            {/* <IOSSwitch
               checked={user.secure === "SSL"}
               onChange={(e) => handleSwitchChange(e, user.id, user.secure)}
-            />
+            /> */}
           </Box>
         ),
       })) || [],
@@ -157,7 +157,7 @@ const IMAP = () => {
 
   // Handle switch change for user status
   const handleSwitchChange = async (e, id, status) => {
-    const newStatus = status === "SSL" ? "TSL" : "SSL";
+    const newStatus = status === "SSL" ? "SSL" : "TSL";
 
     try {
       await callApi(updateSmtp, {
@@ -191,7 +191,7 @@ const IMAP = () => {
         }
       },
       className: "action-icon",
-      tooltip: "Edit User",
+      tooltip: "Edit IMAP",
     },
     {
       icon: DeleteIcon,
@@ -205,7 +205,7 @@ const IMAP = () => {
         }
       },
       className: "action-icon",
-      tooltip: "Delete User",
+      tooltip: "Delete IMAP",
     },
   ];
 

@@ -68,7 +68,7 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
         port: data.port,
         username: data.email,
         password: data.password,
-        dept: data.dept,
+        dept: data.dept.join(","),
         secure: data.status ? "SSL" : "TLS",
         type: "IMAP",
       };
@@ -120,6 +120,8 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
   //     value: dept.id,
   //   })) || [];
 
+console.log("watch dept", watch("dept"));
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
@@ -127,7 +129,7 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
         <Grid size={{ xs: 6 }}>
           <GlobalInput
             type="text"
-            placeholder="Type Here"
+            placeholder="Enter IMAP Host"
             label="IMAP Host"
             {...register("host", { required: "IMAP Host is required" })}
           />
@@ -143,6 +145,7 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
           <GlobalInput
             type="text"
             label="IMAP Port"
+            placeholder="Enter IMAP Port"
             {...register("port", {
               required: "IMAP Port is required",
             })}
@@ -157,6 +160,7 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
           <GlobalInput
             type="email"
             label="Email"
+            placeholder="Enter Email"
             {...register("email", {
               required: "Email is required",
               pattern: {
@@ -177,6 +181,7 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
           <GlobalPasswordInput
             name="password"
             label="Password"
+            placeholder="Enter Password"
             {...register("password", {
               required: "Password is required",
               minLength: {
@@ -204,8 +209,8 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
                   strength === "Weak"
                     ? "red"
                     : strength === "Medium"
-                    ? "orange"
-                    : "green",
+                      ? "orange"
+                      : "green",
               }}
             >
               Strength: {strength}
@@ -222,8 +227,8 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
                     strength === "Weak"
                       ? "red"
                       : strength === "Medium"
-                      ? "orange"
-                      : "green",
+                        ? "orange"
+                        : "green",
                 },
               }}
             />
@@ -238,6 +243,7 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
             rules={{ required: "Department is required" }}
             render={({ field }) => (
               <FormSelect
+                multiple
                 label="Assign to Department"
                 name="dept"
                 defaultText="Select Department"
@@ -251,9 +257,9 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
               />
             )}
           />
-          {errors.status && (
+          {errors.dept && (
             <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
-              {errors.status.message}
+              {errors.dept.message}
             </Typography>
           )}
         </Grid>

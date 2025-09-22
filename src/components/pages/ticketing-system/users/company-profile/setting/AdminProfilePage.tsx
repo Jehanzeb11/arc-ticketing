@@ -12,6 +12,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useApiStore } from '@/lib/api/apiStore'
 import toast from 'react-hot-toast'
 import Cookies from 'js-cookie'
+import { usePermission } from '@/hooks/usePermission'
 
 export default function AdminProfilePage ({ title }) {
   const [profilePicture, setProfilePicture] = useState(null)
@@ -293,7 +294,7 @@ export default function AdminProfilePage ({ title }) {
               </Grid>
             </Grid>
 
-            <Grid
+             {usePermission("Reset Own Password") && <Grid
               size={{ xs: 12, lg: 6 }}
               sx={{
                 display: 'flex',
@@ -309,7 +310,7 @@ export default function AdminProfilePage ({ title }) {
                 onClick={handleChangePasswordClick}
               />
               <Button type='submit' text='Save Changes' />
-            </Grid>
+            </Grid>}
           </Grid>
         </form>
       </div>

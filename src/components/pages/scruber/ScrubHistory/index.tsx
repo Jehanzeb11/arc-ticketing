@@ -14,110 +14,125 @@ import deleteIcon from "@/assets/scruber/icons/delete.png";
 import Image from "next/image";
 import ReuseableDatePicker from "@/components/common/react-day-date-picker/ReuseableDatePicker";
 import MyScruberModal from "@/components/Scrub/Modal";
+import { useQuery } from "@tanstack/react-query";
+import { useApiStore } from "@/lib/api/apiStore";
+import Link from "next/link";
 
 const ScrubHistory = () => {
+
+  const {
+    callApi,
+    scrubHistory,
+  }: any = useApiStore();
+
+  const {
+    data: scrubData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [`scrubHistory`],
+    queryFn: () => callApi(scrubHistory),
+  });
+
   const [status, setStatus] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<[Date | null, Date | null]>([
     null,
     null,
   ]);
+  const [numberStatus, setNumberStatus] = useState(null);
 
   const handleChange = (event: any) => {
     setStatus(event.target.value);
   };
 
-  const columns = [
-    { key: "scrubHistory", label: "Upload Time", sortable: true },
-    { key: "uploadedFile", label: "Uploaded Number/File", sortable: true },
-    { key: "scrubAgainst", label: "Scrub Against", sortable: true },
-    { key: "totalNumbers", label: "Total Numbers", sortable: true },
-    { key: "badNumbers", label: "Bad Numbers", sortable: true },
-    {
-      key: "status",
-      label: "Status",
-      sortable: true,
-      render: (value: string) =>
-        value === "Completed" ? (
-          <Chip
-            icon={
-              <Box
-                sx={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: "50%",
-                  backgroundColor: "#16C60C",
-                  ml: 1,
-                }}
-              />
-            }
-            label="Completed"
-            sx={{
-              backgroundColor: "#DBFCE7",
-              color: "#16C60C",
-              fontWeight: 500,
-              pl: 1,
-            }}
-          />
-        ) : (
-          <Chip
-            icon={
-              <Box
-                sx={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: "50%",
-                  backgroundColor: "#0078D7",
-                  ml: 1,
-                }}
-              />
-            }
-            label="In Progress"
-            sx={{
-              backgroundColor: "#DBEAFE",
-              color: "#0078D7",
-              fontWeight: 500,
-              pl: 1,
-            }}
-          />
-        ),
-    },
-  ];
+   const columns = [
+      { key: "scrubHistory", label: "Scrub History", sortable: true },
+      { key: "uploadedFile", label: "Uploaded Number/File", sortable: true },
+      { key: "scrubAgainst", label: "Scrub Against", sortable: true },
+      { key: "totalNumbers", label: "Total Numbers", sortable: true },
+      { key: "badNumbers", label: "Bad Numbers", sortable: true },
+      {
+        key: "status",
+        label: "Status",
+        sortable: true,
+        render: (value: string) =>
+          value === "completed" ? (
+            <Chip
+              icon={
+                <Box
+                  sx={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: "50%",
+                    backgroundColor: "#16C60C",
+                    ml: 1,
+                  }}
+                />
+              }
+              label="Completed"
+              sx={{
+                backgroundColor: "#DBFCE7",
+                color: "#16C60C",
+                fontWeight: 500,
+                pl: 1,
+              }}
+            />
+          ) : value === "failed" ? (
+            <Chip
+              icon={
+                <Box
+                  sx={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: "50%",
+                    backgroundColor: "#be0000ff",
+                    ml: 1,
+                  }}
+                />
+              }
+              label="Failed"
+              sx={{
+                backgroundColor: "#be00002d",
+                color: "#be0000ff",
+                fontWeight: 500,
+                pl: 1,
+              }}
+            />
+          ) : (
+            <Chip
+              icon={
+                <Box
+                  sx={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: "50%",
+                    backgroundColor: "#0078D7",
+                    ml: 1,
+                  }}
+                />
+              }
+              label="In Progress"
+              sx={{
+                backgroundColor: "#DBEAFE",
+                color: "#0078D7",
+                fontWeight: 500,
+                pl: 1,
+              }}
+            />
+          ),
+      },
+    ];
 
-  const data = [
-    {
-      scrubHistory: "2024-01-15 14:30",
-      uploadedFile: "leads_batch_001.csv",
-      scrubAgainst: "All Validators",
-      totalNumbers: 5000,
-      badNumbers: 342,
-      status: "Completed",
-    },
-    {
-      scrubHistory: "2024-01-15 12:15",
-      uploadedFile: "marketing_list.xlsx",
-      scrubAgainst: "TCPA, Federal DNC",
-      totalNumbers: 2500,
-      badNumbers: 156,
-      status: "Completed",
-    },
-    {
-      scrubHistory: "2024-01-15 10:45",
-      uploadedFile: "+1 (555) 123-4567",
-      scrubAgainst: "All Validators",
-      totalNumbers: 1,
-      badNumbers: 0,
-      status: "Completed",
-    },
-    {
-      scrubHistory: "2024-01-15 09:30",
-      uploadedFile: "cold_leads.csv",
-      scrubAgainst: "All Validators",
-      totalNumbers: 8000,
-      badNumbers: 0,
-      status: "In Progress",
-    },
-  ];
+ const data = scrubData?.history?.map((item) => ({
+    jobId: item.jobId,
+    scrubHistory: item?.createdAt,
+    uploadedFile: "cold_leads.csv",
+    scrubAgainst: JSON.parse(item?.filters)?.join(", "),
+    totalNumbers: item.totalNumbers,
+    badNumbers: item.badNumbers,
+    status: item.status,
+  }));
 
   const statusArr = [
     { name: "TCPA Troll", type: "Match" },
@@ -147,9 +162,13 @@ const ScrubHistory = () => {
     },
   ];
 
+    const validatorArr = numberStatus
+    ? numberStatus?.split(",").map((v) => v.trim().toLowerCase())
+    : [];
+
   return (
     <Box>
-      <KPIsHistory />
+      <KPIsHistory data={scrubData?.history} />
 
       <Box mt={4} mb={2}>
         <ScrubCardTable
@@ -200,12 +219,21 @@ const ScrubHistory = () => {
         >
           <Box sx={{ mt: 3 }}>
             <ReusableTable
+            Pagination={true}
               columns={columns}
-              data={data}
-              actions={(row) => (
+            data={data}
+            actions={(row) => {
+              console.log(row);
+              return (
                 <>
-                  <Button
-                    sx={{ p: 0, mx: 1, width: "fit-content", minWidth: "10px" }}
+                  <Link
+                    href={`/scruber/history-scruber-result?id=${row.jobId}`}
+                    style={{
+                      padding: 0,
+                      margin: 1,
+                      width: "fit-content",
+                      minWidth: "10px",
+                    }}
                     title="View"
                   >
                     <Image
@@ -214,7 +242,7 @@ const ScrubHistory = () => {
                       height={22}
                       alt="download"
                     />
-                  </Button>
+                  </Link>
                   <Button
                     sx={{ p: 0, mx: 1, width: "fit-content", minWidth: "10px" }}
                     title="Download"
@@ -238,7 +266,8 @@ const ScrubHistory = () => {
                     />
                   </Button>
                 </>
-              )}
+              );
+            }}
             />
           </Box>
         </ScrubCardTable>
@@ -266,8 +295,8 @@ const ScrubHistory = () => {
                     item.type === "Match"
                       ? matchIcon
                       : item.type === "Clear"
-                      ? clearIcon
-                      : clearIcon
+                        ? clearIcon
+                        : clearIcon
                   }
                   width={60}
                   height={60}

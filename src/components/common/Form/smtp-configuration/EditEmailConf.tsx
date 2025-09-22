@@ -36,15 +36,25 @@ export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
     control,
     formState: { errors, isSubmitting },
     reset,
+    watch
   } = useForm({
     defaultValues: {
       host: userData?.host || "",
       port: userData?.port?.toString() || "",
       status: userData?.secure || "",
-      dept: userData?.department_ids || "",
+      dept: userData?.department_ids
+        ? userData.department_ids.split(",").map(Number)
+        : [],
       email: userData?.username || "",
     },
   });
+
+
+  console.log("userData?.department_ids?.split(", ")", userData.department_ids.split(",").map(Number));
+
+  console.log("watch dept", watch("dept"));
+
+
 
   const mutation = useMutation({
     mutationFn: async (data: any) => {
@@ -55,8 +65,8 @@ export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
           host: data.host,
           port: data.port,
           username: data.email,
-          dept: data.dept,
-          secure: data.status ? "SSL" : "TLS",
+          department_ids: data.dept.join(","),
+          secure: data.status === "SSL" ? "SSL" : "TLS",
           type: "SMTP",
           user_id: userData?.user_id,
           id: userData?.id,
@@ -69,13 +79,11 @@ export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
       toast.success("User updated successfully!");
       getall();
       onCloseModal();
-      reset();
     },
     onError: (error) => toast.error(`Failed to update user: ${error.message}`),
   });
 
   const onSubmit = (data: any) => mutation.mutate(data);
-  console.log(userData, " - > userData");
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -137,6 +145,7 @@ export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
             rules={{ required: "Department is required" }}
             render={({ field }) => (
               <FormSelect
+                multiple
                 label="Department"
                 name="dept"
                 defaultText="Select Department"

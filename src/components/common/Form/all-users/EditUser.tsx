@@ -102,6 +102,7 @@ export default function EditUser({ getall, onCloseModal, userData }: any) {
           <GlobalInput
             type="email"
             label="Email"
+            readOnly
             {...register("email", {
               required: "Email is required",
               pattern: {

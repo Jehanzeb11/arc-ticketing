@@ -20,19 +20,19 @@ function AnalyticsProgressBarCard({ analyticsData }) {
     <Grid container spacing={2} sx={{ mt: "20px" }}>
       <Grid size={{ xs: 6 }}>
         <Box sx={{ p: "30px 23px", bgcolor: "#fff", borderRadius: "17px" }}>
-          <Typography
-            variant="h6"
+          <Typography variant="h5" className="header-title"
             sx={{
               color: "#000",
-              fontSize: "24px",
-              fontWeight: 700,
               lineHeight: "30px", // 125%
               mb: "35px",
             }}
           >
             Agent Resolution Rate Comparison
           </Typography>
-          {data.map((item) => (
+          {data.map((item) => {
+            const normalizedValue = (item.value / maxTime) * 100;
+
+            return (
             <Box
               key={item.name}
               sx={{
@@ -57,7 +57,7 @@ function AnalyticsProgressBarCard({ analyticsData }) {
               </Typography>
               <LinearProgress
                 variant="determinate"
-                value={item.value}
+                value={normalizedValue > 100 ? 100 : normalizedValue}
                 sx={{
                   height: 18,
                   borderRadius: 5,
@@ -67,19 +67,16 @@ function AnalyticsProgressBarCard({ analyticsData }) {
                   },
                 }}
               />
-              <Typography variant="body1">{item.value}%</Typography>
+              <Typography variant="body1">{normalizedValue > 100 ? 100 : normalizedValue}%</Typography>
             </Box>
-          ))}
+          )})}
         </Box>
       </Grid>
       <Grid size={{ xs: 6 }}>
         <Box sx={{ p: "30px 23px", bgcolor: "#fff", borderRadius: "17px" }}>
-          <Typography
-            variant="h6"
+          <Typography variant="h5" className="header-title"
             sx={{
               color: "#000",
-              fontSize: "24px",
-              fontWeight: 700,
               lineHeight: "30px", // 125%
               mb: "35px",
             }}

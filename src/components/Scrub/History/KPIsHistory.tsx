@@ -5,7 +5,12 @@ import icon8 from "@/assets/scruber/icons/history-2.png";
 import icon9 from "@/assets/scruber/icons/history-3.png";
 import icon10 from "@/assets/scruber/icons/history-4.png";
 import Image from "next/image";
-const KPIsHistory = () => {
+const KPIsHistory = ({ data }) => {
+
+  const totalProcessed = data?.reduce((sum, job) => sum + job.totalNumbers, 0);
+const totalBad = data?.reduce((sum, job) => sum + job.badNumbers, 0);
+const totalValid = totalProcessed - totalBad;
+
   return (
     <Grid
       container
@@ -31,7 +36,7 @@ const KPIsHistory = () => {
             variant="h4"
             sx={{ fontWeight: "600", mb: 0.5, fontSize: "24px" }}
           >
-            15
+            {data?.length || 0}
           </Typography>
           <Typography
             variant="body1"
@@ -83,7 +88,7 @@ const KPIsHistory = () => {
             variant="h4"
             sx={{ fontWeight: "600", mb: 0.5, fontSize: "24px" }}
           >
-            499
+            {totalBad}
           </Typography>
           <Typography
             variant="body1"
@@ -109,7 +114,7 @@ const KPIsHistory = () => {
             variant="h4"
             sx={{ fontWeight: "600", mb: 0.5, fontSize: "24px" }}
           >
-            15,003
+            {totalValid}
           </Typography>
           <Typography
             variant="body1"
