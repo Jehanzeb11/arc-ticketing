@@ -109,6 +109,7 @@ button {
 
 .my-select .MuiAutocomplete-popupIndicator {
   background: url(/select-arrow.svg) center center no-repeat;
+
 }
 
 .my-select .MuiAutocomplete-popupIndicator svg {
@@ -1287,10 +1288,12 @@ button.calling-popup-btn {
 .my-select.br-transparent .autocomplete-select .MuiAutocomplete-input {
   border-radius: 30px;
   border: transparent;
+  /* border: 1px solid var(--border-color); */
+
 }
 
 .my-select.br-transparent .autocomplete-select .MuiAutocomplete-input:focus {
-  border: 1px solid var(--border-color);
+  /* border: 1px solid var(--border-color); */
 }
 
 /* unibox ticket */
@@ -1776,4 +1779,13 @@ button.calling-popup-btn {
   .avatar-container img {
     margin-top: 20px;
   }
+}
+
+.css-o5oj2-MuiAutocomplete-root .MuiAutocomplete-inputRoot {
+  background-color: #fff !important;
+}
+
+.css-o5oj2-MuiAutocomplete-root .MuiAutocomplete-inputRoot .MuiAutocomplete-input {
+  min-width: 100% !important;
+
 }

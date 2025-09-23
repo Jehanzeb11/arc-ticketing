@@ -34,7 +34,8 @@ import EditIMAPConf from "@/components/common/Form/imap-configuration/EditIMAPCo
 
 const IMAP = () => {
   const queryClient = useQueryClient();
-  const { callApi, updateSmtp, deleteSmtp, getAllSMTP }: any = useApiStore();
+  const { callApi, updateSmtp, deleteSmtp, getAllSMTP, fetchDepartments }: any =
+    useApiStore();
   const [addNewModalOpen, setAddNewModalOpen] = useState(false);
   const [editNewModalOpen, setEditNewModalOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -51,6 +52,21 @@ const IMAP = () => {
     queryKey: ["getAllIMAP"],
     queryFn: () =>
       callApi(getAllSMTP, { requestType: "getAllSmtps", type: "IMAP" }),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  });
+
+  const {
+    data: departments,
+    isLoading: departmentsLoading,
+    error: departmentsError,
+  } = useQuery({
+    queryKey: ["departments"],
+    queryFn: () =>
+      callApi(fetchDepartments, {
+        requestType: "getAllDepartments",
+      }),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
@@ -74,6 +90,7 @@ const IMAP = () => {
         email: user.username || "--",
         port: String(user.port) || "--",
         ssl: user.secure || "--",
+        deptIds: user.department_ids || "--",
         dept: user.departments?.join(", ") || "--",
         status: (
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -129,17 +146,13 @@ const IMAP = () => {
 
   const departmentOptions = [
     { value: "AllDepartment", label: "All Departments" },
-    { value: "IT", label: "IT" },
-    { value: "Sales", label: "Sales" },
-    { value: "Support", label: "Support" },
-    { value: "Marketing", label: "Marketing" },
-    { value: "HR", label: "HR" },
+    ...(departments?.map((d) => ({ value: d.id, label: d.name })) || []),
   ];
 
   const statusOptions = [
     { value: "AllStatus", label: "All Status" },
-    { value: "Active", label: "Active" },
-    { value: "Inactive", label: "Inactive" },
+    { value: "SSL", label: "Active" },
+    { value: "TSL", label: "Inactive" },
   ];
 
   const filters = [
@@ -225,7 +238,7 @@ const IMAP = () => {
   });
 
   const applyFilters = () => {
-    let result = [...data]; // Create a copy of the data array
+    let result = [...data];
 
     // Apply search filter
     if (searchQuery) {
@@ -234,27 +247,19 @@ const IMAP = () => {
       );
     }
 
-    // Apply role filter
-    if (filterValues.role && filterValues.role !== "AllRole") {
-      result = result.filter((row) => row.port === filterValues.role);
-    }
-
     // Apply department filter
     if (
       filterValues.department &&
       filterValues.department !== "AllDepartment"
     ) {
-      result = result.filter((row) => row.dept === filterValues.department);
+      result = result.filter((row) =>
+        row.deptIds.includes(filterValues.department)
+      );
     }
 
     // Apply status filter
     if (filterValues.status && filterValues.status !== "AllStatus") {
-      result = result.filter((row) => {
-        // For status filtering, we need to match against the original user data
-        // Find the original user to get the actual status value
-        const originalUser = smtps.find((user) => user.id === row.id);
-        return originalUser?.user_status === filterValues.status;
-      });
+      result = result.filter((row) => row.ssl === filterValues.status);
     }
 
     setFilteredData(result);
@@ -281,7 +286,6 @@ const IMAP = () => {
       status: "AllStatus",
     });
     setSearchQuery("");
-    // The filters will be applied automatically through the useEffect
   };
 
   // if (error) {
@@ -290,7 +294,7 @@ const IMAP = () => {
 
   useEffect(() => {
     if (smtps && data && data.length > 0) {
-      applyFilters();
+      // applyFilters();
     } else {
       // If no smtps or data, set filteredData to empty array
       setFilteredData([]);
@@ -303,6 +307,16 @@ const IMAP = () => {
     filterValues.department,
     filterValues.status,
   ]);
+
+  useEffect(() => {
+    if (
+      filterValues.role == "AllRole" &&
+      filterValues.department == "AllDepartment" &&
+      filterValues.status == "AllStatus"
+    ) {
+      applyFilters();
+    }
+  }, [data, filterValues]);
 
   return (
     <Box>
@@ -357,7 +371,7 @@ const IMAP = () => {
             <CustomButton
               text="Apply Filter"
               customClass={"btn-outlined"}
-              onClick={handleApplyFilter}
+              onClick={applyFilters}
             />
             <Tooltip title="Reset Filter" arrow>
               <Button className="reset-button" onClick={handleResetFilter}>

@@ -76,7 +76,7 @@ export default function MultiSelect({
   };
 
   return (
-    <Box className={`my-select ${className}`} sx={{ ...sx }}>
+    <Box className={`my-select multi-select ${className}`} sx={{ ...sx }}>
       <span className="select-label">{label}</span>
       <Autocomplete
         multiple
@@ -136,7 +136,7 @@ export default function MultiSelect({
             )}
           </li>
         )}
-        isOptionEqualToValue={(option, val) => option.value === val}
+        isOptionEqualToValue={(option, val) => option.value === val.value}
         disabled={disabled || loading}
       />
       {explanationText && (

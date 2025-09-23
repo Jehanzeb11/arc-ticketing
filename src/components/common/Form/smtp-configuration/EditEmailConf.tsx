@@ -10,6 +10,7 @@ import FormSelect from "@/components/common/Select";
 import { useApiStore } from "@/lib/api/apiStore";
 import GlobalPasswordInput from "../../Input/GlobalPasswordInput";
 import IOSSwitch from "../../switch";
+import MultiSelect from "../../Select/MultiOptionsSelect";
 
 export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
   const { callApi, updateSmtp, fetchRoles, fetchDepartments }: any =
@@ -36,7 +37,7 @@ export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
     control,
     formState: { errors, isSubmitting },
     reset,
-    watch
+    watch,
   } = useForm({
     defaultValues: {
       host: userData?.host || "",
@@ -49,12 +50,13 @@ export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
     },
   });
 
-
-  console.log("userData?.department_ids?.split(", ")", userData.department_ids.split(",").map(Number));
+  console.log(
+    "userData?.department_ids?.split(",
+    ")",
+    userData.department_ids.split(",").map(Number)
+  );
 
   console.log("watch dept", watch("dept"));
-
-
 
   const mutation = useMutation({
     mutationFn: async (data: any) => {
@@ -140,21 +142,21 @@ export default function EditEmailConf({ getall, onCloseModal, userData }: any) {
         {/* Status */}
         <Grid size={{ xs: 6 }}>
           <Controller
-            name="dept"
-            control={control}
-            rules={{ required: "Department is required" }}
+            name="dept" // Form field name
+            control={control} // `control` from react-hook-form
+            rules={{ required: "Department is required" }} // Validation rule
             render={({ field }) => (
-              <FormSelect
-                multiple
-                label="Department"
+              <MultiSelect
+                label="Assign to Department"
                 name="dept"
+                rules={{ required: "Department is required" }}
                 defaultText="Select Department"
                 className="modal-select"
-                value={field.value || ""}
-                onChange={(e) => field.onChange(e.target.value)}
-                options={departments?.map((department: any) => ({
-                  label: department.name,
-                  value: department.id,
+                value={field.value || []} // Ensure field.value is an array
+                onChange={(e) => field.onChange(e.target.value)} // Pass selected values back to form
+                options={departments?.map((dept) => ({
+                  label: dept.name,
+                  value: dept.id,
                 }))}
               />
             )}

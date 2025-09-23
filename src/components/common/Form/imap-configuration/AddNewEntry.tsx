@@ -10,6 +10,7 @@ import GlobalPasswordInput from "@/components/common/Input/GlobalPasswordInput";
 import FormSelect from "@/components/common/Select";
 import { useApiStore } from "@/lib/api/apiStore";
 import IOSSwitch from "../../switch";
+import MultiSelect from "../../Select/MultiOptionsSelect";
 
 export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
   const { callApi, createSMTP, fetchRoles, fetchDepartments }: any =
@@ -68,7 +69,7 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
         port: data.port,
         username: data.email,
         password: data.password,
-        dept: data.dept.join(","),
+        department_ids: data.dept.join(","),
         secure: data.status ? "SSL" : "TLS",
         type: "IMAP",
       };
@@ -120,7 +121,7 @@ export default function AddNewEntryIMAPConf({ getall, onCloseModal }: any) {
   //     value: dept.id,
   //   })) || [];
 
-console.log("watch dept", watch("dept"));
+  console.log("watch dept", watch("dept"));
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -209,8 +210,8 @@ console.log("watch dept", watch("dept"));
                   strength === "Weak"
                     ? "red"
                     : strength === "Medium"
-                      ? "orange"
-                      : "green",
+                    ? "orange"
+                    : "green",
               }}
             >
               Strength: {strength}
@@ -227,8 +228,8 @@ console.log("watch dept", watch("dept"));
                     strength === "Weak"
                       ? "red"
                       : strength === "Medium"
-                        ? "orange"
-                        : "green",
+                      ? "orange"
+                      : "green",
                 },
               }}
             />
@@ -238,18 +239,18 @@ console.log("watch dept", watch("dept"));
         {/* Status */}
         <Grid size={{ xs: 12 }}>
           <Controller
-            name="dept"
-            control={control}
-            rules={{ required: "Department is required" }}
+            name="dept" // Form field name
+            control={control} // `control` from react-hook-form
+            rules={{ required: "Department is required" }} // Validation rule
             render={({ field }) => (
-              <FormSelect
-                multiple
+              <MultiSelect
                 label="Assign to Department"
                 name="dept"
+                rules={{ required: "Department is required" }}
                 defaultText="Select Department"
                 className="modal-select"
-                value={field.value || ""}
-                onChange={(e) => field.onChange(e.target.value)}
+                value={field.value || []} // Ensure field.value is an array
+                onChange={(value) => field.onChange(value)} // Pass selected values back to form
                 options={departments?.map((dept) => ({
                   label: dept.name,
                   value: dept.id,

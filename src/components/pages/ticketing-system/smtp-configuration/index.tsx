@@ -89,6 +89,7 @@ const SMTP = () => {
         port: String(user.port) || "--",
         ssl: user.secure || "--",
         dept: user.departments?.join(",") || "--",
+        deptIds: user.department_ids || "--",
         status: (
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Typography
@@ -143,17 +144,16 @@ const SMTP = () => {
 
   const departmentOptions = [
     { value: "AllDepartment", label: "All Departments" },
-    { value: "IT", label: "IT" },
-    { value: "Sales", label: "Sales" },
-    { value: "Support", label: "Support" },
-    { value: "Marketing", label: "Marketing" },
-    { value: "HR", label: "HR" },
+    ...(departments?.map((department) => ({
+      value: department.id,
+      label: department.name,
+    })) || []),
   ];
 
   const statusOptions = [
     { value: "AllStatus", label: "All Status" },
-    { value: "Active", label: "Active" },
-    { value: "Inactive", label: "Inactive" },
+    { value: "SSL", label: "Active" },
+    { value: "TSL", label: "Inactive" },
   ];
 
   const filters = [
@@ -239,7 +239,7 @@ const SMTP = () => {
   });
 
   const applyFilters = () => {
-    let result = [...data]; // Create a copy of the data array
+    let result = [...data];
 
     // Apply search filter
     if (searchQuery) {
@@ -248,27 +248,19 @@ const SMTP = () => {
       );
     }
 
-    // Apply role filter
-    if (filterValues.role && filterValues.role !== "AllRole") {
-      result = result.filter((row) => row.port === filterValues.role);
-    }
-
     // Apply department filter
     if (
       filterValues.department &&
       filterValues.department !== "AllDepartment"
     ) {
-      result = result.filter((row) => row.dept === filterValues.department);
+      result = result.filter((row) =>
+        row.deptIds.includes(filterValues.department)
+      );
     }
 
     // Apply status filter
     if (filterValues.status && filterValues.status !== "AllStatus") {
-      result = result.filter((row) => {
-        // For status filtering, we need to match against the original user data
-        // Find the original user to get the actual status value
-        const originalUser = smtps.find((user) => user.id === row.id);
-        return originalUser?.user_status === filterValues.status;
-      });
+      result = result.filter((row) => row.ssl === filterValues.status);
     }
 
     setFilteredData(result);
@@ -295,7 +287,7 @@ const SMTP = () => {
       status: "AllStatus",
     });
     setSearchQuery("");
-    // The filters will be applied automatically through the useEffect
+    setTimeout(applyFilters, 0); // wait for state update
   };
 
   // if (error) {
@@ -304,7 +296,7 @@ const SMTP = () => {
 
   useEffect(() => {
     if (smtps && data && data.length > 0) {
-      applyFilters();
+      // applyFilters();
     } else {
       // If no smtps or data, set filteredData to empty array
       setFilteredData([]);
@@ -317,6 +309,16 @@ const SMTP = () => {
     filterValues.department,
     filterValues.status,
   ]);
+
+  useEffect(() => {
+    if (
+      filterValues.role == "AllRole" &&
+      filterValues.department == "AllDepartment" &&
+      filterValues.status == "AllStatus"
+    ) {
+      applyFilters();
+    }
+  }, [data, filterValues]);
 
   return (
     <Box>
@@ -371,7 +373,7 @@ const SMTP = () => {
             <CustomButton
               text="Apply Filter"
               customClass={"btn-outlined"}
-              onClick={handleApplyFilter}
+              onClick={applyFilters}
             />
             <Tooltip title="Reset Filter" arrow>
               <Button className="reset-button" onClick={handleResetFilter}>

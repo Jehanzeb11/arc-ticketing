@@ -71,7 +71,7 @@ export default function AddNewEntryEmailConf({ getall, onCloseModal }: any) {
         port: data.port,
         username: data.email,
         password: data.password,
-        dept: data.dept.join(","),
+        department_ids: data.dept.join(","),
         secure: data.status ? "SSL" : "TLS",
         type: "SMTP",
       };
@@ -269,18 +269,18 @@ export default function AddNewEntryEmailConf({ getall, onCloseModal }: any) {
         {/* <MultiOptionsSelect options={roleOptions} label="Assign to Role" /> */}
         <Grid size={12}>
           <Controller
-            name="department" // Form field name
+            name="dept" // Form field name
             control={control} // `control` from react-hook-form
             rules={{ required: "Department is required" }} // Validation rule
             render={({ field }) => (
               <MultiSelect
                 label="Assign to Department"
-                name="department"
+                name="dept"
                 rules={{ required: "Department is required" }}
                 defaultText="Select Department"
                 className="modal-select"
                 value={field.value || []} // Ensure field.value is an array
-                onChange={(e) => field.onChange(e.target.value)} // Pass selected values back to form
+                onChange={(value) => field.onChange(value)} // Pass selected values back to form
                 options={departments?.map((dept) => ({
                   label: dept.name,
                   value: dept.id,
