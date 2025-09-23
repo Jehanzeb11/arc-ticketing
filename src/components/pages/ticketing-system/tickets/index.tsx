@@ -544,7 +544,10 @@ export default function UniBoxTickets() {
           spacing={2}
         >
           {filters.map((filter: any, index: number) => (
-            <Grid size={{ lg: 1.55, xs: 12 }} key={index}>
+            <Grid
+              size={{ xl: 1.54, lg: 2.5, md: 5, sm: 6, xs: 5.5 }}
+              key={index}
+            >
               <TableSelectFilterMainNew
                 value={filter.value || ""}
                 name={filter.name}
@@ -567,7 +570,7 @@ export default function UniBoxTickets() {
             maxDate={new Date(2025, 11, 31)}
           />
 
-          <Grid size={{ lg: 2.5, xs: 12 }}>
+          <Grid size={{ xl: 2.5, lg: 3, xs: 12 }}>
             <Box
               sx={{ display: "flex", gap: "10px" }}
               className="ticket-button"

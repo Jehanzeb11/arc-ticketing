@@ -217,7 +217,10 @@ const RolesAndPermission = () => {
 
   const permissionOptions = [
     { value: "AllRoles", label: "All Roles" },
-    ...roles.map((role) => ({ value: role.role_id, label: role.role_name })),
+    ...(roles?.map((role) => ({
+      value: role.role_id,
+      label: role.role_name,
+    })) || []),
   ];
 
   const filters = [

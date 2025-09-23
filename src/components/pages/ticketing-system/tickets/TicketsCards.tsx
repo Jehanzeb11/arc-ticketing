@@ -85,7 +85,7 @@ export default function TicketsCards({ ticketKpiStats }) {
       }}
     >
       {cards.map((card, index) => (
-        <Grid size={{ lg: 2.9, xs: 2.9 }} key={index}>
+        <Grid size={{ xl: 2.9, lg: 5.5, xs: 12, md: 12 }} key={index}>
           <Card
             sx={{
               background: `white`,
@@ -100,8 +100,9 @@ export default function TicketsCards({ ticketKpiStats }) {
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                p: "22px 20px !important",
+                p: "22px 20px",
               }}
+              className="ticket-kpi-card"
             >
               <Box display={"flex"} alignItems={"center"} gap={1}>
                 <img src={card.img.src} alt="" />

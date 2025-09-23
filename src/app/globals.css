@@ -595,4 +595,16 @@ button.react-calendar__navigation__label {
   .auth_form {
     width: 100%;
   }
+
+  .ticket-kpi-card h4 {
+    font-size: 30px;
+  }
+
+}
+
+@media only screen and (max-width: 1300px) {
+  .ticket-kpi-card {
+    padding: 16px !important;
+  }
+
 }
