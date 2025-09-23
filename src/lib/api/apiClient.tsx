@@ -77,8 +77,16 @@ const applyInterceptors = (instance) => {
     },
     (error) => {
       const status = error.response?.status;
+
+      // Try to extract backend error first
       let message =
-        error.response?.data?.message || error.message || "An error occurred";
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        (typeof error.response?.data === "string"
+          ? error.response.data
+          : null) ||
+        "An error occurred";
+
       if (status === 401) {
         message = "Session expired. Please log in again.";
         Cookies.remove("access_token");
@@ -88,13 +96,16 @@ const applyInterceptors = (instance) => {
       } else if (status === 500) {
         message = "Server error. Please try again later.";
       }
-      if (!error.config.skipToast) {
-        toast.error(message);
-      }
-      console.error("API Error:", status, message);
-      return Promise.reject(new Error(message));
+
+      // if (!error.config.skipToast) {
+      //   toast.error(message); // ✅ no more "Request failed with status code 400"
+      // }
+
+      console.error("API Error:", status, error.response?.data || message);
+      return Promise.reject(error);
     }
   );
+
   return instance;
 };
 

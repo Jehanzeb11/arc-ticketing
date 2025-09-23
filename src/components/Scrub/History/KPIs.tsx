@@ -11,9 +11,12 @@ import icon8 from "@/assets/scruber/icons/8.png";
 import icon9 from "@/assets/scruber/icons/7.svg";
 import icon10 from "@/assets/scruber/icons/10.png";
 import Image from "next/image";
-const ScruberKPIsResult = ({ validatorCounts, totalNumbers,
+const ScruberKPIsResult = ({
+  validatorCounts,
+  totalNumbers,
   badNumbers,
-  goodNumbers }) => {
+  goodNumbers,
+}) => {
   return (
     <Grid
       container
@@ -66,13 +69,13 @@ const ScruberKPIsResult = ({ validatorCounts, totalNumbers,
             variant="h4"
             sx={{ fontWeight: "500", mb: 0.5, fontSize: "24px" }}
           >
-            658
+            {goodNumbers}
           </Typography>
           <Typography
             variant="body1"
             sx={{ fontWeight: "400", fontSize: "13px" }}
           >
-            {goodNumbers}
+            Valid Numbers
           </Typography>
         </Box>
       </Grid>
@@ -118,7 +121,7 @@ const ScruberKPIsResult = ({ validatorCounts, totalNumbers,
             variant="h4"
             sx={{ fontWeight: "500", mb: 0.5, fontSize: "24px" }}
           >
-            {validatorCounts["TCPA Troll"]}
+            {validatorCounts && validatorCounts.tcpa}
           </Typography>
           <Typography
             variant="body1"
@@ -144,7 +147,7 @@ const ScruberKPIsResult = ({ validatorCounts, totalNumbers,
             variant="h4"
             sx={{ fontWeight: "500", mb: 0.5, fontSize: "24px" }}
           >
-            {validatorCounts["DNS Complainers"]}
+            {validatorCounts && validatorCounts.dnc_complainers}
           </Typography>
           <Typography
             variant="body1"
@@ -170,7 +173,7 @@ const ScruberKPIsResult = ({ validatorCounts, totalNumbers,
             variant="h4"
             sx={{ fontWeight: "500", mb: 0.5, fontSize: "24px" }}
           >
-            {validatorCounts["Federal DNC"]}
+            {validatorCounts && validatorCounts["Federal DNC"]}
           </Typography>
           <Typography
             variant="body1"
@@ -196,7 +199,7 @@ const ScruberKPIsResult = ({ validatorCounts, totalNumbers,
             variant="h4"
             sx={{ fontWeight: "500", mb: 0.5, fontSize: "24px" }}
           >
-            {validatorCounts["State DNC"]}
+            {validatorCounts && validatorCounts.state_dnc}
           </Typography>
           <Typography
             variant="body1"
@@ -222,7 +225,7 @@ const ScruberKPIsResult = ({ validatorCounts, totalNumbers,
             variant="h4"
             sx={{ fontWeight: "500", mb: 0.5, fontSize: "24px" }}
           >
-            {validatorCounts["Verizon Wireless"]}
+            {validatorCounts && validatorCounts["Verizon Wireless"]}
           </Typography>
           <Typography
             variant="body1"
@@ -248,7 +251,7 @@ const ScruberKPIsResult = ({ validatorCounts, totalNumbers,
             variant="h4"
             sx={{ fontWeight: "500", mb: 0.5, fontSize: "24px" }}
           >
-            {validatorCounts["Telnyx OCN"]}
+            {validatorCounts && validatorCounts["Telnyx OCN"]}
           </Typography>
           <Typography
             variant="body1"
@@ -274,7 +277,7 @@ const ScruberKPIsResult = ({ validatorCounts, totalNumbers,
             variant="h4"
             sx={{ fontWeight: "500", mb: 0.5, fontSize: "24px" }}
           >
-            {validatorCounts["DNC Trolls"]}
+            {validatorCounts && validatorCounts["DNC Trolls"]}
           </Typography>
           <Typography
             variant="body1"

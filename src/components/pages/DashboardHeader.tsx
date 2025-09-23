@@ -96,7 +96,12 @@ function DashboardHeader({ title, text }: any) {
             sx={{ padding: 0 }}
             onClick={handleClick}
           >
-            <Badge badgeContent={notifications.length} color="error">
+            <Badge
+              badgeContent={
+                notificationsData?.filter((item) => !item.is_read)?.length
+              }
+              color="error"
+            >
               <Image src={NotificationsIcon} alt="notifications" />
             </Badge>
           </IconButton>

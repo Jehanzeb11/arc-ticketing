@@ -6,10 +6,9 @@ import icon9 from "@/assets/scruber/icons/history-3.png";
 import icon10 from "@/assets/scruber/icons/history-4.png";
 import Image from "next/image";
 const KPIsHistory = ({ data }) => {
-
   const totalProcessed = data?.reduce((sum, job) => sum + job.totalNumbers, 0);
-const totalBad = data?.reduce((sum, job) => sum + job.badNumbers, 0);
-const totalValid = totalProcessed - totalBad;
+  const totalBad = data?.reduce((sum, job) => sum + job.badNumbers, 0);
+  const totalValid = totalProcessed - totalBad;
 
   return (
     <Grid
@@ -62,7 +61,7 @@ const totalValid = totalProcessed - totalBad;
             variant="h4"
             sx={{ fontWeight: "600", mb: 0.5, fontSize: "24px" }}
           >
-            15502
+            {totalProcessed}
           </Typography>
           <Typography
             variant="body1"

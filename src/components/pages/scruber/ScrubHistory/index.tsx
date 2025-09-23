@@ -19,11 +19,7 @@ import { useApiStore } from "@/lib/api/apiStore";
 import Link from "next/link";
 
 const ScrubHistory = () => {
-
-  const {
-    callApi,
-    scrubHistory,
-  }: any = useApiStore();
+  const { callApi, scrubHistory }: any = useApiStore();
 
   const {
     data: scrubData,
@@ -46,85 +42,85 @@ const ScrubHistory = () => {
     setStatus(event.target.value);
   };
 
-   const columns = [
-      { key: "scrubHistory", label: "Scrub History", sortable: true },
-      { key: "uploadedFile", label: "Uploaded Number/File", sortable: true },
-      { key: "scrubAgainst", label: "Scrub Against", sortable: true },
-      { key: "totalNumbers", label: "Total Numbers", sortable: true },
-      { key: "badNumbers", label: "Bad Numbers", sortable: true },
-      {
-        key: "status",
-        label: "Status",
-        sortable: true,
-        render: (value: string) =>
-          value === "completed" ? (
-            <Chip
-              icon={
-                <Box
-                  sx={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: "50%",
-                    backgroundColor: "#16C60C",
-                    ml: 1,
-                  }}
-                />
-              }
-              label="Completed"
-              sx={{
-                backgroundColor: "#DBFCE7",
-                color: "#16C60C",
-                fontWeight: 500,
-                pl: 1,
-              }}
-            />
-          ) : value === "failed" ? (
-            <Chip
-              icon={
-                <Box
-                  sx={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: "50%",
-                    backgroundColor: "#be0000ff",
-                    ml: 1,
-                  }}
-                />
-              }
-              label="Failed"
-              sx={{
-                backgroundColor: "#be00002d",
-                color: "#be0000ff",
-                fontWeight: 500,
-                pl: 1,
-              }}
-            />
-          ) : (
-            <Chip
-              icon={
-                <Box
-                  sx={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: "50%",
-                    backgroundColor: "#0078D7",
-                    ml: 1,
-                  }}
-                />
-              }
-              label="In Progress"
-              sx={{
-                backgroundColor: "#DBEAFE",
-                color: "#0078D7",
-                fontWeight: 500,
-                pl: 1,
-              }}
-            />
-          ),
-      },
-    ];
+  const columns = [
+    { key: "scrubHistory", label: "Scrub History", sortable: true },
+    { key: "uploadedFile", label: "Uploaded Number/File", sortable: true },
+    { key: "scrubAgainst", label: "Scrub Against", sortable: true },
+    { key: "totalNumbers", label: "Total Numbers", sortable: true },
+    { key: "badNumbers", label: "Bad Numbers", sortable: true },
+    {
+      key: "status",
+      label: "Status",
+      sortable: true,
+      render: (value: string) =>
+        value === "completed" ? (
+          <Chip
+            icon={
+              <Box
+                sx={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  backgroundColor: "#16C60C",
+                  ml: 1,
+                }}
+              />
+            }
+            label="Completed"
+            sx={{
+              backgroundColor: "#DBFCE7",
+              color: "#16C60C",
+              fontWeight: 500,
+              pl: 1,
+            }}
+          />
+        ) : value === "failed" ? (
+          <Chip
+            icon={
+              <Box
+                sx={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  backgroundColor: "#be0000ff",
+                  ml: 1,
+                }}
+              />
+            }
+            label="Failed"
+            sx={{
+              backgroundColor: "#be00002d",
+              color: "#be0000ff",
+              fontWeight: 500,
+              pl: 1,
+            }}
+          />
+        ) : (
+          <Chip
+            icon={
+              <Box
+                sx={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  backgroundColor: "#0078D7",
+                  ml: 1,
+                }}
+              />
+            }
+            label="In Progress"
+            sx={{
+              backgroundColor: "#DBEAFE",
+              color: "#0078D7",
+              fontWeight: 500,
+              pl: 1,
+            }}
+          />
+        ),
+    },
+  ];
 
- const data = scrubData?.history?.map((item) => ({
+  const data = scrubData?.history?.map((item) => ({
     jobId: item.jobId,
     scrubHistory: item?.createdAt,
     uploadedFile: "cold_leads.csv",
@@ -162,7 +158,7 @@ const ScrubHistory = () => {
     },
   ];
 
-    const validatorArr = numberStatus
+  const validatorArr = numberStatus
     ? numberStatus?.split(",").map((v) => v.trim().toLowerCase())
     : [];
 
@@ -219,55 +215,65 @@ const ScrubHistory = () => {
         >
           <Box sx={{ mt: 3 }}>
             <ReusableTable
-            Pagination={true}
+              Pagination={true}
               columns={columns}
-            data={data}
-            actions={(row) => {
-              console.log(row);
-              return (
-                <>
-                  <Link
-                    href={`/scruber/history-scruber-result?id=${row.jobId}`}
-                    style={{
-                      padding: 0,
-                      margin: 1,
-                      width: "fit-content",
-                      minWidth: "10px",
-                    }}
-                    title="View"
-                  >
-                    <Image
-                      src={viewIcon}
-                      width={22}
-                      height={22}
-                      alt="download"
-                    />
-                  </Link>
-                  <Button
-                    sx={{ p: 0, mx: 1, width: "fit-content", minWidth: "10px" }}
-                    title="Download"
-                  >
-                    <Image
-                      src={downloadIcon}
-                      width={16}
-                      height={16}
-                      alt="download"
-                    />
-                  </Button>
-                  <Button
-                    sx={{ p: 0, mx: 1, width: "fit-content", minWidth: "10px" }}
-                    title="Delete"
-                  >
-                    <Image
-                      src={deleteIcon}
-                      width={15}
-                      height={18}
-                      alt="download"
-                    />
-                  </Button>
-                </>
-              );
-            }}
+              data={data}
+              actions={(row) => {
+                console.log(row);
+                return (
+                  <Box sx={{ display: "flex" }}>
+                    <Link
+                      href={`/scruber/history-scruber-result?id=${row.jobId}`}
+                      style={{
+                        padding: 0,
+                        margin: 1,
+                        width: "fit-content",
+                        minWidth: "10px",
+                      }}
+                      title="View"
+                    >
+                      <Image
+                        src={viewIcon}
+                        width={22}
+                        height={22}
+                        alt="download"
+                      />
+                    </Link>
+                    <Button
+                      sx={{
+                        p: 0,
+                        mx: 1,
+                        width: "fit-content",
+                        minWidth: "10px",
+                      }}
+                      title="Download"
+                    >
+                      <Image
+                        src={downloadIcon}
+                        width={16}
+                        height={16}
+                        alt="download"
+                      />
+                    </Button>
+                    <Button
+                      sx={{
+                        p: 0,
+                        mx: 1,
+                        width: "fit-content",
+                        minWidth: "10px",
+                      }}
+                      title="Delete"
+                    >
+                      <Image
+                        src={deleteIcon}
+                        width={15}
+                        height={18}
+                        alt="download"
+                      />
+                    </Button>
+                  </Box>
+                );
+              }}
             />
           </Box>
         </ScrubCardTable>
@@ -295,8 +301,8 @@ const ScrubHistory = () => {
                     item.type === "Match"
                       ? matchIcon
                       : item.type === "Clear"
-                        ? clearIcon
-                        : clearIcon
+                      ? clearIcon
+                      : clearIcon
                   }
                   width={60}
                   height={60}

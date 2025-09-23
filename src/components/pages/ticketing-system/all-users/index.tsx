@@ -20,6 +20,7 @@ import DashboardHeader from "../../DashboardHeader";
 import AddNewEntry from "@/components/common/Form/all-users/AddNewEntry";
 import EditAllUsersEntry from "@/components/common/Form/all-users/EditUser";
 import AssigneeIcon from "@/assets/icons/unibox/ticket/unibox-ticket-assignee-img.svg";
+import AssignmentIcon from "@/assets/icons/Assignment.png";
 import toast from "react-hot-toast";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -283,7 +284,7 @@ const AllUsers = () => {
       tooltip: "Delete User",
     },
     canAssignModule && {
-      icon: DeleteIcon, // <-- replace with correct icon
+      icon: AssignmentIcon, // <-- replace with correct icon
       onClick: (row) => {
         if (row && row.user_id) {
           setSelectedId(row.user_id);

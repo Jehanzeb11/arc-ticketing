@@ -537,13 +537,16 @@ button.react-calendar__navigation__label {
 }
 
 .scrub-show-all {
-  color: #32AAB1 !important;
+  color: #fff !important;
   text-transform: capitalize !important;
   font-size: 16px;
   font-weight: 600;
-  text-decoration: underline !important;
   margin-top: 20px;
   margin-bottom: 20px;
+  background-color: #32ABB1 !important;
+  text-decoration: none !important;
+  border-radius: 100px !important;
+  padding: 10px 30px !important;
 }
 
 
@@ -570,4 +573,26 @@ button.react-calendar__navigation__label {
   text-align: center;
   background: linear-gradient(180deg, #FFFFFF 0%, #F0F5FF 100%);
 
+}
+
+
+
+
+
+
+
+
+
+
+/* responsive */
+
+
+@media only screen and (max-width: 1200px) {
+  .auth-img-parent {
+    display: none;
+  }
+
+  .auth_form {
+    width: 100%;
+  }
 }

@@ -30,6 +30,7 @@ import MyScruberModal from "@/components/Scrub/Modal";
 import matchIcon from "@/assets/scruber/icons/status-close.png";
 import clearIcon from "@/assets/scruber/icons/status-check.png";
 import Link from "next/link";
+import { imageUrl } from "@/lib/constants/variables";
 
 const PhoneScrube = () => {
   const {
@@ -41,14 +42,15 @@ const PhoneScrube = () => {
   }: any = useApiStore();
 
   const filterLabels: Record<string, string> = {
-    tcpA: "TCPA Troll",
-    dns: "DNS Complainers",
+    tcpa: "TCPA Troll",
+    dnc_complainers: "DNS Complainers",
     federalDNC: "Federal DNC",
-    stateDNC: "State DNC",
+    state_dnc: "State DNC",
     verizonWireless: "Verizon Wireless",
     telnyxOCN: "Telnyx OCN",
     dncTrolls: "DNC Trolls",
   };
+
   const [open, setOpen] = useState(false);
 
   const [tab, setTab] = useState(0);
@@ -69,34 +71,50 @@ const PhoneScrube = () => {
   });
 
   const [checked, setChecked] = useState({
-    tcpA: false,
-    dns: false,
+    tcpa: false,
+    dnc_complainers: false,
     federalDNC: false,
-    stateDNC: false,
+    state_dnc: false,
     verizonWireless: false,
     telnyxOCN: false,
     dncTrolls: false,
   });
 
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
-
   useEffect(() => {
     if (!profile?.data?.user_id) return;
 
     const socket = getSocket();
 
-    socket.emit("registerUser", profile?.data?.user_id);
+    socket.emit("registerUser", profile.data.user_id);
 
     socket.on("scrubJobCompleted", (data) => {
       console.log("🟢 Scrub Job Completed:", data);
       setOpen(true);
-      setNumberStatus(data.numbers[0]?.validator);
+      setNumberStatus(data?.numbers?.[0]?.validator || null);
+    });
+
+    socket.on("registerUser", (notification) => {
+      console.log("New Scrub Notification:", notification);
+
+      // 🔔 Show desktop notification safely
+      if (typeof window !== "undefined" && "Notification" in window) {
+        if (Notification.permission === "granted") {
+          new Notification(notification?.message || "New Notification", {
+            body: notification?.actor?.name || "You have a new update",
+            icon: notification?.actor?.image
+              ? imageUrl + notification.actor.image
+              : "/default-icon.png", // fallback
+          });
+        }
+      }
     });
 
     return () => {
-      socket.removeAllListeners("scrubJobCompleted");
+      socket.off("scrubJobCompleted");
+      socket.off("scrub_job_complete");
     };
-  }, [profile?.data?.user_id, currentJobId]);
+  }, [profile?.data?.user_id]);
 
   const handleChangeCheck = (event) => {
     setChecked({
@@ -240,9 +258,17 @@ const PhoneScrube = () => {
 
   const StartScrub = () => {
     if (tab == 1) {
-      const filters = Object.keys(checked)
-        .filter((key) => checked[key]) // only true ones
-        .map((key) => filterLabels[key]);
+      // Values to send to API
+      const activeFilterValues = Object.keys(checked).filter(
+        (key) => checked[key]
+      );
+
+      // Labels to show in UI
+      const activeFilterLabels = activeFilterValues.map(
+        (key) => filterLabels[key]
+      );
+
+      const filters = activeFilterValues;
 
       const formData: any = new FormData();
       formData.append("file", file);
@@ -444,7 +470,7 @@ const PhoneScrube = () => {
               >
                 <FormControlLabel
                   sx={{
-                    background: checked.tcpA
+                    background: checked.tcpa
                       ? "linear-gradient(90deg, #32ABB1 0%, #3286BD 100%)"
                       : "white",
 
@@ -453,21 +479,21 @@ const PhoneScrube = () => {
                     pl: 3,
                     borderRadius: "10px",
                     width: "240px",
-                    color: checked.tcpA ? "white" : "#797979",
+                    color: checked.tcpa ? "white" : "#797979",
                     border: "1px solid #32ABB1",
                   }}
                   control={
                     <Checkbox
-                      checked={checked.tcpA}
+                      checked={checked.tcpa}
                       onChange={handleChangeCheck}
-                      name="tcpA"
+                      name="tcpa"
                     />
                   }
                   label="TCPA/TCPA Troll"
                 />
                 <FormControlLabel
                   sx={{
-                    background: checked.dns
+                    background: checked.dnc_complainers
                       ? "linear-gradient(90deg, #32ABB1 0%, #3286BD 100%)"
                       : "white",
                     width: "240px",
@@ -475,14 +501,14 @@ const PhoneScrube = () => {
                     pr: 1,
                     pl: 3,
                     borderRadius: "10px",
-                    color: checked.dns ? "white" : "#797979",
+                    color: checked.dnc_complainers ? "white" : "#797979",
                     border: "1px solid #32ABB1",
                   }}
                   control={
                     <Checkbox
-                      checked={checked.dns}
+                      checked={checked.dnc_complainers}
                       onChange={handleChangeCheck}
-                      name="dns"
+                      name="dnc_complainers"
                     />
                   }
                   label="DNS Complainers"
@@ -512,7 +538,7 @@ const PhoneScrube = () => {
                 />
                 <FormControlLabel
                   sx={{
-                    background: checked.stateDNC
+                    background: checked.state_dnc
                       ? "linear-gradient(90deg, #32ABB1 0%, #3286BD 100%)"
                       : "white",
                     width: "240px",
@@ -521,14 +547,14 @@ const PhoneScrube = () => {
                     pr: 1,
                     pl: 3,
                     borderRadius: "10px",
-                    color: checked.stateDNC ? "white" : "#797979",
+                    color: checked.state_dnc ? "white" : "#797979",
                     border: "1px solid #32ABB1",
                   }}
                   control={
                     <Checkbox
-                      checked={checked.stateDNC}
+                      checked={checked.state_dnc}
                       onChange={handleChangeCheck}
-                      name="stateDNC"
+                      name="state_dnc"
                     />
                   }
                   label="State DNC"
@@ -659,7 +685,7 @@ const PhoneScrube = () => {
             actions={(row) => {
               console.log(row);
               return (
-                <>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Link
                     href={`/scruber/history-scruber-result?id=${row.jobId}`}
                     style={{
@@ -699,18 +725,26 @@ const PhoneScrube = () => {
                       alt="download"
                     />
                   </Button>
-                </>
+                </Box>
               );
             }}
           />
-          <Link style={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }} href="/scruber/history-scruber">
+          <Link
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "10px",
+              textDecoration: "none",
+            }}
+            href="/scruber/history-scruber"
+          >
             <Button className="scrub-show-all">Show All</Button>
           </Link>
         </Box>
       </ScrubCardTable>
       <MyScruberModal
         modalHeader="true"
-        modalTitle="Scrub Result -+1 (555) 123-4567"
+        modalTitle={`Scrub Result - +1 ${search}`}
         modalText="Scrub Time: Today,2:45 PM"
         statusBtn="Completed"
         open={open}

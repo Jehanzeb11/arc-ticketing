@@ -8,6 +8,7 @@ import MyModal from "@/components/common/Modal";
 import addnewEntry from "@/assets/icons/modal/add-dept.svg";
 import editnewEntry from "@/assets/icons/modal/add-dept.svg";
 import editIcon from "@/assets/icons/table/edit.svg";
+import sendIcon from "@/assets/icons/send-icon.png";
 import DeleteModalIcon from "@/assets/icons/modal/deleteModalIcon2.svg";
 import deleteModalDeleteIcon from "@/assets/icons/users/delete-icon-2.png";
 import CustomButton from "@/components/common/Button/Button";
@@ -21,7 +22,7 @@ import AddNewEntry from "@/components/common/Form/all-users/AddNewEntry";
 import EditAllUsersEntry from "@/components/common/Form/all-users/EditUser";
 import AssigneeIcon from "@/assets/icons/unibox/ticket/unibox-ticket-assignee-img.svg";
 import toast from "react-hot-toast";
-
+import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
 import EditUser from "@/components/common/Form/all-users/EditUser";
@@ -29,15 +30,18 @@ import AddNewEntryAssignmentModule from "@/components/common/Form/modules/AddNew
 import { imageUrl } from "@/lib/constants/variables";
 import AddNewEntryEmailConf from "@/components/common/Form/smtp-configuration/AddNewEntry";
 import EditEmailConf from "@/components/common/Form/smtp-configuration/EditEmailConf";
+import GlobalInput from "@/components/common/Input/GlobalInput";
+import ButtonCustom from "@/components/common/Button/Button";
+import { useForm } from "react-hook-form";
 
 const SMTP = () => {
   const queryClient = useQueryClient();
-  const { callApi, updateSmtp, deleteSmtp, getAllSMTP, fetchDepartments }: any =
+  const { callApi, testSmtp, deleteSmtp, getAllSMTP, fetchDepartments }: any =
     useApiStore();
   const [addNewModalOpen, setAddNewModalOpen] = useState(false);
   const [editNewModalOpen, setEditNewModalOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [assignModal, setAssignModal] = useState(false);
+  const [sendModal, setSendModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [selectedName, setSelectedName] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
@@ -68,6 +72,17 @@ const SMTP = () => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    defaultValues: {
+      email: "",
+    },
   });
 
   const columns = [
@@ -171,24 +186,6 @@ const SMTP = () => {
     },
   ];
 
-  // Handle switch change for user status
-  const handleSwitchChange = async (e, id, status) => {
-    const newStatus = status === "SSL" ? "TSL" : "SSL";
-
-    try {
-      await callApi(updateSmtp, {
-        requestType: "updateSMTP",
-        secure: newStatus,
-        id: id,
-        type: "SMTP",
-      });
-      queryClient.invalidateQueries({ queryKey: ["getAllSMTP"] });
-      toast.success("IMAP status updated successfully!");
-    } catch (error) {
-      toast.error("Failed to update user status: " + error.message);
-    }
-  };
-
   const actions = [
     {
       icon: editIcon,
@@ -222,6 +219,20 @@ const SMTP = () => {
       },
       className: "action-icon",
       tooltip: "Delete SMTP",
+    },
+    {
+      icon: sendIcon,
+      onClick: (row) => {
+        console.log(row);
+        if (row && row.id) {
+          setSelectedId(row.id);
+          setSendModal(true);
+        } else {
+          toast.error("Cannot delete: User data is invalid.");
+        }
+      },
+      className: "action-icon",
+      tooltip: "Test SMTP",
     },
   ];
 
@@ -275,11 +286,6 @@ const SMTP = () => {
     setSearchQuery(event.target.value?.toString() || "");
   };
 
-  const handleApplyFilter = () => {
-    // The filters are now applied automatically through the useEffect
-    // This function is kept for the button click handler
-  };
-
   const handleResetFilter = () => {
     setFilterValues({
       role: "AllRole",
@@ -319,6 +325,45 @@ const SMTP = () => {
       applyFilters();
     }
   }, [data, filterValues]);
+
+  const mutation = useMutation({
+    mutationFn: async (data: any) => {
+      const object = {
+        requestType: "testSmtp",
+        id: selectedId,
+        testEmail: data.email,
+      };
+      return callApi(testSmtp, object);
+    },
+    onSuccess: () => {
+      toast.success("SMTP Sent successfully!");
+      setSendModal(false);
+      reset();
+    },
+    onError: (error: any) => {
+      console.error("Full Error Object:", error);
+
+      let message = "Something went wrong";
+
+      if (error?.response?.data) {
+        if (typeof error.response.data === "string") {
+          message = error.response.data;
+        } else if (error.response.data.error) {
+          message = error.response.data.error;
+        } else if (error.response.data.message) {
+          message = error.response.data.message;
+        } else {
+          message = JSON.stringify(error.response.data);
+        }
+      } else if (error?.message) {
+        message = error.message;
+      }
+
+      toast.error(`Failed to send SMTP: ${message}`);
+    },
+  });
+
+  const onSubmit = (data: any) => mutation.mutate(data);
 
   return (
     <Box>
@@ -398,6 +443,53 @@ const SMTP = () => {
           isLoading={false}
         />
       </div>
+
+      <MyModal
+        open={sendModal}
+        setOpen={setSendModal}
+        customStyle="add-new-extension-modal"
+        modalHeader="true"
+        modalTitle="Test SMTP"
+        modalText="Test the SMTP"
+        iconSrc={addnewEntry}
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={2}>
+            {/* Full Name */}
+            <Grid size={{ xs: 12 }}>
+              <GlobalInput
+                type="email"
+                placeholder="Enter SMTP Host"
+                label="SMTP Host"
+                {...register("email", { required: "SMTP Host is required" })}
+              />
+              {errors.email && (
+                <Typography
+                  variant="caption"
+                  color="error"
+                  sx={{ mt: -1, ml: 1 }}
+                >
+                  {errors.email.message}
+                </Typography>
+              )}
+            </Grid>
+          </Grid>
+
+          {/* Footer Buttons */}
+          <Box sx={{ display: "flex", gap: "15px", mt: "35px" }}>
+            <ButtonCustom
+              text="Cancel"
+              btntrasnparent={true}
+              onClick={() => setSendModal(false)}
+            />
+            <ButtonCustom
+              text={isSubmitting ? "Sending..." : "Send SMTP"}
+              type="submit"
+              disabled={isSubmitting}
+            />
+          </Box>
+        </form>
+      </MyModal>
 
       <MyModal
         open={addNewModalOpen}

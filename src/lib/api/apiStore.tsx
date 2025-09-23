@@ -49,7 +49,7 @@ import {
   myData,
   createGuest,
   fetchNotifications,
-
+  testSmtp,
   // scrub
   searchSingleNumber,
   searchBulkNumber,
@@ -99,6 +99,7 @@ export const useApiStore = create((set) => ({
   getAllSMTP,
   updateSmtp,
   deleteSmtp,
+  testSmtp,
   // departments
   fetchDepartments,
   createDepartment,
@@ -162,8 +163,18 @@ export const useApiStore = create((set) => ({
       const result = await fn(...args);
       set({ loading: false });
       return result;
-    } catch (error) {
-      set({ loading: false, error: error.message });
+    } catch (error: any) {
+      set({ loading: false, error });
+
+      if (error?.response) {
+        console.error("API Error Response Data:", error.response.data);
+        console.error("API Error Status:", error.response.status);
+      } else if (error?.request) {
+        console.error("API Error Request:", error.request);
+      } else {
+        console.error("API Error Message:", error.message);
+      }
+
       throw error;
     }
   },

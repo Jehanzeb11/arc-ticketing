@@ -66,6 +66,8 @@ export const updateSmtp = (data) =>
   postbackend(`${API_ENDPOINTS.SMTP}?requestType=updateSmtp`, data);
 export const deleteSmtp = (data) =>
   postbackend(`${API_ENDPOINTS.SMTP}?requestType=deleteSmtp`, data);
+export const testSmtp = (data) =>
+  postbackend(`${API_ENDPOINTS.SMTP}?requestType=testSmtp`, data);
 
 // NOTIFICATIONS
 export const fetchNotifications = (data) =>

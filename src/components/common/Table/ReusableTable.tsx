@@ -462,6 +462,8 @@ export default function EnhancedTable({
                                       ? action.icon2(row)
                                       : action.icon || ""
                                   }
+                                  width={24}
+                                  height={20}
                                   alt="action icon"
                                 />
                               </IconButton>
