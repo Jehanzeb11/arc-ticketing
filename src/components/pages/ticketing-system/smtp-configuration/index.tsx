@@ -384,7 +384,7 @@ const SMTP = () => {
 
       <Grid
         container
-        spacing={2}
+        spacing={1.7}
         sx={{
           mb: "20px",
           backgroundColor: "#fff",
@@ -400,7 +400,7 @@ const SMTP = () => {
           />
         </Grid>
         {filters.map((filter, index) => (
-          <Grid size={{ lg: 1.5, xs: 12 }} key={index}>
+          <Grid size={{ xl: 1.5, lg: 2, xs: 3 }} key={index}>
             <TableSelectFilterMainNew
               value={filter.value || ""}
               name={filter.name}
@@ -413,7 +413,7 @@ const SMTP = () => {
             />
           </Grid>
         ))}
-        <Grid size={{ lg: 3, xs: 12 }}>
+        <Grid size={{ lg: 4, xs: 6 }}>
           <Box sx={{ display: "flex", gap: "10px" }} className="ticket-button">
             <CustomButton
               text="Apply Filter"

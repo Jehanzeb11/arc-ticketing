@@ -158,6 +158,7 @@ const CreateTicket = ({ closeModal, getall }) => {
           <GlobalInput
             type="text"
             label="Requester Name"
+            placeholder="Enter Requester Name"
             {...register("Name", { required: "Name is required" })}
             sx={{ width: "100%" }}
           />
@@ -171,6 +172,7 @@ const CreateTicket = ({ closeModal, getall }) => {
           <GlobalInput
             type="text"
             label="Title"
+            placeholder="Enter Title"
             {...register("Title", { required: "Title is required" })}
             sx={{ width: "100%" }}
           />
@@ -182,8 +184,9 @@ const CreateTicket = ({ closeModal, getall }) => {
         </Grid>
         <Grid size={{ xs: 12 }}>
           <GlobalTextarea
+            placeholder="Enter Details"
             label="Details"
-            rows={6}
+            rows={5}
             cols={30}
             {...register("message", { required: "Message is required" })}
           />
@@ -194,7 +197,7 @@ const CreateTicket = ({ closeModal, getall }) => {
           )}
         </Grid>
 
-        <Grid size={{ lg: 4, xs: 12 }}>
+        <Grid size={{ xs: 4 }}>
           <FormSelect
             label="Department"
             className="modal-select"
@@ -216,7 +219,7 @@ const CreateTicket = ({ closeModal, getall }) => {
             </p>
           )}
         </Grid>
-        <Grid size={{ lg: 4, xs: 12 }}>
+        <Grid size={{ xs: 4 }}>
           <FormSelect
             label="Status"
             className="modal-select"
@@ -237,7 +240,7 @@ const CreateTicket = ({ closeModal, getall }) => {
             </p>
           )}
         </Grid>
-        <Grid size={{ lg: 4, xs: 12 }}>
+        <Grid size={{ xs: 4 }}>
           <FormSelect
             label="Priority"
             name="Priority"
@@ -258,7 +261,7 @@ const CreateTicket = ({ closeModal, getall }) => {
             </p>
           )}
         </Grid>
-        <Grid size={{ lg: 6, xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <FormSelect
             label="Type"
             name="Type"
@@ -281,7 +284,7 @@ const CreateTicket = ({ closeModal, getall }) => {
             </p>
           )}
         </Grid>
-        <Grid size={{ lg: 6, xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <FormSelect
             label="Assigned to"
             name="Assignedto"

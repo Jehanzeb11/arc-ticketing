@@ -73,19 +73,84 @@ const ScrubHistoryResult = () => {
   const data = jobData?.numbers?.map((item) => ({
     phoneNumber: item.number,
     status: item.status,
-    reason: item.validator,
+    reason: (
+      <Box>
+        {item.validator.split(",").map((item, index) => (
+          <Chip
+            key={index}
+            label={
+              item === "troll"
+                ? "DNC Trolls"
+                : item === "telnyx"
+                ? "Telnyx OCN"
+                : item === "federalDNC"
+                ? "Federal DNC"
+                : item === "dnc_complainers"
+                ? "DNC Complainers"
+                : item === "state_dnc"
+                ? "State DNC"
+                : item === "tcpa"
+                ? "TCPA/TCPA Troll"
+                : item === "Verizon Wireless"
+                ? "Verizon Wireless"
+                : item
+            }
+            sx={{
+              color:
+                index == 0
+                  ? "#75C8CE"
+                  : index == 1
+                  ? "#FF5BFF"
+                  : index == 2
+                  ? "#D97C1E"
+                  : index == 3
+                  ? "#16C60C"
+                  : index == 4
+                  ? "#000000"
+                  : "#F34C4C",
+              backgroundColor:
+                index == 0
+                  ? "#E4F9FE"
+                  : index == 1
+                  ? "#FEF4FE"
+                  : index == 2
+                  ? "#FFF3EA"
+                  : index == 3
+                  ? "#DBFCE7"
+                  : index == 4
+                  ? "#E0E0E0"
+                  : "#FFEAEA",
+              fontWeight: 500,
+            }}
+          />
+        ))}
+        {/* {item.validator.split(",").length > 2 && (
+          <Chip
+            label={`+${item.validator.split(",").length - 2}`}
+            sx={{
+              color: "#0000007A",
+              backgroundColor: "transparent",
+              fontWeight: 500,
+            }}
+          />
+        )} */}
+      </Box>
+    ),
   }));
 
   return (
     <Box>
-      <ScruberKPIsResult validatorCounts={jobData?.validatorCounts} totalNumbers={jobData?.totalNumbers}
+      <ScruberKPIsResult
+        validatorCounts={jobData?.validatorCounts}
+        totalNumbers={jobData?.totalNumbers}
         badNumbers={jobData?.badNumbers}
-        goodNumbers={jobData?.goodNumbers} />
+        goodNumbers={jobData?.goodNumbers}
+      />
 
       <Box mt={4} mb={2}>
         <ScrubCardTable
-          title={"Scrub History"}
-          desc={"View and manage your previous scrub jobs"}
+          title={"Scrub Results"}
+          desc={""}
           filters={
             <>
               <FilterSelect
@@ -120,9 +185,7 @@ const ScrubHistoryResult = () => {
           }
         >
           <Box sx={{ mt: 3 }}>
-            <ReusableTable columns={columns} data={data} 
-            Pagination={true}
-            />
+            <ReusableTable columns={columns} data={data} Pagination={true} />
           </Box>
         </ScrubCardTable>
       </Box>

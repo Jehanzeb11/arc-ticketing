@@ -440,48 +440,50 @@ export default function EnhancedTable({
                       ))}
                       {actions.length > 0 && (
                         <TableCell align="left">
-                          {actions.map((action, idx) => {
-                            const tooltipText = action.tooltip
-                              ? typeof action.tooltip === "function"
-                                ? action.tooltip(row)
-                                : action.tooltip
-                              : "";
+                          <Box display="flex" gap={0.2}>
+                            {actions.map((action, idx) => {
+                              const tooltipText = action.tooltip
+                                ? typeof action.tooltip === "function"
+                                  ? action.tooltip(row)
+                                  : action.tooltip
+                                : "";
 
-                            const iconButton = (
-                              <IconButton
-                                key={idx}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  action.onClick(row, e);
-                                }}
-                                className={action.className}
-                              >
-                                <Image
-                                  src={
-                                    action.icon2
-                                      ? action.icon2(row)
-                                      : action.icon || ""
-                                  }
-                                  width={24}
-                                  height={20}
-                                  alt="action icon"
-                                />
-                              </IconButton>
-                            );
+                              const iconButton = (
+                                <IconButton
+                                  key={idx}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    action.onClick(row, e);
+                                  }}
+                                  className={action.className}
+                                >
+                                  <Image
+                                    src={
+                                      action.icon2
+                                        ? action.icon2(row)
+                                        : action.icon || ""
+                                    }
+                                    width={24}
+                                    height={20}
+                                    alt="action icon"
+                                  />
+                                </IconButton>
+                              );
 
-                            return tooltipText ? (
-                              <Tooltip
-                                key={idx}
-                                title={tooltipText}
-                                arrow
-                                placement="top"
-                              >
-                                <span>{iconButton}</span>
-                              </Tooltip>
-                            ) : (
-                              iconButton
-                            );
-                          })}
+                              return tooltipText ? (
+                                <Tooltip
+                                  key={idx}
+                                  title={tooltipText}
+                                  arrow
+                                  placement="top"
+                                >
+                                  <span>{iconButton}</span>
+                                </Tooltip>
+                              ) : (
+                                iconButton
+                              );
+                            })}
+                          </Box>
                         </TableCell>
                       )}
                     </TableRow>

@@ -46,9 +46,9 @@ const PhoneScrube = () => {
     dnc_complainers: "DNS Complainers",
     federalDNC: "Federal DNC",
     state_dnc: "State DNC",
-    verizonWireless: "Verizon Wireless",
-    telnyxOCN: "Telnyx OCN",
-    dncTrolls: "DNC Trolls",
+    "Verizon Wireless": "Verizon Wireless",
+    telnyx: "Telnyx OCN",
+    troll: "DNC Trolls",
   };
 
   const [open, setOpen] = useState(false);
@@ -75,9 +75,9 @@ const PhoneScrube = () => {
     dnc_complainers: false,
     federalDNC: false,
     state_dnc: false,
-    verizonWireless: false,
-    telnyxOCN: false,
-    dncTrolls: false,
+    "Verizon Wireless": false,
+    telnyx: false,
+    troll: false,
   });
 
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
@@ -206,7 +206,10 @@ const PhoneScrube = () => {
 
   const data = scrubData?.history?.slice(0, 4)?.map((item) => ({
     jobId: item.jobId,
-    scrubHistory: item?.createdAt,
+    scrubHistory:
+      item?.createdAt.split("T")[0] +
+      " " +
+      new Date(item?.createdAt).toTimeString().split(" ")[0],
     uploadedFile: "cold_leads.csv",
     scrubAgainst: JSON.parse(item?.filters)?.join(", "),
     totalNumbers: item.totalNumbers,
@@ -223,7 +226,8 @@ const PhoneScrube = () => {
         setCurrentJobId(res.jobId); // save jobId for socket listener
       }
 
-      toast.success("Numbers Searched successfully.");
+      toast.success("Scrubing... We will notify you once it's done.");
+      setSearch("");
       setResponseType("single");
     },
     onError: (error: any) => {
@@ -239,7 +243,17 @@ const PhoneScrube = () => {
         setCurrentJobId(res.jobId); // save jobId for socket listener
       }
 
-      toast.success("Numbers uploaded successfully.");
+      toast.success("Scrubing... We will notify you once it's done.");
+      setFile(null);
+      setChecked({
+        tcpa: false,
+        dnc_complainers: false,
+        federalDNC: false,
+        state_dnc: false,
+        "Verizon Wireless": false,
+        telnyx: false,
+        troll: false,
+      });
       setResponseType("bulk");
     },
     onError: (error: any) => {
@@ -282,13 +296,13 @@ const PhoneScrube = () => {
       const payload = {
         number: search,
         filters: [
-          "TCPA Troll",
-          "DNS Complainers",
-          "Federal DNC",
-          "State DNC",
+          "tcpa",
+          "dnc_complainers",
+          "federalDNC",
+          "state_dnc",
           "Verizon Wireless",
-          "Telnyx OCN",
-          "DNC Trolls",
+          "telnyx",
+          "troll",
         ],
       };
       singleNumberMutation.mutate(payload);
@@ -310,10 +324,10 @@ const PhoneScrube = () => {
       name: "Verizon Wireless",
     },
     {
-      name: "Telnyx OCN",
+      name: "telnyx",
     },
     {
-      name: "DNC Trolls",
+      name: "troll",
     },
   ];
 
@@ -324,7 +338,7 @@ const PhoneScrube = () => {
   return (
     <Box mt={4}>
       <ScrubCard
-        title={"Step 01 - Choose Scrub Type"}
+        title={"Choose Scrub Type"}
         desc={"Select your preferred scrubbing method"}
       >
         <Box sx={{ display: "flex", gap: 5, mt: 6, mb: 8 }}>
@@ -351,7 +365,12 @@ const PhoneScrube = () => {
                 <Box>
                   <Typography
                     variant="h4"
-                    sx={{ fontSize: "24px", mb: 1, fontWeight: 600 }}
+                    sx={{
+                      fontSize: "24px",
+                      mb: 1,
+                      fontWeight: 600,
+                      color: "#183C58",
+                    }}
                   >
                     Single Number Search
                   </Typography>
@@ -393,7 +412,12 @@ const PhoneScrube = () => {
                 <Box>
                   <Typography
                     variant="h4"
-                    sx={{ fontSize: "24px", mb: 1, fontWeight: 600 }}
+                    sx={{
+                      fontSize: "24px",
+                      mb: 1,
+                      fontWeight: 600,
+                      color: "#183C58",
+                    }}
                   >
                     Bulk Search (File Upload)
                   </Typography>
@@ -433,7 +457,7 @@ const PhoneScrube = () => {
           >
             <input
               type="text"
-              placeholder="Enter Phone Number"
+              placeholder="Enter 10-digit number with country code"
               className="scrub-number-search"
               onChange={(e) => setSearch(e.target.value)}
               value={search}
@@ -561,7 +585,7 @@ const PhoneScrube = () => {
                 />
                 <FormControlLabel
                   sx={{
-                    background: checked.verizonWireless
+                    background: checked["Verizon Wireless"]
                       ? "linear-gradient(90deg, #32ABB1 0%, #3286BD 100%)"
                       : "white",
                     width: "240px",
@@ -570,21 +594,21 @@ const PhoneScrube = () => {
                     pr: 1,
                     pl: 3,
                     borderRadius: "10px",
-                    color: checked.verizonWireless ? "white" : "#797979",
+                    color: checked["Verizon Wireless"] ? "white" : "#797979",
                     border: "1px solid #32ABB1",
                   }}
                   control={
                     <Checkbox
-                      checked={checked.verizonWireless}
+                      checked={checked["Verizon Wireless"]}
                       onChange={handleChangeCheck}
-                      name="verizonWireless"
+                      name="Verizon Wireless"
                     />
                   }
                   label="Verizon Wireless"
                 />
                 <FormControlLabel
                   sx={{
-                    background: checked.telnyxOCN
+                    background: checked.telnyx
                       ? "linear-gradient(90deg, #32ABB1 0%, #3286BD 100%)"
                       : "white",
                     width: "240px",
@@ -593,21 +617,21 @@ const PhoneScrube = () => {
                     pr: 1,
                     pl: 3,
                     borderRadius: "10px",
-                    color: checked.telnyxOCN ? "white" : "#797979",
+                    color: checked.telnyx ? "white" : "#797979",
                     border: "1px solid #32ABB1",
                   }}
                   control={
                     <Checkbox
-                      checked={checked.telnyxOCN}
+                      checked={checked.telnyx}
                       onChange={handleChangeCheck}
-                      name="telnyxOCN"
+                      name="telnyx"
                     />
                   }
                   label="Telnyx OCN"
                 />
                 <FormControlLabel
                   sx={{
-                    background: checked.dncTrolls
+                    background: checked.troll
                       ? "linear-gradient(90deg, #32ABB1 0%, #3286BD 100%)"
                       : "white",
                     width: "240px",
@@ -616,17 +640,17 @@ const PhoneScrube = () => {
                     pr: 1,
                     pl: 3,
                     borderRadius: "10px",
-                    color: checked.dncTrolls ? "white" : "#797979",
+                    color: checked.troll ? "white" : "#797979",
                     border: "1px solid #32ABB1",
                   }}
                   control={
                     <Checkbox
-                      checked={checked.dncTrolls}
+                      checked={checked.troll}
                       onChange={handleChangeCheck}
-                      name="dncTrolls"
+                      name="troll"
                     />
                   }
-                  label="DNC Trolls"
+                  label="DNC Troll"
                 />
               </FormGroup>
             </Box>
@@ -644,7 +668,7 @@ const PhoneScrube = () => {
 
       <ScrubCardTable
         title={"Scrub History"}
-        desc={"View and manage your previous scrub jobs"}
+        desc={"View and manage your previous scrub history"}
         filters={
           <>
             <FilterSelect
@@ -690,7 +714,7 @@ const PhoneScrube = () => {
                     href={`/scruber/history-scruber-result?id=${row.jobId}`}
                     style={{
                       padding: 0,
-                      margin: 1,
+                      marginTop: "5px",
                       width: "fit-content",
                       minWidth: "10px",
                     }}
@@ -780,9 +804,23 @@ const PhoneScrube = () => {
                     {!exists ? "Match" : "Clear"}
                   </Typography>
                   <Typography
-                    sx={{ fontSize: "14px", mt: 1, textAlign: "center" }}
+                    sx={{ fontSize: "13px", mt: 1, textAlign: "center" }}
                   >
-                    {item.name}
+                    {item.name === "troll"
+                      ? "DNC Trolls"
+                      : item.name === "telnyx"
+                      ? "Telnyx OCN"
+                      : item.name === "federalDNC"
+                      ? "Federal DNC"
+                      : item.name === "dnc_complainers"
+                      ? "DNC Complainers"
+                      : item.name === "state_dnc"
+                      ? "State DNC"
+                      : item.name === "tcpa"
+                      ? "TCPA/TCPA Troll"
+                      : item.name === "Verizon Wireless"
+                      ? "Verizon Wireless"
+                      : item.name}
                   </Typography>
                 </Box>
               );

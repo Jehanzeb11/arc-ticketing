@@ -114,13 +114,12 @@ export default function TableSelectFilterMainNew({
                 alignItems: "center",
                 gap: 1,
                 color:
-                  name === "Priority"
+                  name === "Priority" && option.value !== "All"
                     ? getPriorityColor(option.label)
                     : selected &&
                       popperClassName?.split(" ")[0] == "ticket-table-dropdown"
                     ? "#3F8CFF"
                     : "inherit",
-
                 fontWeight: selected ? 600 : 400,
                 ...menuItemSx,
               }}

@@ -276,8 +276,9 @@ export default function AdminProfilePage({ title }) {
                 background: "#3F8CFF08",
                 marginTop: "50px",
               }}
+              className="profile-form-inputs"
             >
-              <Grid size={{ xs: 12, lg: 6 }} sx={{ mb: "40px" }}>
+              <Grid size={{ xs: 6 }} sx={{ mb: "40px" }}>
                 <GlobalInput
                   label="Full Name"
                   type="text"
@@ -288,7 +289,7 @@ export default function AdminProfilePage({ title }) {
                   className="primary-border"
                 />
               </Grid>
-              <Grid size={{ xs: 12, lg: 6 }}>
+              <Grid size={{ xs: 6 }}>
                 <GlobalInput
                   label="Email Address"
                   type="email"
@@ -299,7 +300,7 @@ export default function AdminProfilePage({ title }) {
                   className="primary-border"
                 />
               </Grid>
-              <Grid size={{ xs: 12, lg: 6 }}>
+              <Grid size={{ xs: 6 }}>
                 <GlobalInput
                   label="Phone Number"
                   type="tel"
@@ -322,7 +323,7 @@ export default function AdminProfilePage({ title }) {
                 />
               </Grid> */}
 
-              <Grid size={{ lg: 6, xs: 12 }}>
+              <Grid size={{ xs: 6 }}>
                 <FormSelect
                   label="Role"
                   name="role"

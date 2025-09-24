@@ -23,7 +23,7 @@ export default function UniBoxViewHeader({
             <ArrowBack />
           </IconButton>
           <Typography sx={{ fontWeight: "600", fontSize: "30px" }}>
-            Back to Unibox
+            Back to Tickets
           </Typography>
         </Box>
       </Grid>

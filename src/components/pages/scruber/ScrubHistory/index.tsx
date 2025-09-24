@@ -122,7 +122,10 @@ const ScrubHistory = () => {
 
   const data = scrubData?.history?.map((item) => ({
     jobId: item.jobId,
-    scrubHistory: item?.createdAt,
+    scrubHistory:
+      item?.createdAt.split("T")[0] +
+      " " +
+      new Date(item?.createdAt).toTimeString().split(" ")[0],
     uploadedFile: "cold_leads.csv",
     scrubAgainst: JSON.parse(item?.filters)?.join(", "),
     totalNumbers: item.totalNumbers,
@@ -168,7 +171,7 @@ const ScrubHistory = () => {
 
       <Box mt={4} mb={2}>
         <ScrubCardTable
-          title={"Scrub History"}
+          title={"Phone Number Scrubber"}
           desc={"View and manage your previous scrub jobs"}
           filters={
             <>
@@ -226,7 +229,7 @@ const ScrubHistory = () => {
                       href={`/scruber/history-scruber-result?id=${row.jobId}`}
                       style={{
                         padding: 0,
-                        margin: 1,
+                        marginTop: "5px",
                         width: "fit-content",
                         minWidth: "10px",
                       }}

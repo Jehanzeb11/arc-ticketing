@@ -168,8 +168,7 @@ export default function DeletedUniBoxTickets() {
     },
   });
 
- const dateFormat = (isoDate: string) => {
-
+  const dateFormat = (isoDate: string) => {
     const date = new Date(isoDate);
 
     const formatted = date.toLocaleString("en-GB", {
@@ -179,17 +178,16 @@ export default function DeletedUniBoxTickets() {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
-      timeZone: "UTC"  // keep this if you want to preserve original UTC time
+      timeZone: "UTC", // keep this if you want to preserve original UTC time
     });
 
-    console.log(formatted);  // ➜ "19/09/25, 19:16"
+    console.log(formatted); // ➜ "19/09/25, 19:16"
 
     // Replace `/` and `,` to match your desired format
     const cleanFormat = formatted.replace(/\//g, "-").replace(",", "");
 
     return cleanFormat;
-
-  }
+  };
   const archiveTicketMutation = useMutation({
     mutationFn: ({ ticketId, archived }: any) => {
       const ticketData = uniboxTickets?.find((t: any) => t.id === ticketId);
@@ -381,7 +379,9 @@ export default function DeletedUniBoxTickets() {
           </div>
         ),
         Created: dateFormat(ticket.created_at) || "N/A",
-        LastReply: ticket.replies[0] ? dateFormat(ticket.replies[0]?.created_at) : "N/A",
+        LastReply: ticket.replies[0]
+          ? dateFormat(ticket.replies[0]?.created_at)
+          : "N/A",
       }))) ||
     [];
 
@@ -543,10 +543,13 @@ export default function DeletedUniBoxTickets() {
             mb: 2,
             borderRadius: 3,
           }}
-          spacing={2}
+          spacing={1.7}
         >
           {filters.map((filter: any, index: number) => (
-            <Grid size={{ lg: 1.4, xs: 12 }} key={index}>
+            <Grid
+              size={{ xl: 1.4, lg: 2.7, md: 5.75, sm: 6, xs: 5.5 }}
+              key={index}
+            >
               <TableSelectFilterMainNew
                 value={filter.value || ""}
                 name={filter.name}
@@ -568,7 +571,7 @@ export default function DeletedUniBoxTickets() {
             locale="en-US"
             format="dd/MM/yyyy"
           />
-          <Grid size={{ lg: 3, xs: 12 }}>
+          <Grid size={{ xl: 2.8, lg: 6, xs: 12 }}>
             <Box
               sx={{ display: "flex", gap: "10px" }}
               className="ticket-button"

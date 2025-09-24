@@ -114,18 +114,19 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
 
   const filters = [
     {
-      name: "priority",
+      name: "Priority",
       value: filterValues.priority,
-      className: "priority-filter",
+      className: "table-dropdown-select",
       filterOptions: [
         { value: "All", label: "All Priority" },
         { value: "Low", label: "Low" },
-        { value: "Medium", label: " Medium" },
-        { value: "High", label: " High" },
+        { value: "Medium", label: "Medium" },
+        { value: "High", label: "High" },
       ],
+      popperClassName: "ticket-table-dropdown",
     },
     {
-      name: "status",
+      name: "Status",
       value: filterValues.status,
       className: "department-filter",
       filterOptions: [

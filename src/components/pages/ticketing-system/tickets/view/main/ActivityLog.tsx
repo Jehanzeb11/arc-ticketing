@@ -177,7 +177,9 @@ const ActivityLog = ({ activityData }) => {
                   sx={{ fontSize: 16, color: "#666", mr: 0.5 }}
                 />
                 <Typography sx={{ color: "#666", fontSize: "12px" }}>
-                  {new Date(activity.updatedAt).toDateString()}
+                  {new Date(activity.updatedAt).toDateString() +
+                    " " +
+                    new Date(activity.updatedAt).toLocaleTimeString()}
                 </Typography>
               </Box>
               {/* {activity.fileName && (

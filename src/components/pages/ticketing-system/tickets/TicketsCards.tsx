@@ -76,16 +76,16 @@ export default function TicketsCards({ ticketKpiStats }) {
     <Grid
       container
       sx={{
-        py: 3,
-        px: 4,
-        gap: 1.8,
+        p: 3,
+        gap: 1,
         backgroundColor: "#E9EAF9",
         mt: 4,
         borderRadius: "20px !important",
       }}
+      size={{ xs: 12 }}
     >
       {cards.map((card, index) => (
-        <Grid size={{ xl: 2.9, lg: 5.5, xs: 12, md: 12 }} key={index}>
+        <Grid size={{ xl: 2.9, lg: 5.7, xs: 12, md: 5.8 }} key={index}>
           <Card
             sx={{
               background: `white`,
@@ -118,7 +118,7 @@ export default function TicketsCards({ ticketKpiStats }) {
                   </Typography>
                   <Typography
                     variant="h4"
-                    fontSize={30}
+                    fontSize={28}
                     fontWeight={600}
                     color="#3E3E3E"
                   >

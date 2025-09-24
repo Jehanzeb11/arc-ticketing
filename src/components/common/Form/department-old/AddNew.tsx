@@ -62,6 +62,7 @@ export default function AddNewEntry({
           <GlobalInput
             type="text"
             label="Department Name"
+            placeholder="Enter department name"
             {...register("Name", { required: "Department Name is required" })}
           />
           {errors.Name && (
@@ -70,7 +71,7 @@ export default function AddNewEntry({
             </Typography>
           )}
         </Grid>
-        
+
         <Grid size={{ xs: 6 }}>
           <Controller
             name="Status"
@@ -99,6 +100,7 @@ export default function AddNewEntry({
           <GlobalInput
             type="text"
             label="Description"
+            placeholder="Enter description"
             multiline
             rows={6}
             {...register("Description", {

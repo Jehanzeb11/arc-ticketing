@@ -541,11 +541,11 @@ export default function UniBoxTickets() {
             mb: 2,
             borderRadius: 3,
           }}
-          spacing={2}
+          spacing={1.7}
         >
           {filters.map((filter: any, index: number) => (
             <Grid
-              size={{ xl: 1.54, lg: 2.5, md: 5, sm: 6, xs: 5.5 }}
+              size={{ xl: 1.4, lg: 2.7, md: 5.75, sm: 6, xs: 5.5 }}
               key={index}
             >
               <TableSelectFilterMainNew
@@ -570,7 +570,7 @@ export default function UniBoxTickets() {
             maxDate={new Date(2025, 11, 31)}
           />
 
-          <Grid size={{ xl: 2.5, lg: 3, xs: 12 }}>
+          <Grid size={{ xl: 2.8, lg: 6, xs: 12 }}>
             <Box
               sx={{ display: "flex", gap: "10px" }}
               className="ticket-button"
@@ -609,7 +609,7 @@ export default function UniBoxTickets() {
         setOpen={setAddModal}
         customStyle="create-ticket-modal"
         modalHeader="true"
-        modalTitle="Create Ticket"
+        modalTitle="Add New Ticket"
         iconSrc={createModalIcon}
       >
         <CreateTicket

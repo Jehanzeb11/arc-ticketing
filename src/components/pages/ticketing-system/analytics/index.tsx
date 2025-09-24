@@ -36,8 +36,10 @@ function Analytics() {
     status: "All",
   });
 
-  const canFilterAnalytics = usePermission("Filter Analytics"); 
-  const canViewAgentsPerformance = usePermission("View Agent Performance Metrics");
+  const canFilterAnalytics = usePermission("Filter Analytics");
+  const canViewAgentsPerformance = usePermission(
+    "View Agent Performance Metrics"
+  );
 
   const { data: departments } = useQuery({
     queryKey: ["departments"],
@@ -199,61 +201,66 @@ function Analytics() {
   return (
     <div className="main-analytics">
       <AnalyticsHeader />
-      {canFilterAnalytics && <Grid
-        container
-        sx={{
-          alignItems: "center",
-          background: "#fff",
-          p: 1.5,
-          my: "20px",
-          borderRadius: 3,
-        }}
-        spacing={2}
-      >
-        {filters.map((filter: any, index: number) => (
-          <Grid size={{ lg: 1.75, xs: 12 }} key={index}>
-            <TableSelectFilterMainNew
-              value={filter.value || ""}
-              name={filter.name}
-              options={filter.filterOptions}
-              popperClassName={filter.className}
-              defaultText="All"
-              className="table-dropdown-select"
-              onChange={handleFilterChange}
-              sx={{ border: "1px solid #DBDBDB", borderRadius: "30px" }}
+      {canFilterAnalytics && (
+        <Grid
+          container
+          sx={{
+            alignItems: "center",
+            background: "#fff",
+            p: 1.7,
+            my: "20px",
+            borderRadius: 3,
+          }}
+          spacing={1.5}
+        >
+          {filters.map((filter: any, index: number) => (
+            <Grid size={{ xl: 1.5, lg: 3, md: 3, xs: 6 }} key={index}>
+              <TableSelectFilterMainNew
+                value={filter.value || ""}
+                name={filter.name}
+                options={filter.filterOptions}
+                popperClassName={filter.className}
+                defaultText="All"
+                className="table-dropdown-select"
+                onChange={handleFilterChange}
+                sx={{ border: "1px solid #DBDBDB", borderRadius: "30px" }}
+              />
+            </Grid>
+          ))}
+
+          <Grid size={{ xl: 1.7, lg: 2.3, md: 3.8, xs: 6 }}>
+            <ReuseableDatePicker
+              value={selectedDate}
+              onChange={(range) => {
+                console.log("Final range:", range);
+                setSelectedDate(range);
+              }}
+              minDate={new Date(2023, 0, 1)}
+              maxDate={new Date(2025, 11, 31)}
             />
           </Grid>
-        ))}
 
-        <Grid size={{ lg: 1.6, xs: 12 }}>
-          <ReuseableDatePicker
-            value={selectedDate}
-            onChange={(range) => {
-              console.log("Final range:", range);
-              setSelectedDate(range);
-            }}
-            minDate={new Date(2023, 0, 1)}
-            maxDate={new Date(2025, 11, 31)}
-          />
+          <Grid size={{ lg: 4, md: 6, xs: 6 }}>
+            <Box
+              sx={{ display: "flex", gap: "10px" }}
+              className="ticket-button"
+            >
+              <CustomButton
+                text="Apply filter"
+                customClass={"btn-outlined"}
+                onClick={handleApplyFilter}
+              />
+              <Button className="reset-button" onClick={handleResetFilter}>
+                <Image src={resetIcon} alt="reset-icon" />
+                Reset Filter
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
-
-        <Grid size={{ lg: 3, xs: 12 }}>
-          <Box sx={{ display: "flex", gap: "10px" }} className="ticket-button">
-            <CustomButton
-              text="Apply filter"
-              customClass={"btn-outlined"}
-              onClick={handleApplyFilter}
-            />
-            <Button className="reset-button" onClick={handleResetFilter}>
-              <Image src={resetIcon} alt="reset-icon" />
-              Reset Filter
-            </Button>
-          </Box>
-        </Grid>
-      </Grid>}
+      )}
       <Grid size={{ lg: 12, xs: 12 }} container spacing={2} sx={{ mb: "20px" }}>
         <Grid
-          size={{ lg: 3, xs: 12 }}
+          size={{ lg: 3, md: 6, xs: 12 }}
           sx={{
             padding: "20px 15px 20px 40px",
             background: "#fff",
@@ -302,7 +309,7 @@ function Analytics() {
           </Typography>
         </Grid>
         <Grid
-          size={{ lg: 3, xs: 12 }}
+          size={{ lg: 3, md: 6, xs: 12 }}
           sx={{
             padding: "20px 15px 20px 40px",
             background: "#fff",
@@ -351,7 +358,7 @@ function Analytics() {
           </Typography>
         </Grid>
         <Grid
-          size={{ lg: 3, xs: 12 }}
+          size={{ lg: 3, md: 6, xs: 12 }}
           sx={{
             padding: "20px 15px 20px 40px",
             background: "#fff",
@@ -400,7 +407,7 @@ function Analytics() {
           </Typography>
         </Grid>
         <Grid
-          size={{ lg: 3, xs: 12 }}
+          size={{ lg: 3, md: 6, xs: 12 }}
           sx={{
             padding: "20px 15px 20px 40px",
             background: "#fff",
@@ -472,7 +479,9 @@ function Analytics() {
           pageSize={10}
         />
       </div>
-     {canViewAgentsPerformance && <AnalyticsProgressBarCard analyticsData={analytics || []} />}
+      {canViewAgentsPerformance && (
+        <AnalyticsProgressBarCard analyticsData={analytics || []} />
+      )}
     </div>
   );
 }

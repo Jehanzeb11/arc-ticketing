@@ -65,7 +65,11 @@ export default function FileUploader({ handleFileUpload }: any) {
         <Stack direction="row" spacing={2} alignItems="center">
           <CloudUploadIcon sx={{ fontSize: 40, color: "#2BBBAC" }} />
           <Box>
-            <Typography variant="body1" fontWeight="medium">
+            <Typography
+              variant="body1"
+              fontWeight="medium"
+              sx={{ color: "#183C58" }}
+            >
               Drag & drop your file here
             </Typography>
             <Typography variant="body2" color="text.secondary">

@@ -360,7 +360,7 @@ const DepartmentPage = () => {
           />
         </Grid>
         {filters.map((filter, index) => (
-          <Grid size={{ lg: 2.5, xs: 12 }} key={index}>
+          <Grid size={{ xl: 2.5, lg: 2.2, xs: 3 }} key={index}>
             <TableSelectFilterMainNew
               value={filter.value || ""}
               name={filter.name}
@@ -373,7 +373,7 @@ const DepartmentPage = () => {
             />
           </Grid>
         ))}
-        <Grid size={{ lg: 3, xs: 12 }}>
+        <Grid size={{ xl: 3, lg: 3.5, xs: 6 }}>
           <Box sx={{ display: "flex", gap: "10px" }} className="ticket-button">
             <CustomButton
               text="Apply Filter"

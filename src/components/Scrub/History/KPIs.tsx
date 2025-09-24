@@ -8,7 +8,7 @@ import icon5 from "@/assets/scruber/icons/5.png";
 import icon6 from "@/assets/scruber/icons/6.png";
 import icon7 from "@/assets/scruber/icons/7.svg";
 import icon8 from "@/assets/scruber/icons/8.png";
-import icon9 from "@/assets/scruber/icons/7.svg";
+import icon9 from "@/assets/scruber/icons/ocn-icon.svg";
 import icon10 from "@/assets/scruber/icons/10.png";
 import Image from "next/image";
 const ScruberKPIsResult = ({
@@ -127,7 +127,7 @@ const ScruberKPIsResult = ({
             variant="body1"
             sx={{ fontWeight: "400", fontSize: "13px" }}
           >
-            TCPA Matches
+            TCPA / TCPA Troll
           </Typography>
         </Box>
       </Grid>

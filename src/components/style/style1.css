@@ -1789,3 +1789,12 @@ button.calling-popup-btn {
   min-width: 100% !important;
 
 }
+
+@media (max-width: 1275px) {
+
+  .profile-form-inputs {
+    padding: 30px 40px !important;
+    margin-top: 30px !important;
+  }
+
+}

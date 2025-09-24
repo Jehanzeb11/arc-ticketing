@@ -100,8 +100,9 @@ const AllUsers = () => {
     { key: "profile", title: "Profile", filterable: false },
     { key: "fullName", title: "Full Name", filterable: false },
     { key: "email", title: "Email", filterable: false },
-    { key: "role", title: "Role", filterable: false },
+    { key: "role_name", title: "Role", filterable: false },
     { key: "phone", title: "Phone", filterable: false },
+    { key: "department_name", title: "Department", filterable: false },
     { key: "status", title: "Status", filterable: false },
   ];
 
@@ -111,12 +112,14 @@ const AllUsers = () => {
       users?.map((user) => ({
         user_id: user.user_id,
         role_id: user.roleId,
+        role_name: user.role_name,
         department_id: user.departmentId,
+        department_name: user.departments[0] || "N/A",
         profile: (
           <Box
             sx={{
-              width: "49px",
-              height: "49px",
+              width: "42px",
+              height: "42px",
               borderRadius: "39.355px",
               border: "1px solid #E3E3E3",
               backgroundColor: "#D9D9D9",
@@ -128,8 +131,8 @@ const AllUsers = () => {
             <Image
               src={user.picture ? imageUrl + user.picture : AssigneeIcon}
               alt="Assignee"
-              width={45}
-              height={45}
+              width={30}
+              height={30}
               unoptimized
             />
           </Box>
@@ -139,7 +142,7 @@ const AllUsers = () => {
         role: user.roleId || "--",
         department: user.phone || "--",
         status: (
-          <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <Typography
               sx={{
                 color: user.status === "Active" ? "#3286BD" : "#000",
@@ -434,7 +437,7 @@ const AllUsers = () => {
       {usePermission("Search & Filter Users") && (
         <Grid
           container
-          spacing={2}
+          spacing={1.7}
           sx={{
             mb: "20px",
             backgroundColor: "#fff",
@@ -442,7 +445,7 @@ const AllUsers = () => {
             borderRadius: "10px",
           }}
         >
-          <Grid size={{ lg: 4, xs: 12 }}>
+          <Grid size={{ lg: 4, md: 6, xs: 12 }}>
             <Search
               searchQuery={searchQuery}
               handleSearch={handleSearch}
@@ -450,7 +453,7 @@ const AllUsers = () => {
             />
           </Grid>
           {filters.map((filter, index) => (
-            <Grid size={{ lg: 1.5, xs: 12 }} key={index}>
+            <Grid size={{ xl: 1.5, lg: 2.5, md: 3, sm: 4, xs: 5 }} key={index}>
               <TableSelectFilterMainNew
                 value={filter.value || ""}
                 name={filter.name}
@@ -463,7 +466,7 @@ const AllUsers = () => {
               />
             </Grid>
           ))}
-          <Grid size={{ lg: 3, xs: 12 }}>
+          <Grid size={{ xl: 3, lg: 4, md: 6, xs: 12 }}>
             <Box
               sx={{ display: "flex", gap: "10px" }}
               className="ticket-button"
