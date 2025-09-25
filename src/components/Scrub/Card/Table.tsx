@@ -10,12 +10,15 @@ const ScrubCardTable = ({ children, ...props }) => {
         borderRadius: "12px",
         mb: 4,
       }}
+      className="scrub-table"
     >
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          gap: "12px",
+          flexWrap: "wrap",
         }}
       >
         <Box>
@@ -29,7 +32,12 @@ const ScrubCardTable = ({ children, ...props }) => {
             {props.desc}
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", gap: "16px" }}>{props.filters}</Box>
+        <Box
+          sx={{ display: "flex", gap: "14px", fontSize: "14px" }}
+          className="scrub-filters"
+        >
+          {props.filters}
+        </Box>
       </Box>
 
       {children}

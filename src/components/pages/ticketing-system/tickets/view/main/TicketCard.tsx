@@ -108,7 +108,7 @@ const TicketCard = ({
               sx={{
                 color: `${
                   priority === "High"
-                    ? "var(--pri-color)"
+                    ? "#45A3E5"
                     : priority === "Medium"
                     ? "#FDC748"
                     : priority === "Low"
@@ -122,7 +122,7 @@ const TicketCard = ({
                 border: "1px solid transparent",
                 backgroundColor:
                   priority === "High"
-                    ? "rgba(50, 170, 177, 0.15)"
+                    ? "#44A6E426"
                     : priority === "Low"
                     ? "rgba(136, 136, 136, 0.15)"
                     : priority === "Urgent"

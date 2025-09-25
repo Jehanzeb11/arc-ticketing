@@ -174,7 +174,14 @@ const ScrubHistory = () => {
           title={"Phone Number Scrubber"}
           desc={"View and manage your previous scrub jobs"}
           filters={
-            <>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
               <ReuseableDatePicker
                 value={selectedDate}
                 onChange={(range) => {
@@ -203,6 +210,7 @@ const ScrubHistory = () => {
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
+                  width: "100%",
                 }}
               >
                 <SearchOutlined sx={{ color: "#787878", fontSize: "28px" }} />
@@ -210,10 +218,15 @@ const ScrubHistory = () => {
                 <input
                   type="text"
                   placeholder="Search Phone Number"
-                  style={{ border: "none", outline: "none", fontSize: "16px" }}
+                  style={{
+                    border: "none",
+                    outline: "none",
+                    fontSize: "16px",
+                    width: "100%",
+                  }}
                 />
               </Box>
-            </>
+            </Box>
           }
         >
           <Box sx={{ mt: 3 }}>

@@ -20,14 +20,14 @@ const ScruberKPIsResult = ({
   return (
     <Grid
       container
-      spacing={2}
+      spacing={1.5}
       mt={4}
       p={3}
       bgcolor={"#E9EAF9"}
       sx={{ borderRadius: "12px" }}
     >
       <Grid
-        size={2.4}
+        size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -53,7 +53,7 @@ const ScruberKPIsResult = ({
         </Box>
       </Grid>
       <Grid
-        size={2.4}
+        size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -80,7 +80,7 @@ const ScruberKPIsResult = ({
         </Box>
       </Grid>
       <Grid
-        size={2.4}
+        size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -106,7 +106,7 @@ const ScruberKPIsResult = ({
         </Box>
       </Grid>
       <Grid
-        size={2.4}
+        size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -132,7 +132,7 @@ const ScruberKPIsResult = ({
         </Box>
       </Grid>
       <Grid
-        size={2.4}
+        size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -158,7 +158,7 @@ const ScruberKPIsResult = ({
         </Box>
       </Grid>
       <Grid
-        size={2.4}
+        size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -184,7 +184,7 @@ const ScruberKPIsResult = ({
         </Box>
       </Grid>
       <Grid
-        size={2.4}
+        size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -210,7 +210,7 @@ const ScruberKPIsResult = ({
         </Box>
       </Grid>
       <Grid
-        size={2.4}
+        size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -236,7 +236,7 @@ const ScruberKPIsResult = ({
         </Box>
       </Grid>
       <Grid
-        size={2.4}
+        size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -251,7 +251,7 @@ const ScruberKPIsResult = ({
             variant="h4"
             sx={{ fontWeight: "500", mb: 0.5, fontSize: "24px" }}
           >
-            {validatorCounts && validatorCounts["Telnyx OCN"]}
+            {(validatorCounts && validatorCounts.telnyx) || 0}
           </Typography>
           <Typography
             variant="body1"
@@ -262,7 +262,7 @@ const ScruberKPIsResult = ({
         </Box>
       </Grid>
       <Grid
-        size={2.4}
+        size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -277,7 +277,7 @@ const ScruberKPIsResult = ({
             variant="h4"
             sx={{ fontWeight: "500", mb: 0.5, fontSize: "24px" }}
           >
-            {validatorCounts && validatorCounts["DNC Trolls"]}
+            {validatorCounts && validatorCounts.troll}
           </Typography>
           <Typography
             variant="body1"

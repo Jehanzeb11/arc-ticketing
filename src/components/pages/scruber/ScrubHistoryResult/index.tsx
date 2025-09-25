@@ -38,7 +38,7 @@ const ScrubHistoryResult = () => {
       label: "Status",
       sortable: true,
       render: (value: string) =>
-        value === "valid" ? (
+        value === "good" ? (
           <Chip
             label="Valid"
             sx={{
@@ -58,7 +58,7 @@ const ScrubHistoryResult = () => {
           />
         ) : (
           <Chip
-            label="TCPA Match"
+            label="Null"
             sx={{
               backgroundColor: "#FEF4FE",
               color: "#FF5BFF",
@@ -121,6 +121,7 @@ const ScrubHistoryResult = () => {
                   ? "#E0E0E0"
                   : "#FFEAEA",
               fontWeight: 500,
+              m: 0.5,
             }}
           />
         ))}
@@ -171,6 +172,7 @@ const ScrubHistoryResult = () => {
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
+                  width: "100%",
                 }}
               >
                 <SearchOutlined sx={{ color: "#787878", fontSize: "28px" }} />

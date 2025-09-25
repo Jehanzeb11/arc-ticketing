@@ -20,7 +20,7 @@ const KPIsHistory = ({ data }) => {
       sx={{ borderRadius: "12px" }}
     >
       <Grid
-        size={3}
+        size={{ xl: 3, lg: 3, md: 6, sm: 12, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -46,7 +46,7 @@ const KPIsHistory = ({ data }) => {
         </Box>
       </Grid>
       <Grid
-        size={3}
+        size={{ xl: 3, lg: 3, md: 6, sm: 12, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -72,7 +72,7 @@ const KPIsHistory = ({ data }) => {
         </Box>
       </Grid>
       <Grid
-        size={3}
+        size={{ xl: 3, lg: 3, md: 6, sm: 12, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",
@@ -98,7 +98,7 @@ const KPIsHistory = ({ data }) => {
         </Box>
       </Grid>
       <Grid
-        size={3}
+        size={{ xl: 3, lg: 3, md: 6, sm: 12, xs: 12 }}
         sx={{
           backgroundColor: "white",
           borderRadius: "23px",

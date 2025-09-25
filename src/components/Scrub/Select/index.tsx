@@ -28,7 +28,7 @@ const FilterSelect: React.FC<FilterSelectProps> = ({
   return (
     <FormControl
       sx={{
-        minWidth: 125,
+        minWidth: 175,
         "& .MuiOutlinedInput-root": {
           borderRadius: "9999px",
           border: "1.5px solid #C4C4C4",
@@ -69,7 +69,11 @@ const FilterSelect: React.FC<FilterSelectProps> = ({
         }
         renderValue={(selected) => {
           if (!selected) {
-            return <span style={{ color: "#757575" }}>{placeholder}</span>;
+            return (
+              <span style={{ color: "#757575", fontSize: "14px" }}>
+                {placeholder}
+              </span>
+            );
           }
           const option = options.find((opt) => opt.value === selected);
           return option ? option.label : selected;

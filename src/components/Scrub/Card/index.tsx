@@ -10,6 +10,7 @@ const ScrubCard = ({ children, ...props }) => {
         borderRadius: "12px",
         mb: 4,
       }}
+      className="scrub-card"
     >
       <Box>
         <Typography

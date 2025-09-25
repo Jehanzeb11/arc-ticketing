@@ -6,7 +6,7 @@ import React from "react";
 const PhoneScruber = () => {
   return (
     <DefaultLayout>
-      <DashboardHeader title="Phone Number Scrubber" />
+      <DashboardHeader title="Phone Scrub" />
       <PhoneScrube />
     </DefaultLayout>
   );

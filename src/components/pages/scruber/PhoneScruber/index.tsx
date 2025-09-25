@@ -90,8 +90,8 @@ const PhoneScrube = () => {
 
     socket.on("scrubJobCompleted", (data) => {
       console.log("🟢 Scrub Job Completed:", data);
-      setOpen(true);
       setNumberStatus(data?.numbers?.[0]?.validator || null);
+      tab === 0 && setOpen(true);
     });
 
     socket.on("registerUser", (notification) => {
@@ -341,7 +341,10 @@ const PhoneScrube = () => {
         title={"Choose Scrub Type"}
         desc={"Select your preferred scrubbing method"}
       >
-        <Box sx={{ display: "flex", gap: 5, mt: 6, mb: 8 }}>
+        <Box
+          sx={{ display: "flex", gap: 4, mt: 6, mb: 8 }}
+          className="scrub-tabs"
+        >
           <section
             className={`card-scruber ${tab === 0 ? "active" : ""}`}
             onClick={() => setTab(0)}
@@ -354,7 +357,10 @@ const PhoneScrube = () => {
                 height: "100%",
               }}
             >
-              <Box sx={{ display: "flex", gap: "22px", alignItems: "start" }}>
+              <Box
+                sx={{ display: "flex", gap: "22px", alignItems: "start" }}
+                className="scrub-tab"
+              >
                 <Image
                   src={singleSeach}
                   width={50}
@@ -400,6 +406,7 @@ const PhoneScrube = () => {
                 flexDirection: "column",
                 height: "100%",
               }}
+              className={"scrub-tab"}
             >
               <Box sx={{ display: "flex", gap: "22px" }}>
                 <Image
@@ -670,7 +677,14 @@ const PhoneScrube = () => {
         title={"Scrub History"}
         desc={"View and manage your previous scrub history"}
         filters={
-          <>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
             <FilterSelect
               value={status}
               onChange={handleChange}
@@ -689,17 +703,23 @@ const PhoneScrube = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: 1,
+                width: "100%",
               }}
             >
-              <SearchOutlined sx={{ color: "#787878", fontSize: "28px" }} />
+              <SearchOutlined sx={{ color: "#787878", fontSize: "25px" }} />
 
               <input
                 type="text"
                 placeholder="Search Phone Number"
-                style={{ border: "none", outline: "none", fontSize: "16px" }}
+                style={{
+                  border: "none",
+                  outline: "none",
+                  fontSize: "16px",
+                  width: "100%",
+                }}
               />
             </Box>
-          </>
+          </Box>
         }
       >
         <Box sx={{ mt: 3 }}>
