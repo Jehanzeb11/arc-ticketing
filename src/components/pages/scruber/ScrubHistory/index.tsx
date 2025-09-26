@@ -14,13 +14,20 @@ import deleteIcon from "@/assets/scruber/icons/delete.png";
 import Image from "next/image";
 import ReuseableDatePicker from "@/components/common/react-day-date-picker/ReuseableDatePicker";
 import MyScruberModal from "@/components/Scrub/Modal";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
 import Link from "next/link";
 import { usePermission } from "@/hooks/usePermission";
+import toast from "react-hot-toast";
+import MyModal from "@/components/common/Modal";
+import DeleteModalIcon from "@/assets/icons/modal/deleteModalIcon2.svg";
+import CustomButton from "@/components/common/Button/Button";
+import deleteModalDeleteIcon from "@/assets/icons/users/delete-icon-2.png";
 
 const ScrubHistory = () => {
-  const { callApi, scrubHistory }: any = useApiStore();
+  const queryClient = useQueryClient();
+
+  const { callApi, scrubHistory, deleteJobHistory }: any = useApiStore();
   const canDownloadHistory = usePermission("Download history");
   const canViewHistory = usePermission("View history");
   const canDeleteHistory = usePermission("Delete History");
@@ -42,6 +49,20 @@ const ScrubHistory = () => {
     null,
   ]);
   const [numberStatus, setNumberStatus] = useState(null);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const deleteJobMutation = useMutation({
+    mutationFn: (data) => callApi(deleteJobHistory, { id: data }),
+    onSuccess: (res: any) => {
+      toast.success("Job deleted successfully!");
+      setDeleteModal(false);
+      queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
+    },
+    onError: (error: any) => {
+      toast.error("Failed to delete job: " + error.message);
+    },
+  });
 
   const handleChange = (event: any) => {
     setStatus(event.target.value);
@@ -139,6 +160,7 @@ const ScrubHistory = () => {
       return statusMatch && queryMatch;
     })
     ?.map((item) => ({
+      id: item.id,
       jobId: item.jobId,
       scrubHistory:
         item?.createdAt.split("T")[0] +
@@ -304,6 +326,10 @@ const ScrubHistory = () => {
                           minWidth: "10px",
                         }}
                         title="Delete"
+                        onClick={() => {
+                          setSelectedId(row.id);
+                          setDeleteModal(true);
+                        }}
                       >
                         <Image
                           src={deleteIcon}
@@ -370,6 +396,43 @@ const ScrubHistory = () => {
           </Box>
         </Box>
       </MyScruberModal>
+
+      <MyModal
+        open={deleteModal}
+        setOpen={setDeleteModal}
+        customStyle="archive-modal"
+      >
+        <Box sx={{ display: "flex", gap: "15px", alignItems: "center", mb: 2 }}>
+          <Image src={DeleteModalIcon} alt="delete-modal-icon" width={50} />
+          <Typography variant="h6">Confirm Deletion</Typography>
+        </Box>
+        <Typography mb={2}>
+          Are you sure you want to permanently delete this record? This action
+          cannot be undone.
+        </Typography>
+        <Box sx={{ display: "flex", gap: "15px" }} className="ticket-button">
+          <CustomButton
+            type="button"
+            text="Cancel"
+            style={{ padding: "10px 36px", width: "unset" }}
+            btntrasnparent={true}
+            onClick={() => {
+              setDeleteModal(false);
+            }}
+          />
+          <CustomButton
+            btnDelete={true}
+            text="Delete"
+            icon={deleteModalDeleteIcon}
+            style={{ padding: "10px 36px", width: "unset" }}
+            onClick={() => {
+              if (selectedId) {
+                deleteJobMutation.mutate(selectedId);
+              }
+            }}
+          />
+        </Box>
+      </MyModal>
     </Box>
   );
 };

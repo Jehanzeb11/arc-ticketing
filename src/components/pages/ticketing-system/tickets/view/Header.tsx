@@ -51,9 +51,9 @@ export default function UniBoxViewHeader({
               {/* <Button text='Open' btntrasnparent /> */}
               <Button
                 text="Apply filter"
-                btntrasnparent
+                customClass="btn-outlined"
                 onClick={onApplyFilter}
-                style={{ width: "170px" }}
+                style={{ width: "170px", backgroundColor: "unset" }}
               />
             </Box>
           </Grid>
