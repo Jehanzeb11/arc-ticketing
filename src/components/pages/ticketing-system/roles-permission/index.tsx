@@ -185,6 +185,8 @@ const RolesAndPermission = () => {
                 background:
                   role.status === "Active" ? "#3286BD15" : "#24242415",
                 borderRadius: "100px",
+                width: "80px",
+                textAlign: "center",
               }}
             >
               {role.status}

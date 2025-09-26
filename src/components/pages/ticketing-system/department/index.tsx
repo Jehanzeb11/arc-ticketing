@@ -132,6 +132,8 @@ const DepartmentPage = () => {
                 background:
                   dept.status === "Active" ? "#3286BD15" : "#24242415",
                 borderRadius: "100px",
+                width: "80px",
+                textAlign: "center",
               }}
             >
               {dept.status || "Active"}
