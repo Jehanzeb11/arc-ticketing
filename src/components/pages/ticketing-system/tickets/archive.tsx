@@ -300,7 +300,7 @@ export default function UniBoxTickets() {
                       { value: "Low", label: "Low" },
                       { value: "Medium", label: "Medium" },
                       { value: "High", label: "High" },
-                      { value: "Urgent", label: "Urgent" },
+                      // { value: "Urgent", label: "Urgent" },
                     ]
                   : [{ value: ticket.priority, label: ticket.priority }]
               }
@@ -458,7 +458,7 @@ export default function UniBoxTickets() {
         { value: "Low", label: "Low" },
         { value: "Medium", label: " Medium" },
         { value: "High", label: " High" },
-        { value: "Urgent", label: "Urgent" },
+        // { value: "Urgent", label: "Urgent" },
       ],
     },
     {

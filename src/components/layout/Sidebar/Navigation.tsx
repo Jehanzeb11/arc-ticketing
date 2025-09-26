@@ -47,6 +47,8 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
   const canViewRoles = usePermission("View Roles");
   const canViewDepartments = usePermission("View Departments");
   const canViewAnalytics = usePermission("View Analytics Dashboard");
+  const canViewRunSingleScruber = usePermission("Run Single Search");
+  const canViewRunBulkScruber = usePermission("Run Bulk Search");
 
   // const { t, i18n } = useTranslation()
   const { themeMode, toggleTheme } = useThemeStore();
@@ -204,7 +206,6 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
                         justifyContent: "center",
                         width: "100%",
                         padding: "9px",
-                        
                       }}
                     >
                       <Image

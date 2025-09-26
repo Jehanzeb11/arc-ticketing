@@ -171,7 +171,7 @@ const ScrubHistory = () => {
 
       <Box mt={4} mb={2}>
         <ScrubCardTable
-          title={"Phone Number Scrubber"}
+          title={"Scrub History"}
           desc={"View and manage your previous scrub jobs"}
           filters={
             <Box

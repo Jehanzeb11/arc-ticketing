@@ -181,6 +181,31 @@ export default function AddNewEntry() {
         },
       ],
     },
+    {
+      heading: "Scrubber Modules & Permissions",
+      data: [
+        {
+          label: "Run Single Search",
+          value: "Run Single Search",
+        },
+        {
+          label: "Run Bulk Search",
+          value: "Run Bulk Search",
+        },
+        {
+          label: "View history",
+          value: "View history",
+        },
+        {
+          label: "Download history",
+          value: "Download history",
+        },
+        {
+          label: "Delete History",
+          value: "Delete History",
+        },
+      ],
+    },
   ];
   return (
     <form

@@ -257,17 +257,18 @@ const DepartmentPage = () => {
       filterValues.assignedUsers !== "AllAssignedUsers"
     ) {
       result = result.filter((row) => {
-        const originalDept = departments.find((dept) => dept.id === row.id);
-        const userCount = parseInt(originalDept?.assignedUsers || "0");
+        const userCount = row.assignedUsers;
+
+        if (filterValues.assignedUsers.includes("+")) {
+          const rangeStart = parseInt(
+            filterValues.assignedUsers.replace("+", "")
+          );
+          return userCount >= rangeStart;
+        }
 
         const [rangeStart, rangeEnd] = filterValues.assignedUsers
           .split("-")
           .map(Number);
-
-        // Handle range filtering logic
-        if (filterValues.assignedUsers.includes("+")) {
-          return userCount >= rangeStart;
-        }
 
         return userCount >= rangeStart && userCount <= rangeEnd;
       });

@@ -251,7 +251,7 @@ const CreateTicket = ({ closeModal, getall }) => {
               { label: "Low", value: "Low" },
               { label: "Medium", value: "Medium" },
               { label: "High", value: "High" },
-              { label: "Urgent", value: "Urgent" },
+              // { label: "Urgent", value: "Urgent" },
             ]}
             {...register("Priority", { required: "Priority is required" })}
           />
