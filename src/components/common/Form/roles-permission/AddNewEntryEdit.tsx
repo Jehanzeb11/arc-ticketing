@@ -22,7 +22,7 @@ export default function AddNewEntryEdit() {
   // getall,
   // onCloseModal,
   // }: AddNewModalProps
-const router = useRouter();
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const { callApi, createRole } = useApiStore();
@@ -75,11 +75,10 @@ const router = useRouter();
     },
     onSuccess: (response, data) => {
       toast.success("Role Updated successfully!");
-      queryClient.invalidateQueries({ queryKey: ["roles"] })
-      router.replace('/ticketing-system/roles-permission')
+      queryClient.invalidateQueries({ queryKey: ["roles"] });
+      router.replace("/ticketing-system/roles-permission");
       // onCloseModal()
       refetch();
-      
     },
     onError: (error) => toast.error(`Failed to create role: ${error.message}`),
   });
@@ -203,6 +202,31 @@ const router = useRouter();
         {
           label: "Access Audit Logs",
           value: "Access Audit Logs",
+        },
+      ],
+    },
+    {
+      heading: "Scrubber Modules & Permissions",
+      data: [
+        {
+          label: "Run Single Search",
+          value: "Run Single Search",
+        },
+        {
+          label: "Run Bulk Search",
+          value: "Run Bulk Search",
+        },
+        {
+          label: "View history",
+          value: "View history",
+        },
+        {
+          label: "Download history",
+          value: "Download history",
+        },
+        {
+          label: "Delete History",
+          value: "Delete History",
         },
       ],
     },

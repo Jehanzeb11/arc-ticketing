@@ -17,9 +17,13 @@ import MyScruberModal from "@/components/Scrub/Modal";
 import { useQuery } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
 import Link from "next/link";
+import { usePermission } from "@/hooks/usePermission";
 
 const ScrubHistory = () => {
   const { callApi, scrubHistory }: any = useApiStore();
+  const canDownloadHistory = usePermission("Download history");
+  const canViewHistory = usePermission("View history");
+  const canDeleteHistory = usePermission("Delete History");
 
   const {
     data: scrubData,
@@ -31,6 +35,7 @@ const ScrubHistory = () => {
   });
 
   const [status, setStatus] = useState("");
+  const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<[Date | null, Date | null]>([
     null,
@@ -120,18 +125,31 @@ const ScrubHistory = () => {
     },
   ];
 
-  const data = scrubData?.history?.map((item) => ({
-    jobId: item.jobId,
-    scrubHistory:
-      item?.createdAt.split("T")[0] +
-      " " +
-      new Date(item?.createdAt).toTimeString().split(" ")[0],
-    uploadedFile: "cold_leads.csv",
-    scrubAgainst: JSON.parse(item?.filters)?.join(", "),
-    totalNumbers: item.totalNumbers,
-    badNumbers: item.badNumbers,
-    status: item.status,
-  }));
+  const data = scrubData?.history
+    ?.filter((item) => {
+      // ✅ if no status filter selected, allow all
+      const statusMatch =
+        !status || item.status.toLowerCase() === status.toLowerCase();
+
+      // ✅ if no query entered, allow all
+      const queryMatch =
+        !query ||
+        item.uploadedFile?.toLowerCase().includes(query.toLowerCase());
+
+      return statusMatch && queryMatch;
+    })
+    ?.map((item) => ({
+      jobId: item.jobId,
+      scrubHistory:
+        item?.createdAt.split("T")[0] +
+        " " +
+        new Date(item?.createdAt).toTimeString().split(" ")[0],
+      uploadedFile: "cold_leads.csv",
+      scrubAgainst: JSON.parse(item?.filters)?.join(", "),
+      totalNumbers: item.totalNumbers,
+      badNumbers: item.badNumbers,
+      status: item.status,
+    }));
 
   const statusArr = [
     { name: "TCPA Troll", type: "Match" },
@@ -196,9 +214,9 @@ const ScrubHistory = () => {
                 value={status}
                 onChange={handleChange}
                 options={[
-                  { label: "Valid", value: "Valid" },
-                  { label: "Bad", value: "Bad" },
-                  { label: "TCPA Match", value: "TCPA Match" },
+                  { label: "Completed", value: "Completed" },
+                  { label: "In Progress", value: "In Progress" },
+                  { label: "Failed", value: "Failed" },
                 ]}
               />
 
@@ -224,6 +242,8 @@ const ScrubHistory = () => {
                     fontSize: "16px",
                     width: "100%",
                   }}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
                 />
               </Box>
             </Box>
@@ -238,55 +258,61 @@ const ScrubHistory = () => {
                 console.log(row);
                 return (
                   <Box sx={{ display: "flex" }}>
-                    <Link
-                      href={`/scruber/history-scruber-result?id=${row.jobId}`}
-                      style={{
-                        padding: 0,
-                        marginTop: "5px",
-                        width: "fit-content",
-                        minWidth: "10px",
-                      }}
-                      title="View"
-                    >
-                      <Image
-                        src={viewIcon}
-                        width={22}
-                        height={22}
-                        alt="download"
-                      />
-                    </Link>
-                    <Button
-                      sx={{
-                        p: 0,
-                        mx: 1,
-                        width: "fit-content",
-                        minWidth: "10px",
-                      }}
-                      title="Download"
-                    >
-                      <Image
-                        src={downloadIcon}
-                        width={16}
-                        height={16}
-                        alt="download"
-                      />
-                    </Button>
-                    <Button
-                      sx={{
-                        p: 0,
-                        mx: 1,
-                        width: "fit-content",
-                        minWidth: "10px",
-                      }}
-                      title="Delete"
-                    >
-                      <Image
-                        src={deleteIcon}
-                        width={15}
-                        height={18}
-                        alt="download"
-                      />
-                    </Button>
+                    {canViewHistory && (
+                      <Link
+                        href={`/scruber/history-scruber-result?id=${row.jobId}`}
+                        style={{
+                          padding: 0,
+                          marginTop: "5px",
+                          width: "fit-content",
+                          minWidth: "10px",
+                        }}
+                        title="View"
+                      >
+                        <Image
+                          src={viewIcon}
+                          width={22}
+                          height={22}
+                          alt="download"
+                        />
+                      </Link>
+                    )}
+                    {canDownloadHistory && (
+                      <Button
+                        sx={{
+                          p: 0,
+                          mx: 1,
+                          width: "fit-content",
+                          minWidth: "10px",
+                        }}
+                        title="Download"
+                      >
+                        <Image
+                          src={downloadIcon}
+                          width={16}
+                          height={16}
+                          alt="download"
+                        />
+                      </Button>
+                    )}
+                    {canDeleteHistory && (
+                      <Button
+                        sx={{
+                          p: 0,
+                          mx: 1,
+                          width: "fit-content",
+                          minWidth: "10px",
+                        }}
+                        title="Delete"
+                      >
+                        <Image
+                          src={deleteIcon}
+                          width={15}
+                          height={18}
+                          alt="download"
+                        />
+                      </Button>
+                    )}
                   </Box>
                 );
               }}

@@ -146,11 +146,15 @@ export default function Navigation({ open, openMenus, handleMenuClick }: any) {
       icon: icon1,
       activeIcon: activeicon1,
       subItems: [
-        {
-          i18nKey: "Phone Scruber",
-          href: "/scruber/phone-scruber",
-          pathname: "/scruber/phone-scruber",
-        },
+        ...(canViewRunSingleScruber || canViewRunBulkScruber
+          ? [
+              {
+                i18nKey: "Phone Scruber",
+                href: "/scruber/phone-scruber",
+                pathname: "/scruber/phone-scruber",
+              },
+            ]
+          : []),
         {
           i18nKey: "Scrub History",
           href: "/scruber/history-scruber",

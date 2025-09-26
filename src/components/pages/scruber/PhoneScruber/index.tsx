@@ -31,6 +31,7 @@ import matchIcon from "@/assets/scruber/icons/status-close.png";
 import clearIcon from "@/assets/scruber/icons/status-check.png";
 import Link from "next/link";
 import { imageUrl } from "@/lib/constants/variables";
+import { usePermission } from "@/hooks/usePermission";
 
 const PhoneScrube = () => {
   const {
@@ -40,6 +41,12 @@ const PhoneScrube = () => {
     profile,
     scrubHistory,
   }: any = useApiStore();
+  const canDownloadHistory = usePermission("Download history");
+  const canViewHistory = usePermission("View history");
+  const canDeleteHistory = usePermission("Delete History");
+
+  const canViewRunSingleScruber = usePermission("Run Single Search");
+  const canViewRunBulkScruber = usePermission("Run Bulk Search");
 
   const filterLabels: Record<string, string> = {
     tcpa: "TCPA Troll",
@@ -60,6 +67,7 @@ const PhoneScrube = () => {
 
   const [file, setFile] = useState(null);
   const [search, setSearch] = useState("");
+  const [query, setQuery] = useState("");
 
   const {
     data: scrubData,
@@ -204,18 +212,32 @@ const PhoneScrube = () => {
     },
   ];
 
-  const data = scrubData?.history?.slice(0, 4)?.map((item) => ({
-    jobId: item.jobId,
-    scrubHistory:
-      item?.createdAt.split("T")[0] +
-      " " +
-      new Date(item?.createdAt).toTimeString().split(" ")[0],
-    uploadedFile: "cold_leads.csv",
-    scrubAgainst: JSON.parse(item?.filters)?.join(", "),
-    totalNumbers: item.totalNumbers,
-    badNumbers: item.badNumbers,
-    status: item.status,
-  }));
+  const data = scrubData?.history
+    ?.slice(0, 4)
+    ?.filter((item) => {
+      // ✅ if no status filter selected, allow all
+      const statusMatch =
+        !status || item.status.toLowerCase() === status.toLowerCase();
+
+      // ✅ if no query entered, allow all
+      const queryMatch =
+        !query ||
+        item.uploadedFile?.toLowerCase().includes(query.toLowerCase());
+
+      return statusMatch && queryMatch;
+    })
+    ?.map((item) => ({
+      jobId: item.jobId,
+      scrubHistory:
+        item?.createdAt.split("T")[0] +
+        " " +
+        new Date(item?.createdAt).toTimeString().split(" ")[0],
+      uploadedFile: "cold_leads.csv",
+      scrubAgainst: JSON.parse(item?.filters)?.join(", "),
+      totalNumbers: item.totalNumbers,
+      badNumbers: item.badNumbers,
+      status: item.status,
+    }));
 
   const singleNumberMutation = useMutation({
     mutationFn: (data) => callApi(searchSingleNumber, data),
@@ -227,7 +249,6 @@ const PhoneScrube = () => {
       }
 
       toast.success("Scrubing... We will notify you once it's done.");
-      setSearch("");
       setResponseType("single");
     },
     onError: (error: any) => {
@@ -345,104 +366,108 @@ const PhoneScrube = () => {
           sx={{ display: "flex", gap: 4, mt: 6, mb: 8 }}
           className="scrub-tabs"
         >
-          <section
-            className={`card-scruber ${tab === 0 ? "active" : ""}`}
-            onClick={() => setTab(0)}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-                height: "100%",
-              }}
+          {canViewRunSingleScruber && (
+            <section
+              className={`card-scruber ${tab === 0 ? "active" : ""}`}
+              onClick={() => setTab(0)}
             >
               <Box
-                sx={{ display: "flex", gap: "22px", alignItems: "start" }}
-                className="scrub-tab"
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  height: "100%",
+                }}
               >
-                <Image
-                  src={singleSeach}
-                  width={50}
-                  height={50}
-                  alt="single-search"
-                  style={{ marginTop: "10px" }}
-                />
-                <Box>
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontSize: "24px",
-                      mb: 1,
-                      fontWeight: 600,
-                      color: "#183C58",
-                    }}
-                  >
-                    Single Number Search
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontSize: "18px",
-                      color: "#B1B1B1",
-                      lineHeight: "34px",
-                    }}
-                  >
-                    Quickly scrub a single phone number against all validators
-                  </Typography>
+                <Box
+                  sx={{ display: "flex", gap: "22px", alignItems: "start" }}
+                  className="scrub-tab"
+                >
+                  <Image
+                    src={singleSeach}
+                    width={50}
+                    height={50}
+                    alt="single-search"
+                    style={{ marginTop: "10px" }}
+                  />
+                  <Box>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontSize: "24px",
+                        mb: 1,
+                        fontWeight: 600,
+                        color: "#183C58",
+                      }}
+                    >
+                      Single Number Search
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: "18px",
+                        color: "#B1B1B1",
+                        lineHeight: "34px",
+                      }}
+                    >
+                      Quickly scrub a single phone number against all validators
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          </section>
-          <section
-            className={`card-scruber ${tab === 1 ? "active" : ""}`}
-            onClick={() => setTab(1)}
-            style={{ border: tab === 1 && "2px solid #2BBBAC !important" }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-                height: "100%",
-              }}
-              className={"scrub-tab"}
+            </section>
+          )}
+          {canViewRunBulkScruber && (
+            <section
+              className={`card-scruber ${tab === 1 ? "active" : ""}`}
+              onClick={() => setTab(1)}
+              style={{ border: tab === 1 && "2px solid #2BBBAC !important" }}
             >
-              <Box sx={{ display: "flex", gap: "22px" }}>
-                <Image
-                  src={bulkSeach}
-                  width={50}
-                  height={50}
-                  alt="single-search"
-                  style={{ marginTop: "5px" }}
-                />
-                <Box>
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontSize: "24px",
-                      mb: 1,
-                      fontWeight: 600,
-                      color: "#183C58",
-                    }}
-                  >
-                    Bulk Search (File Upload)
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontSize: "18px",
-                      color: "#B1B1B1",
-                      lineHeight: "34px",
-                    }}
-                  >
-                    Upload a file and select specific validators for batch
-                    processing
-                  </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  height: "100%",
+                }}
+                className={"scrub-tab"}
+              >
+                <Box sx={{ display: "flex", gap: "22px" }}>
+                  <Image
+                    src={bulkSeach}
+                    width={50}
+                    height={50}
+                    alt="single-search"
+                    style={{ marginTop: "5px" }}
+                  />
+                  <Box>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontSize: "24px",
+                        mb: 1,
+                        fontWeight: 600,
+                        color: "#183C58",
+                      }}
+                    >
+                      Bulk Search (File Upload)
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: "18px",
+                        color: "#B1B1B1",
+                        lineHeight: "34px",
+                      }}
+                    >
+                      Upload a file and select specific validators for batch
+                      processing
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          </section>
+            </section>
+          )}
         </Box>
       </ScrubCard>
 
@@ -469,7 +494,11 @@ const PhoneScrube = () => {
               onChange={(e) => setSearch(e.target.value)}
               value={search}
             />{" "}
-            <Button className="scrub-number-search-btn" onClick={StartScrub}>
+            <Button
+              className="scrub-number-search-btn"
+              onClick={StartScrub}
+              disabled={!search}
+            >
               Start Scrub
             </Button>
           </Box>
@@ -666,6 +695,7 @@ const PhoneScrube = () => {
               className="scrub-number-search-btn"
               sx={{ mt: 3, ml: 0 }}
               onClick={StartScrub}
+              disabled={!file}
             >
               Start Scrub
             </Button>
@@ -717,6 +747,8 @@ const PhoneScrube = () => {
                   fontSize: "16px",
                   width: "100%",
                 }}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
               />
             </Box>
           </Box>
@@ -730,45 +762,61 @@ const PhoneScrube = () => {
               console.log(row);
               return (
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Link
-                    href={`/scruber/history-scruber-result?id=${row.jobId}`}
-                    style={{
-                      padding: 0,
-                      marginTop: "5px",
-                      width: "fit-content",
-                      minWidth: "10px",
-                    }}
-                    title="View"
-                  >
-                    <Image
-                      src={viewIcon}
-                      width={22}
-                      height={22}
-                      alt="download"
-                    />
-                  </Link>
-                  <Button
-                    sx={{ p: 0, mx: 1, width: "fit-content", minWidth: "10px" }}
-                    title="Download"
-                  >
-                    <Image
-                      src={downloadIcon}
-                      width={16}
-                      height={16}
-                      alt="download"
-                    />
-                  </Button>
-                  <Button
-                    sx={{ p: 0, mx: 1, width: "fit-content", minWidth: "10px" }}
-                    title="Delete"
-                  >
-                    <Image
-                      src={deleteIcon}
-                      width={15}
-                      height={18}
-                      alt="download"
-                    />
-                  </Button>
+                  {canViewHistory && (
+                    <Link
+                      href={`/scruber/history-scruber-result?id=${row.jobId}`}
+                      style={{
+                        padding: 0,
+                        marginTop: "5px",
+                        width: "fit-content",
+                        minWidth: "10px",
+                      }}
+                      title="View"
+                    >
+                      <Image
+                        src={viewIcon}
+                        width={22}
+                        height={22}
+                        alt="download"
+                      />
+                    </Link>
+                  )}
+                  {canDownloadHistory && (
+                    <Button
+                      sx={{
+                        p: 0,
+                        mx: 1,
+                        width: "fit-content",
+                        minWidth: "10px",
+                      }}
+                      title="Download"
+                    >
+                      <Image
+                        src={downloadIcon}
+                        width={16}
+                        height={16}
+                        alt="download"
+                      />
+                    </Button>
+                  )}
+                  {canDeleteHistory && (
+                    <Button
+                      sx={{
+                        p: 0,
+                        mx: 1,
+                        width: "fit-content",
+                        minWidth: "10px",
+                      }}
+                      title="Delete"
+                    >
+                      <Image
+                        src={deleteIcon}
+                        width={15}
+                        height={18}
+                        alt="download"
+                      />
+                    </Button>
+                  )}
                 </Box>
               );
             }}
@@ -789,7 +837,7 @@ const PhoneScrube = () => {
       <MyScruberModal
         modalHeader="true"
         modalTitle={`Scrub Result - +1 ${search}`}
-        modalText="Scrub Time: Today,2:45 PM"
+        modalText={`Scrub Time: Today, ${new Date().toLocaleTimeString()} `}
         statusBtn="Completed"
         open={open}
         setOpen={setOpen}
