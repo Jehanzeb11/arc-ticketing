@@ -113,8 +113,8 @@ const AllUsers = () => {
         user_id: user.user_id,
         role_id: user.roleId,
         role_name: user.role_name,
-        department_id: user.departmentId,
-        department_name: user.departments[0] || "N/A",
+        department_id: user.department_id,
+        department_name: user.department || "N/A",
         profile: (
           <Box
             sx={{
@@ -140,7 +140,7 @@ const AllUsers = () => {
         fullName: user.full_name || "--",
         email: user.email.toLowerCase() || "--",
         role: user.roleId || "--",
-        department: user.phone || "--",
+        // department: user.phone || "--",
         status: (
           <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <Typography

@@ -92,7 +92,7 @@ export default function UniBoxTickets() {
         priority: filterValues.priority == "All" ? "" : filterValues.priority,
         department:
           filterValues.department_id == "All" ? "" : filterValues.department_id,
-        assignee: filterValues.assignee == "All" ? "" : filterValues.assignee,
+        assignee: filterValues.assignee == "All" ? "" : filterValues.assignee, // 👈 add this
         startDate: selectedDate?.[0]
           ? selectedDate[0].toISOString().split("T")[0]
           : "",
@@ -102,6 +102,7 @@ export default function UniBoxTickets() {
       }),
   });
 
+  // Departments
   const { data: departments } = useQuery({
     queryKey: ["departments"],
     queryFn: () =>
@@ -110,6 +111,7 @@ export default function UniBoxTickets() {
       }),
   });
 
+  // Users / Assignees
   const { data: users } = useQuery({
     queryKey: ["users"],
     queryFn: () =>
@@ -438,27 +440,26 @@ export default function UniBoxTickets() {
 
   const filters = [
     {
-      name: "status",
-      value: filterValues.status,
-      className: "status-filter",
-      filterOptions: [
-        { value: "All", label: "All Status" },
-        { value: "Open", label: "Open" },
-        { value: "In-progress", label: "In-progress" },
-        { value: "Resolved", label: "Resolved" },
-        { value: "Closed", label: "Closed" },
-      ],
-    },
-    {
       name: "priority",
       value: filterValues.priority,
-      className: "priority-filter",
+      className: "table-dropdown-select",
       filterOptions: [
         { value: "All", label: "All Priority" },
         { value: "Low", label: "Low" },
-        { value: "Medium", label: " Medium" },
-        { value: "High", label: " High" },
-        // { value: "Urgent", label: "Urgent" },
+        { value: "Medium", label: "Medium" },
+        { value: "High", label: "High" },
+      ],
+    },
+    {
+      name: "status",
+      value: filterValues.status,
+      className: "department-filter",
+      filterOptions: [
+        { value: "All", label: "All Status" },
+        { value: "Open", label: "Open" },
+        { value: "In-Progress", label: "In-Progress" },
+        { value: "Closed", label: "Closed" },
+        { value: "Resolved", label: "Resolved" },
       ],
     },
     {
@@ -474,19 +475,7 @@ export default function UniBoxTickets() {
       ],
     },
     {
-      name: "type",
-      value: filterValues.type,
-      className: "type-filter",
-      filterOptions: [
-        { value: "All", label: "All Types" },
-        { value: "Support", label: "Support" },
-        { value: "Feature", label: "Feature" },
-        { value: "Bug", label: "Bug" },
-        { value: "Question", label: "Question" },
-      ],
-    },
-    {
-      name: "assignee",
+      name: "assignee", // 👈 add this
       value: filterValues.assignee,
       className: "assignee-filter",
       filterOptions: [
@@ -494,7 +483,6 @@ export default function UniBoxTickets() {
         ...(users?.map((user: any) => ({
           value: user.user_id,
           label: user.full_name,
-          icon: AssigneeIcon,
         })) || []),
       ],
     },

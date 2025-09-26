@@ -54,8 +54,6 @@ export default function TableSelectFilterMainNew({
     }
   };
 
-  console.log(selectedOption);
-
   return (
     <Box
       className={`my-select ${name} ${selectedOption?.value} ${
@@ -69,6 +67,14 @@ export default function TableSelectFilterMainNew({
         getOptionLabel={(option) => option.label || defaultText}
         value={selectedOption}
         PopperComponent={CustomPopper}
+        slotProps={{
+          paper: {
+            sx: {
+              maxHeight: 48 * 6, // 6 rows
+              overflowY: "auto",
+            },
+          },
+        }}
         // open={open}
         // onOpen={() => setOpen(true)}
         onChange={(event, newValue) => {

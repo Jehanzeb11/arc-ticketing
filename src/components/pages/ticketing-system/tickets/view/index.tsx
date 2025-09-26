@@ -17,8 +17,6 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
     status: "All",
     priority: "All",
     department_id: "All",
-    type: "All",
-    assignee: "All",
   });
 
   const {
@@ -114,7 +112,7 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
 
   const filters = [
     {
-      name: "Priority",
+      name: "priority",
       value: filterValues.priority,
       className: "table-dropdown-select",
       filterOptions: [
@@ -126,7 +124,7 @@ export default function ViewUniBoxTicket({ ticketId }: any) {
       popperClassName: "ticket-table-dropdown",
     },
     {
-      name: "Status",
+      name: "status",
       value: filterValues.status,
       className: "department-filter",
       filterOptions: [

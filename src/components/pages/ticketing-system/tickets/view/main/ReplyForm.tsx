@@ -18,6 +18,7 @@ import addUserIcon from "@/assets/icons/unibox/ticket/viewpage/add-user.png";
 import toast from "react-hot-toast";
 import DownloadIcon from "@mui/icons-material/Download";
 import CloseIcon from "@mui/icons-material/Close";
+import { usePermission } from "@/hooks/usePermission";
 
 const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
   const queryClient = useQueryClient();
@@ -27,6 +28,8 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
   const { callApi, fetchDepartments }: any = useApiStore();
 
   const [ccInput, setCcInput] = React.useState("");
+
+  const canReply = usePermission("Reply to Ticket");
 
   const handleButtonClick = () => {
     // Trigger file input click
@@ -65,8 +68,22 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
 
   const ccEmails: string[] = watch("ccEmails") || [];
 
+  // Email validator
+  const isValidEmail = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
   const addCcEmail = () => {
     if (ccInput.trim()) {
+      if (!isValidEmail(ccInput.trim())) {
+        toast.error("Invalid email address!");
+        return;
+      }
+      if (ccEmails.includes(ccInput.trim())) {
+        toast.error("Email already added!");
+        return;
+      }
       setValue("ccEmails", [...ccEmails, ccInput.trim()]);
       setCcInput("");
     }
@@ -391,11 +408,13 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
       <Box
         sx={{ display: "flex", justifyContent: "start", mt: 2, gap: "10px" }}
       >
-        <MyButton
-          onClick={handleSubmit(onSubmit)}
-          disabled={isSubmitting}
-          text="Submit Reply"
-        />
+        {canReply && (
+          <MyButton
+            onClick={handleSubmit(onSubmit)}
+            disabled={isSubmitting}
+            text="Submit Reply"
+          />
+        )}
         <MyButton
           onClick={() => alert("Cancel clicked")}
           text="Cancel"
