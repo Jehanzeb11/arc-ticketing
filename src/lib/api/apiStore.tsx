@@ -57,6 +57,8 @@ import {
   scrubHistory,
   deleteJobHistory,
   validNumbersByJob,
+  createOTP,
+  signupGuest,
 } from "./apiCalls";
 
 export const useApiStore = create((set) => ({
@@ -85,7 +87,7 @@ export const useApiStore = create((set) => ({
   // modules
 
   createGuest,
-
+  signupGuest,
   createModules,
   getUserModules,
   updateUserModule,
@@ -118,7 +120,7 @@ export const useApiStore = create((set) => ({
   // admin proile
   fetchAdminProfile,
   getAllTickets,
-
+  createOTP,
   // company profile
   fetchCompanyProfile,
   updateCompanyProfile, // Add this

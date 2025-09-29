@@ -24,7 +24,7 @@ export default function UserSignUpForm() {
   } = useForm();
   const router = useRouter();
   const password = watch("password");
-  const { callApi, createGuest, setEmailToVerify }: any = useApiStore();
+  const { callApi, signupGuest, setEmailToVerify }: any = useApiStore();
 
   useEffect(() => {
     const userData = Cookies.get("userData");
@@ -35,7 +35,7 @@ export default function UserSignUpForm() {
 
   const mutation = useMutation({
     mutationFn: (data: FieldValues) =>
-      callApi(createGuest, {
+      callApi(signupGuest, {
         requestType: "register",
         full_name: data.username,
         phone: data.phone,
@@ -47,7 +47,7 @@ export default function UserSignUpForm() {
     onSuccess: (data: any, vars) => {
       setEmailToVerify(vars.email);
       toast.success("Sign-up successful!");
-      router.push("/auth/verify-otp");
+      router.push(`/auth/verify-otp`);
     },
     onError: (error) => toast.error("Sign-up failed: " + error.message),
   });

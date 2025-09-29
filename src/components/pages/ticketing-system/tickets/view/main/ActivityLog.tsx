@@ -76,7 +76,7 @@ const ActivityLog = ({ activityData }) => {
       </Grid>
 
       {activityData
-        .filter((log) =>
+        ?.filter((log) =>
           filter === "ticket"
             ? log.description.startsWith("Ticket")
             : filter === "replies"

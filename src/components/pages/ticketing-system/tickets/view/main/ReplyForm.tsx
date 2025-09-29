@@ -19,8 +19,10 @@ import toast from "react-hot-toast";
 import DownloadIcon from "@mui/icons-material/Download";
 import CloseIcon from "@mui/icons-material/Close";
 import { usePermission } from "@/hooks/usePermission";
+import Cookies from "js-cookie";
 
 const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
+  const role = Cookies.get("access_role");
   const queryClient = useQueryClient();
   const fileInputRef = useRef(null);
   const [selectedFiles, setSelectedFiles] = React.useState<File[]>([]);
@@ -115,6 +117,7 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
       formData.append("cc_emails", data.ccEmails);
       formData.append("department_id", data.department);
       formData.append("to_email", emailstosend);
+      formData.append("user_type", role == "guest" ? "Guest" : "User");
 
       selectedFiles.forEach((file) => {
         formData.append("files[]", file);
@@ -408,13 +411,13 @@ const ReplyForm = ({ ticketId, c_mail, tomails }: any) => {
       <Box
         sx={{ display: "flex", justifyContent: "start", mt: 2, gap: "10px" }}
       >
-        {canReply && (
-          <MyButton
-            onClick={handleSubmit(onSubmit)}
-            disabled={isSubmitting}
-            text="Submit Reply"
-          />
-        )}
+        {/* {canReply && ( */}
+        <MyButton
+          onClick={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
+          text="Submit Reply"
+        />
+        {/* )} */}
         <MyButton
           onClick={() => alert("Cancel clicked")}
           text="Cancel"

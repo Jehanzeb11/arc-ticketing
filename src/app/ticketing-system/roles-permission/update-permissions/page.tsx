@@ -1,8 +1,15 @@
-import AddNewEntryEdit from "@/components/common/Form/roles-permission/AddNewEntryEdit";
+"use client";
+// import AddNewEntryEdit from "@/components/common/Form/roles-permission/AddNewEntryEdit";
 import DefaultLayout from "@/components/layout/DefaultLayout";
 import DashboardHeader from "@/components/pages/DashboardHeader";
 import { Box, Typography } from "@mui/material";
+import dynamic from "next/dynamic";
 import React from "react";
+
+const AddNewEntryEdit = dynamic(
+  () => import("@/components/common/Form/roles-permission/AddNewEntryEdit"),
+  { ssr: false }
+);
 
 const page = () => {
   return (

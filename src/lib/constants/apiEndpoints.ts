@@ -1,7 +1,9 @@
 export const API_ENDPOINTS = {
   // Users
   USERS: (type) => `/users/multi-purpose?requestType=${type}`,
+  GUESTREGISTER: `/guest/register`,
   GUEST: `/guest/multi-purpose`,
+  OTP: `/guest/verify-otp`,
   USER_BY_ID: (id) => `/users/multi-purpose?requestType=${id}`,
   PROFILE: "/profile",
   NOTIFICATIONS: "/notification/multi-purpose",

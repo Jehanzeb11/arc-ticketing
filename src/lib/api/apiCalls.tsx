@@ -26,8 +26,11 @@ export const fetchUserById = (data) =>
   postbackend(`${API_ENDPOINTS.USER_BY_ID(data.id)}`, data);
 export const fetchProfile = () => postbackend(`${API_ENDPOINTS.PROFILE}`);
 
+export const signupGuest = (data) =>
+  postbackend(`${API_ENDPOINTS.GUESTREGISTER}`, data); // API_ENDPOINTS.USERS(data);
 export const createGuest = (data) =>
   postbackend(`${API_ENDPOINTS.GUEST}`, data); // API_ENDPOINTS.USERS(data);
+export const createOTP = (data) => postbackend(`${API_ENDPOINTS.OTP}`, data); // API_ENDPOINTS.USERS(data);
 
 export const createUser = (data) =>
   postbackend(`${API_ENDPOINTS.USERS(data?.get("requestType"))}`, data);

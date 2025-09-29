@@ -11,7 +11,7 @@ import { Box } from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { useApiStore } from "@/lib/api/apiStore";
-import { createGuest } from "@/lib/api/apiCalls";
+import { createOTP } from "@/lib/api/apiCalls";
 
 export default function VerifyForm() {
   const {
@@ -25,8 +25,8 @@ export default function VerifyForm() {
 
   const loginMutation = useMutation({
     mutationFn: async (data: FieldValues) => {
-      return callApi(createGuest, {
-        requestType: "verifyOtp",
+      return callApi(createOTP, {
+        // requestType: "verifyOtp",
         email: emailToVerify,
         otp: +data.otp,
       });

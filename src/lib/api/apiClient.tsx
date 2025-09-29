@@ -8,10 +8,10 @@ const backendUrl = process.env.BACKEND_API_URL;
 
 if (
   !process.env.BACKEND_API_URL ||
-  !process.env.LIVE_BASE_URL ||
+  // !process.env.LIVE_BASE_URL ||
   !process.env.LOCAL_BASE_URL
 ) {
-  console.warn("BASE_URL_1 or BASE_URL_2 not set in .env. Using fallback:", {
+  console.log("BASE_URL_1 or BASE_URL_2 not set in .env. Using fallback:", {
     liveBaseUrl,
     localBaseUrl,
     backendUrl,
