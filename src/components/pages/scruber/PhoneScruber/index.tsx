@@ -123,7 +123,7 @@ const PhoneScrube = () => {
       console.log("🟢 Scrub Job Completed:", data);
       setNumberStatus(data?.numbers?.[0]?.validator || null);
       setSS(data?.numbers?.[0]?.status || null);
-      tab === 0 && setOpen(true);
+      tab == 0 && setOpen(true);
       queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
     });
 
