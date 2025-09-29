@@ -74,6 +74,7 @@ const PhoneScrube = () => {
   const [status, setStatus] = useState("");
   const [responseType, setResponseType] = useState("");
   const [numberStatus, setNumberStatus] = useState(null);
+  const [ss, setSS] = useState(null);
 
   const [file, setFile] = useState(null);
   const [search, setSearch] = useState("");
@@ -121,7 +122,9 @@ const PhoneScrube = () => {
     socket.on("scrubJobCompleted", (data) => {
       console.log("🟢 Scrub Job Completed:", data);
       setNumberStatus(data?.numbers?.[0]?.validator || null);
+      setSS(data?.numbers?.[0]?.status || null);
       tab === 0 && setOpen(true);
+      queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
     });
 
     socket.on("registerUser", (notification) => {
@@ -244,7 +247,7 @@ const PhoneScrube = () => {
       // ✅ if no query entered, allow all
       const queryMatch =
         !query ||
-        item.uploadedFile?.toLowerCase().includes(query.toLowerCase());
+        item.org_filename?.toLowerCase().includes(query.toLowerCase());
 
       return statusMatch && queryMatch;
     })
@@ -255,7 +258,7 @@ const PhoneScrube = () => {
         item?.createdAt.split("T")[0] +
         " " +
         new Date(item?.createdAt).toTimeString().split(" ")[0],
-      uploadedFile: "cold_leads.csv",
+      uploadedFile: item.org_filename,
       scrubAgainst: JSON.parse(item?.filters)?.join(", "),
       totalNumbers: item.totalNumbers,
       badNumbers: item.badNumbers,
@@ -263,13 +266,15 @@ const PhoneScrube = () => {
     }));
 
   const singleNumberMutation = useMutation({
-    mutationFn: (data) => callApi(searchSingleNumber, data),
+    mutationFn: (data) => callApi(searchBulkNumber, data),
+    // mutationFn: (data) => callApi(searchSingleNumber, data),
     onSuccess: (res: any) => {
       // ✅ res is your API response here
 
       if (res?.jobId) {
         setCurrentJobId(res.jobId); // save jobId for socket listener
       }
+      queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
 
       toast.success("Scrubing... We will notify you once it's done.");
       setResponseType("single");
@@ -288,6 +293,8 @@ const PhoneScrube = () => {
       }
 
       toast.success("Scrubing... We will notify you once it's done.");
+      queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
+
       setFile(null);
       setChecked({
         tcpa: false,
@@ -865,7 +872,7 @@ const PhoneScrube = () => {
         modalHeader="true"
         modalTitle={`Scrub Result - +1 ${search}`}
         modalText={`Scrub Time: Today, ${new Date().toLocaleTimeString()} `}
-        statusBtn="Completed"
+        statusBtn={ss}
         open={open}
         setOpen={setOpen}
       >
@@ -883,7 +890,7 @@ const PhoneScrube = () => {
               return (
                 <Box key={index} className="scruber-status-box">
                   <Image
-                    src={!exists ? matchIcon : clearIcon}
+                    src={!exists ? clearIcon : matchIcon}
                     width={60}
                     height={60}
                     alt="status"
@@ -893,10 +900,10 @@ const PhoneScrube = () => {
                       fontSize: "16px",
                       fontWeight: 600,
                       textAlign: "center",
-                      color: !exists ? "#FF293D" : "#7AC899",
+                      color: !exists ? "#7AC899" : "#FF293D",
                     }}
                   >
-                    {!exists ? "Match" : "Clear"}
+                    {!exists ? "Clear" : "Match"}
                   </Typography>
                   <Typography
                     sx={{ fontSize: "13px", mt: 1, textAlign: "center" }}

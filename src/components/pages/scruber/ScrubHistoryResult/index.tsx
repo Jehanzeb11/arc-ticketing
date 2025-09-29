@@ -18,14 +18,17 @@ const ScrubHistoryResult = () => {
   const { jobHistory, callApi } = useApiStore();
   const [status, setStatus] = useState("");
   const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1); // 👈 controlled page state
+
   const jobId = new URLSearchParams(window.location.search).get("id");
   const {
     data: jobData,
     isLoading,
     error,
   } = useQuery({
-    queryKey: [`jobHistory`],
-    queryFn: () => callApi(jobHistory, { jobId: jobId }),
+    queryKey: ["jobHistory", jobId, page], // 👈 include page in key
+    queryFn: () => callApi(jobHistory, { jobId, page }), // 👈 pass page to backend
+    // keepPreviousData: true, // 👈 keeps old data while loading new pa
   });
   const handleChange = (event: any) => {
     setStatus(event.target.value);
@@ -87,7 +90,7 @@ const ScrubHistoryResult = () => {
     ?.map((item) => ({
       phoneNumber: item.number,
       status: item.status,
-      reason: (
+      reason: item.validator ? (
         <Box>
           {item.validator.split(",").map((item, index) => (
             <Chip
@@ -150,7 +153,7 @@ const ScrubHistoryResult = () => {
           />
         )} */}
         </Box>
-      ),
+      ) : null,
     }));
 
   return (
@@ -203,7 +206,15 @@ const ScrubHistoryResult = () => {
           }
         >
           <Box sx={{ mt: 3 }}>
-            <ReusableTable columns={columns} data={data} Pagination={true} />
+            <ReusableTable
+              columns={columns}
+              data={data}
+              rowsPerPage={jobData?.limit}
+              serverPagination
+              page={jobData?.page}
+              totalItems={jobData?.totalNumbers}
+              onPageChange={(newPage) => setPage(newPage)} // 👈 just update local state
+            />
           </Box>
         </ScrubCardTable>
       </Box>

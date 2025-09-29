@@ -56,6 +56,7 @@ import {
   jobHistory,
   scrubHistory,
   deleteJobHistory,
+  validNumbersByJob,
 } from "./apiCalls";
 
 export const useApiStore = create((set) => ({
@@ -159,6 +160,7 @@ export const useApiStore = create((set) => ({
   jobHistory,
   scrubHistory,
   deleteJobHistory,
+  validNumbersByJob,
   callApi: async (fn, ...args) => {
     set({ loading: true, error: null });
     try {

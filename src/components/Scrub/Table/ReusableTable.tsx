@@ -16,7 +16,6 @@ import {
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-// Types
 interface Column {
   key: string;
   label: string;
@@ -29,7 +28,12 @@ interface ReusableTableProps {
   data: any[];
   actions?: (row: any) => React.ReactNode;
   rowsPerPage?: number;
-  Pagination?: React.ReactNode;
+
+  /** New props for server pagination */
+  serverPagination?: boolean;
+  page?: number; // controlled page (from parent if serverPagination)
+  totalItems?: number;
+  onPageChange?: (newPage: number) => void;
 }
 
 type Order = "asc" | "desc";
@@ -38,12 +42,17 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
   columns,
   data,
   actions,
-  Pagination,
-  rowsPerPage = 8, // default page size
+  rowsPerPage = 8,
+  serverPagination = false,
+  page: controlledPage,
+  totalItems,
+  onPageChange,
 }) => {
   const [orderBy, setOrderBy] = useState<string | null>(null);
   const [order, setOrder] = useState<Order>("asc");
-  const [page, setPage] = useState(0);
+  const [localPage, setLocalPage] = useState(0);
+
+  const currentPage = serverPagination ? controlledPage || 1 : localPage + 1;
 
   const handleSort = (colKey: string) => {
     const isAsc = orderBy === colKey && order === "asc";
@@ -57,7 +66,6 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
       const aVal = a[orderBy];
       const bVal = b[orderBy];
       if (aVal === undefined || bVal === undefined) return 0;
-
       if (typeof aVal === "number" && typeof bVal === "number") {
         return order === "asc" ? aVal - bVal : bVal - aVal;
       }
@@ -67,17 +75,36 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
     });
   }, [data, orderBy, order]);
 
-  // Pagination logic
-  const startIndex = page * rowsPerPage || 0;
-  const endIndex = Math.min(startIndex + rowsPerPage, sortedData?.length) || 0;
-  const paginatedData = Pagination ? sortedData?.slice(startIndex, endIndex) : sortedData;
+  // Client pagination (only slice if not serverPagination)
+  const startIndex = serverPagination
+    ? (currentPage - 1) * rowsPerPage
+    : localPage * rowsPerPage;
+  const endIndex = serverPagination
+    ? startIndex + data?.length
+    : Math.min(startIndex + rowsPerPage, sortedData?.length);
+  const paginatedData = serverPagination
+    ? sortedData // backend already gives current page slice
+    : sortedData?.slice(startIndex, endIndex);
 
+  // Handlers
   const handleNext = () => {
-    if (endIndex < sortedData.length) setPage((prev) => prev + 1);
+    if (serverPagination) {
+      if (onPageChange && endIndex < (totalItems || 0)) {
+        onPageChange(currentPage + 1);
+      }
+    } else {
+      if (endIndex < sortedData?.length) setLocalPage((p) => p + 1);
+    }
   };
 
   const handlePrev = () => {
-    if (page > 0) setPage((prev) => prev - 1);
+    if (serverPagination) {
+      if (onPageChange && currentPage > 1) {
+        onPageChange(currentPage - 1);
+      }
+    } else {
+      if (localPage > 0) setLocalPage((p) => p - 1);
+    }
   };
 
   return (
@@ -138,36 +165,40 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
       </TableContainer>
 
       {/* Pagination Footer */}
-      {Pagination && (
-        <Box sx={{ display: "flex", justifyContent: "end" }}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              mt: 2,
-              gap: 1,
-              background: "#f5f9fc",
-              width: "fit-content",
-              pl: 2,
-              borderRadius: "10px",
-            }}
+      <Box sx={{ display: "flex", justifyContent: "end" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            mt: 2,
+            gap: 1,
+            background: "#f5f9fc",
+            width: "fit-content",
+            pl: 2,
+            borderRadius: "10px",
+          }}
+        >
+          <Typography sx={{ fontSize: "14px", color: "#374151" }}>
+            {serverPagination
+              ? `${startIndex + 1}-${endIndex} of ${totalItems || 0}`
+              : `${startIndex + 1}-${endIndex} of ${sortedData?.length}`}
+          </Typography>
+          <IconButton onClick={handlePrev} disabled={currentPage === 1}>
+            <ArrowBackIosNewIcon fontSize="small" />
+          </IconButton>
+          <IconButton
+            onClick={handleNext}
+            disabled={
+              serverPagination
+                ? endIndex >= (totalItems || 0)
+                : endIndex >= sortedData?.length
+            }
           >
-            <Typography sx={{ fontSize: "14px", color: "#374151" }}>
-              {`${startIndex + 1}-${endIndex} of ${sortedData?.length}`}
-            </Typography>
-            <IconButton onClick={handlePrev} disabled={page === 0}>
-              <ArrowBackIosNewIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              onClick={handleNext}
-              disabled={endIndex >= sortedData?.length}
-            >
-              <ArrowForwardIosIcon fontSize="small" />
-            </IconButton>
-          </Box>
+            <ArrowForwardIosIcon fontSize="small" />
+          </IconButton>
         </Box>
-      )}
+      </Box>
     </Box>
   );
 };

@@ -121,7 +121,10 @@ export default function MyScruberModal(porps: any) {
                       }}
                     >
                       Status:{" "}
-                      <Typography color="success" variant="body2">
+                      <Typography
+                        color={statusBtn === "bad" ? "error" : "success"}
+                        variant="body2"
+                      >
                         {statusBtn}
                       </Typography>
                     </Box>

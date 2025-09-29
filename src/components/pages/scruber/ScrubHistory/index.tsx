@@ -27,7 +27,8 @@ import deleteModalDeleteIcon from "@/assets/icons/users/delete-icon-2.png";
 const ScrubHistory = () => {
   const queryClient = useQueryClient();
 
-  const { callApi, scrubHistory, deleteJobHistory }: any = useApiStore();
+  const { callApi, scrubHistory, deleteJobHistory, validNumbersByJob }: any =
+    useApiStore();
   const canDownloadHistory = usePermission("Download history");
   const canViewHistory = usePermission("View history");
   const canDeleteHistory = usePermission("Delete History");
@@ -61,6 +62,39 @@ const ScrubHistory = () => {
     },
     onError: (error: any) => {
       toast.error("Failed to delete job: " + error.message);
+    },
+  });
+
+  const validJobMutation = useMutation({
+    mutationFn: (data) => callApi(validNumbersByJob, { jobId: data }),
+    onSuccess: (res: any) => {
+      toast.success("Job validated successfully!");
+      setDeleteModal(false);
+      queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
+
+      // 🔽 Create CSV with just numbers
+      if (res?.numbers && Array.isArray(res.numbers)) {
+        const numbers = res.numbers.map((n: any) => n.number);
+
+        // Add header + rows
+        const csvContent = "number\n" + numbers.join("\n");
+
+        // Blob & download
+        const blob = new Blob([csvContent], {
+          type: "text/csv;charset=utf-8;",
+        });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "valid-numbers.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    },
+    onError: (error: any) => {
+      toast.error("Failed to validate job: " + error.message);
     },
   });
 
@@ -155,7 +189,7 @@ const ScrubHistory = () => {
       // ✅ if no query entered, allow all
       const queryMatch =
         !query ||
-        item.uploadedFile?.toLowerCase().includes(query.toLowerCase());
+        item.org_filename?.toLowerCase().includes(query.toLowerCase());
 
       return statusMatch && queryMatch;
     })
@@ -166,7 +200,7 @@ const ScrubHistory = () => {
         item?.createdAt.split("T")[0] +
         " " +
         new Date(item?.createdAt).toTimeString().split(" ")[0],
-      uploadedFile: "cold_leads.csv",
+      uploadedFile: item.org_filename,
       scrubAgainst: JSON.parse(item?.filters)?.join(", "),
       totalNumbers: item.totalNumbers,
       badNumbers: item.badNumbers,
@@ -308,6 +342,7 @@ const ScrubHistory = () => {
                           minWidth: "10px",
                         }}
                         title="Download"
+                        onClick={() => validJobMutation.mutate(row.jobId)}
                       >
                         <Image
                           src={downloadIcon}

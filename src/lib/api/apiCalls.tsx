@@ -126,6 +126,8 @@ export const scrubHistory = (data) =>
   postbackend(`${API_ENDPOINTS.SCRUB}?requestType=scrubHistory`, data);
 export const deleteJobHistory = (data) =>
   postbackend(`${API_ENDPOINTS.SCRUB}?requestType=deleteJobHistory`, data);
+export const validNumbersByJob = (data) =>
+  postbackend(`${API_ENDPOINTS.SCRUB}?requestType=validNumbersByJob`, data);
 
 // roles
 export const fetchRoles = (data) => postbackend(API_ENDPOINTS.ROLES, data);
