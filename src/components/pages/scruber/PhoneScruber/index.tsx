@@ -40,11 +40,16 @@ import deleteModalDeleteIcon from "@/assets/icons/users/delete-icon-2.png";
 const PhoneScrube = () => {
   const {
     searchSingleNumber,
+    singleNumberHistory,
     searchBulkNumber,
     callApi,
     profile,
     scrubHistory,
     deleteJobHistory,
+    validNumbersByJob,
+    validateScrubFile,
+    allNumbersByJob,
+    badNumbersByJob,
   }: any = useApiStore();
 
   const queryClient = useQueryClient();
@@ -71,6 +76,7 @@ const PhoneScrube = () => {
   const [selectedId, setSelectedId] = useState(null);
 
   const [tab, setTab] = useState(0);
+  const [counts, setCounts] = useState(null);
   const [status, setStatus] = useState("");
   const [responseType, setResponseType] = useState("");
   const [numberStatus, setNumberStatus] = useState(null);
@@ -88,6 +94,14 @@ const PhoneScrube = () => {
     queryKey: [`scrubHistory`],
     queryFn: () => callApi(scrubHistory),
   });
+  const {
+    data: scrubDataSingle,
+    isLoading: isLoadingSingle,
+    error: errorSingle,
+  } = useQuery({
+    queryKey: [`singleNumberHistory`],
+    queryFn: () => callApi(singleNumberHistory),
+  });
 
   const deleteJobMutation = useMutation({
     mutationFn: (data) => callApi(deleteJobHistory, { id: data }),
@@ -98,6 +112,18 @@ const PhoneScrube = () => {
     },
     onError: (error: any) => {
       toast.error("Failed to delete job: " + error.message);
+    },
+  });
+
+  const validScrubMutation = useMutation({
+    mutationFn: (formData: FormData) => callApi(validateScrubFile, formData),
+    onSuccess: (res, variables) => {
+      console.log(res, "✅ API Response");
+      console.log(variables, "🔹 Data you sent");
+      toast.success("File validated successfully!");
+    },
+    onError: (error: any) => {
+      toast.error("Failed to validate job: " + error.message);
     },
   });
 
@@ -123,9 +149,7 @@ const PhoneScrube = () => {
       console.log("🟢 Scrub Job Completed:", data);
       setNumberStatus(data?.numbers?.[0]?.validator || null);
       setSS(data?.numbers?.[0]?.status || null);
-      if (tab == 0 && data?.jobId == currentJobId) {
-        setOpen(true);
-      }
+      tab == 0 && setOpen(true);
       queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
     });
 
@@ -161,111 +185,236 @@ const PhoneScrube = () => {
     setStatus(event.target.value);
   };
 
-  const columns = [
-    { key: "scrubHistory", label: "Scrub History", sortable: true },
-    { key: "uploadedFile", label: "Uploaded Number/File", sortable: true },
-    { key: "scrubAgainst", label: "Scrub Against", sortable: true },
-    { key: "totalNumbers", label: "Total Numbers", sortable: true },
-    { key: "badNumbers", label: "Bad Numbers", sortable: true },
-    {
-      key: "status",
-      label: "Status",
-      sortable: true,
-      render: (value: string) =>
-        value === "completed" ? (
-          <Chip
-            icon={
-              <Box
-                sx={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: "50%",
-                  backgroundColor: "#16C60C",
-                  ml: 1,
-                }}
-              />
-            }
-            label="Completed"
-            sx={{
-              backgroundColor: "#DBFCE7",
-              color: "#16C60C",
-              fontWeight: 500,
-              pl: 1,
-            }}
-          />
-        ) : value === "failed" ? (
-          <Chip
-            icon={
-              <Box
-                sx={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: "50%",
-                  backgroundColor: "#be0000ff",
-                  ml: 1,
-                }}
-              />
-            }
-            label="Failed"
-            sx={{
-              backgroundColor: "#be00002d",
-              color: "#be0000ff",
-              fontWeight: 500,
-              pl: 1,
-            }}
-          />
-        ) : (
-          <Chip
-            icon={
-              <Box
-                sx={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: "50%",
-                  backgroundColor: "#0078D7",
-                  ml: 1,
-                }}
-              />
-            }
-            label="In Progress"
-            sx={{
-              backgroundColor: "#DBEAFE",
-              color: "#0078D7",
-              fontWeight: 500,
-              pl: 1,
-            }}
-          />
-        ),
-    },
-  ];
+  const columns =
+    tab == 0
+      ? [
+          { key: "scrubHistory", label: "Time Stamp", sortable: true },
+          { key: "number", label: "Number", sortable: true },
+          { key: "tcpa", label: "TCPA/TCPA Troll", sortable: true },
+          { key: "dns", label: "DNS Complainers", sortable: true },
+          { key: "federalDNC", label: "Federal DNC", sortable: true },
+          { key: "stateDNC", label: "State DNC", sortable: true },
+          { key: "verizon", label: "Verizon Wireless", sortable: true },
+          { key: "telnyx", label: "Telnyx OCN", sortable: true },
+          { key: "dncTroll", label: "DNC Troll", sortable: true },
 
-  const data = scrubData?.history
-    ?.slice(0, 4)
-    ?.filter((item) => {
-      // ✅ if no status filter selected, allow all
-      const statusMatch =
-        !status || item.status.toLowerCase() === status.toLowerCase();
+          {
+            key: "status",
+            label: "Status",
+            sortable: true,
+            render: (value: string) =>
+              value === "completed" ? (
+                <Chip
+                  icon={
+                    <Box
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        backgroundColor: "#16C60C",
+                        ml: 1,
+                      }}
+                    />
+                  }
+                  label="Completed"
+                  sx={{
+                    backgroundColor: "#DBFCE7",
+                    color: "#16C60C",
+                    fontWeight: 500,
+                    pl: 1,
+                  }}
+                />
+              ) : value === "failed" ? (
+                <Chip
+                  icon={
+                    <Box
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        backgroundColor: "#be0000ff",
+                        ml: 1,
+                      }}
+                    />
+                  }
+                  label="Failed"
+                  sx={{
+                    backgroundColor: "#be00002d",
+                    color: "#be0000ff",
+                    fontWeight: 500,
+                    pl: 1,
+                  }}
+                />
+              ) : (
+                <Chip
+                  icon={
+                    <Box
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        backgroundColor: "#0078D7",
+                        ml: 1,
+                      }}
+                    />
+                  }
+                  label="In Progress"
+                  sx={{
+                    backgroundColor: "#DBEAFE",
+                    color: "#0078D7",
+                    fontWeight: 500,
+                    pl: 1,
+                  }}
+                />
+              ),
+          },
+        ]
+      : [
+          { key: "scrubHistory", label: "Scrub History", sortable: true },
+          {
+            key: "uploadedFile",
+            label: "Uploaded Number/File",
+            sortable: true,
+          },
+          { key: "scrubAgainst", label: "Scrub Against", sortable: true },
+          { key: "totalNumbers", label: "Total Numbers", sortable: true },
+          { key: "badNumbers", label: "Bad Numbers", sortable: true },
+          { key: "validNums", label: "Valid Numbers", sortable: true },
+          {
+            key: "status",
+            label: "Status",
+            sortable: true,
+            render: (value: string) =>
+              value === "completed" ? (
+                <Chip
+                  icon={
+                    <Box
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        backgroundColor: "#16C60C",
+                        ml: 1,
+                      }}
+                    />
+                  }
+                  label="Completed"
+                  sx={{
+                    backgroundColor: "#DBFCE7",
+                    color: "#16C60C",
+                    fontWeight: 500,
+                    pl: 1,
+                  }}
+                />
+              ) : value === "failed" ? (
+                <Chip
+                  icon={
+                    <Box
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        backgroundColor: "#be0000ff",
+                        ml: 1,
+                      }}
+                    />
+                  }
+                  label="Failed"
+                  sx={{
+                    backgroundColor: "#be00002d",
+                    color: "#be0000ff",
+                    fontWeight: 500,
+                    pl: 1,
+                  }}
+                />
+              ) : (
+                <Chip
+                  icon={
+                    <Box
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        backgroundColor: "#0078D7",
+                        ml: 1,
+                      }}
+                    />
+                  }
+                  label="In Progress"
+                  sx={{
+                    backgroundColor: "#DBEAFE",
+                    color: "#0078D7",
+                    fontWeight: 500,
+                    pl: 1,
+                  }}
+                />
+              ),
+          },
+        ];
 
-      // ✅ if no query entered, allow all
-      const queryMatch =
-        !query ||
-        item.org_filename?.toLowerCase().includes(query.toLowerCase());
+  const data =
+    tab == 0
+      ? scrubDataSingle?.singleNumberJobs
+          ?.slice(0, 4)
+          ?.filter((item) => {
+            // ✅ if no status filter selected, allow all
+            const statusMatch =
+              !status || item.status.toLowerCase() === status.toLowerCase();
 
-      return statusMatch && queryMatch;
-    })
-    ?.map((item) => ({
-      id: item.id,
-      jobId: item.jobId,
-      scrubHistory:
-        item?.createdAt.split("T")[0] +
-        " " +
-        new Date(item?.createdAt).toTimeString().split(" ")[0],
-      uploadedFile: item.org_filename,
-      scrubAgainst: JSON.parse(item?.filters)?.join(", "),
-      totalNumbers: item.totalNumbers,
-      badNumbers: item.badNumbers,
-      status: item.status,
-    }));
+            // ✅ if no query entered, allow all
+            const queryMatch =
+              !query ||
+              item.org_filename?.toLowerCase().includes(query.toLowerCase());
+
+            return statusMatch && queryMatch;
+          })
+          ?.map((item) => ({
+            id: item.id,
+            jobId: item.jobId,
+            scrubHistory:
+              item?.createdAt.split("T")[0] +
+              " " +
+              new Date(item?.createdAt).toTimeString().split(" ")[0],
+            number: item.number,
+            tcpa: item.validator.includes("tcpa") ? "Bad" : "Clean",
+            dns: item.validator.includes("dnc_complainers") ? "Bad" : "Clean",
+            federalDNC: item.validator.includes("federalDNC") ? "Bad" : "Clean",
+            stateDNC: item.validator.includes("state_dnc") ? "Bad" : "Clean",
+            verizon: item.validator.includes("Verizon Wireless")
+              ? "Bad"
+              : "Clean",
+            telnyx: item.validator.includes("telnyx") ? "Bad" : "Clean",
+            dncTroll: item.validator.includes("troll") ? "Bad" : "Clean",
+            status: item.status,
+          }))
+      : scrubData?.history
+          ?.slice(0, 4)
+          ?.filter((item) => {
+            // ✅ if no status filter selected, allow all
+            const statusMatch =
+              !status || item.status.toLowerCase() === status.toLowerCase();
+
+            // ✅ if no query entered, allow all
+            const queryMatch =
+              !query ||
+              item.org_filename?.toLowerCase().includes(query.toLowerCase());
+
+            return statusMatch && queryMatch;
+          })
+          ?.map((item) => ({
+            id: item.id,
+            jobId: item.jobId,
+            scrubHistory:
+              item?.createdAt.split("T")[0] +
+              " " +
+              new Date(item?.createdAt).toTimeString().split(" ")[0],
+            uploadedFile: item.org_filename,
+            scrubAgainst: JSON.parse(item?.filters)?.join(", "),
+            totalNumbers: item.totalNumbers,
+            badNumbers: item.badNumbers,
+            validNums: item.totalNumbers - item.badNumbers,
+            status: item.status,
+          }));
 
   const singleNumberMutation = useMutation({
     mutationFn: (data) => callApi(searchBulkNumber, data),
@@ -314,13 +463,16 @@ const PhoneScrube = () => {
     },
   });
 
-  const handleFileUpload = (files: any) => {
-    if (!files) {
-      return;
-    }
-    console.log(files);
+  const handleFileUpload = (file: File) => {
+    if (!file) return;
 
-    setFile(files);
+    const formData = new FormData();
+    formData.append("file", file); // ✅ "file" key matches backend
+
+    console.log([...formData]); // debug: shows [["file", File]]
+
+    setFile(file);
+    validScrubMutation.mutate(formData);
   };
 
   const StartScrub = () => {
@@ -388,6 +540,177 @@ const PhoneScrube = () => {
     ? numberStatus?.split(",").map((v) => v.trim().toLowerCase())
     : [];
 
+  const validJobMutation = useMutation({
+    mutationFn: (data) => callApi(validNumbersByJob, { jobId: data }),
+    onSuccess: (res: any) => {
+      toast.success("Job validated successfully!");
+      setDeleteModal(false);
+      queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
+
+      if (res?.numbers && Array.isArray(res.numbers)) {
+        const headers = [
+          "number",
+          "tcpa",
+          "dnc_complainers",
+          "Federal DNC",
+          "state_dnc",
+          "Verizon Wireless",
+          "telnyx",
+          "troll",
+        ];
+
+        // Build CSV rows
+        const rows = res.numbers.map((n: any) => [
+          n.number,
+          "clean",
+          "clean",
+          "clean",
+          "clean",
+          "clean",
+          "clean",
+          "clean",
+        ]);
+
+        // Convert to CSV string
+        const csvContent =
+          headers.join(",") + "\n" + rows.map((r) => r.join(",")).join("\n");
+
+        // Blob & download
+        const blob = new Blob([csvContent], {
+          type: "text/csv;charset=utf-8;",
+        });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "valid-numbers.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    },
+
+    onError: (error: any) => {
+      toast.error("Failed to validate job: " + error.message);
+    },
+  });
+
+  const BadJobMutation = useMutation({
+    mutationFn: (data) => callApi(badNumbersByJob, { jobId: data }),
+    onSuccess: (res: any) => {
+      toast.success("Job validated successfully!");
+      setDeleteModal(false);
+      queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
+
+      if (res?.numbers && Array.isArray(res.numbers)) {
+        const headers = [
+          "number",
+          "tcpa",
+          "dnc_complainers",
+          "Federal DNC",
+          "state_dnc",
+          "Verizon Wireless",
+          "telnyx",
+          "troll",
+        ];
+
+        const rows = res.numbers.map((n: any) => {
+          // Split validators into array
+          const validators = n.validator
+            ? n.validator.split(",").map((v: string) => v.trim().toLowerCase())
+            : [];
+
+          return [
+            n.number,
+            validators.includes("tcpa") ? "bad" : "clean",
+            validators.includes("dnc_complainers") ? "bad" : "clean",
+            validators.includes("federaldnc") ? "bad" : "clean", // lowercase match
+            validators.includes("state_dnc") ? "bad" : "clean",
+            validators.includes("verizon wireless") ? "bad" : "clean",
+            validators.includes("telnyx") ? "bad" : "clean",
+            validators.includes("troll") ? "bad" : "clean",
+          ];
+        });
+
+        const csvContent =
+          headers.join(",") + "\n" + rows.map((r) => r.join(",")).join("\n");
+
+        const blob = new Blob([csvContent], {
+          type: "text/csv;charset=utf-8;",
+        });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "bad-numbers.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    },
+
+    onError: (error: any) => {
+      toast.error("Failed to validate job: " + error.message);
+    },
+  });
+  const AllJobMutation = useMutation({
+    mutationFn: (data) => callApi(allNumbersByJob, { jobId: data }),
+    onSuccess: (res: any) => {
+      toast.success("Job validated successfully!");
+      setDeleteModal(false);
+      queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
+
+      if (res?.numbers && Array.isArray(res.numbers)) {
+        const headers = [
+          "number",
+          "tcpa",
+          "dnc_complainers",
+          "Federal DNC",
+          "state_dnc",
+          "Verizon Wireless",
+          "telnyx",
+          "troll",
+        ];
+
+        const rows = res.numbers.map((n: any) => {
+          // Split validators into array
+          const validators = n.validator
+            ? n.validator.split(",").map((v: string) => v.trim().toLowerCase())
+            : [];
+
+          return [
+            n.number,
+            validators.includes("tcpa") ? "bad" : "clean",
+            validators.includes("dnc_complainers") ? "bad" : "clean",
+            validators.includes("federaldnc") ? "bad" : "clean", // lowercase match
+            validators.includes("state_dnc") ? "bad" : "clean",
+            validators.includes("verizon wireless") ? "bad" : "clean",
+            validators.includes("telnyx") ? "bad" : "clean",
+            validators.includes("troll") ? "bad" : "clean",
+          ];
+        });
+
+        const csvContent =
+          headers.join(",") + "\n" + rows.map((r) => r.join(",")).join("\n");
+
+        const blob = new Blob([csvContent], {
+          type: "text/csv;charset=utf-8;",
+        });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "bad-numbers.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    },
+
+    onError: (error: any) => {
+      toast.error("Failed to validate job: " + error.message);
+    },
+  });
   return (
     <Box mt={4}>
       <ScrubCard
@@ -521,11 +844,15 @@ const PhoneScrube = () => {
           >
             <input
               type="text"
-              placeholder="Enter 10-digit number with country code"
+              placeholder="Enter number (must start with 1 + 10 digits)"
               className="scrub-number-search"
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                let val = e.target.value;
+                setSearch(val);
+              }}
               value={search}
-            />{" "}
+            />
+
             <Button
               className="scrub-number-search-btn"
               onClick={StartScrub}
@@ -546,6 +873,15 @@ const PhoneScrube = () => {
               <FileUploader handleFileUpload={handleFileUpload} />
             </Box>
           </ScrubCard>
+
+          {validScrubMutation.data && (
+            <Box>
+              total: {validScrubMutation.data.totalNumbers}, validNumbersCount:
+              {validScrubMutation.data.validNumbersCount}, badNumbersCount:
+              {validScrubMutation.data.invalidNumbersCount}
+            </Box>
+          )}
+
           <ScrubCard
             title={"Step 2 – Select Validators"}
             desc={"Select the validators to scrub against"}
@@ -794,7 +1130,7 @@ const PhoneScrube = () => {
               console.log(row);
               return (
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  {canViewHistory && (
+                  {/* {canViewHistory && (
                     <Link
                       href={`/scruber/history-scruber-result?id=${row.jobId}`}
                       style={{
@@ -812,8 +1148,8 @@ const PhoneScrube = () => {
                         alt="download"
                       />
                     </Link>
-                  )}
-                  {canDownloadHistory && (
+                  )} */}
+                  {canDownloadHistory && tab == 1 && (
                     <Button
                       sx={{
                         p: 0,
@@ -822,6 +1158,7 @@ const PhoneScrube = () => {
                         minWidth: "10px",
                       }}
                       title="Download"
+                      onClick={() => validJobMutation.mutate(row.jobId)}
                     >
                       <Image
                         src={downloadIcon}
@@ -832,26 +1169,59 @@ const PhoneScrube = () => {
                     </Button>
                   )}
                   {canDeleteHistory && (
-                    <Button
-                      sx={{
-                        p: 0,
-                        mx: 1,
-                        width: "fit-content",
-                        minWidth: "10px",
-                      }}
-                      title="Delete"
-                      onClick={() => {
-                        setSelectedId(row.id);
-                        setDeleteModal(true);
-                      }}
-                    >
-                      <Image
-                        src={deleteIcon}
-                        width={15}
-                        height={18}
-                        alt="download"
-                      />
-                    </Button>
+                    <>
+                      <Button
+                        sx={{
+                          p: 0,
+                          mx: 1,
+                          width: "fit-content",
+                          minWidth: "10px",
+                        }}
+                        title="All"
+                        onClick={() => AllJobMutation.mutate(row.jobId)}
+                      >
+                        <Image
+                          src={downloadIcon}
+                          width={16}
+                          height={16}
+                          alt="download"
+                        />
+                      </Button>
+                      <Button
+                        sx={{
+                          p: 0,
+                          mx: 1,
+                          width: "fit-content",
+                          minWidth: "10px",
+                        }}
+                        title="Clean"
+                        onClick={() => validJobMutation.mutate(row.jobId)}
+                      >
+                        <Image
+                          src={downloadIcon}
+                          width={16}
+                          height={16}
+                          alt="download"
+                        />
+                      </Button>
+                      <Button
+                        sx={{
+                          p: 0,
+                          mx: 1,
+                          width: "fit-content",
+                          minWidth: "10px",
+                        }}
+                        title="Bad"
+                        onClick={() => BadJobMutation.mutate(row.jobId)}
+                      >
+                        <Image
+                          src={downloadIcon}
+                          width={16}
+                          height={16}
+                          alt="download"
+                        />
+                      </Button>
+                    </>
                   )}
                 </Box>
               );
@@ -864,7 +1234,11 @@ const PhoneScrube = () => {
               marginTop: "10px",
               textDecoration: "none",
             }}
-            href="/scruber/history-scruber"
+            href={
+              tab === 0
+                ? "/scruber/history-scruber-single"
+                : "/scruber/history-scruber"
+            }
           >
             <Button className="scrub-show-all">Show All</Button>
           </Link>

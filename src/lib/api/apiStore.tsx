@@ -59,6 +59,10 @@ import {
   validNumbersByJob,
   createOTP,
   signupGuest,
+  singleNumberHistory,
+  badNumbersByJob,
+  allNumbersByJob,
+  validateScrubFile,
 } from "./apiCalls";
 
 export const useApiStore = create((set) => ({
@@ -163,6 +167,10 @@ export const useApiStore = create((set) => ({
   scrubHistory,
   deleteJobHistory,
   validNumbersByJob,
+  singleNumberHistory,
+  badNumbersByJob,
+  allNumbersByJob,
+  validateScrubFile,
   callApi: async (fn, ...args) => {
     set({ loading: true, error: null });
     try {

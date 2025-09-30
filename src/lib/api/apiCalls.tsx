@@ -127,10 +127,18 @@ export const jobHistory = (data) =>
   postbackend(`${API_ENDPOINTS.SCRUB}?requestType=jobHistory`, data);
 export const scrubHistory = (data) =>
   postbackend(`${API_ENDPOINTS.SCRUB}?requestType=scrubHistory`, data);
+export const singleNumberHistory = (data) =>
+  postbackend(`${API_ENDPOINTS.SCRUB}?requestType=singleNumberHistory`, data);
 export const deleteJobHistory = (data) =>
   postbackend(`${API_ENDPOINTS.SCRUB}?requestType=deleteJobHistory`, data);
 export const validNumbersByJob = (data) =>
   postbackend(`${API_ENDPOINTS.SCRUB}?requestType=validNumbersByJob`, data);
+export const badNumbersByJob = (data) =>
+  postbackend(`${API_ENDPOINTS.SCRUB}?requestType=badNumbersByJob`, data);
+export const allNumbersByJob = (data) =>
+  postbackend(`${API_ENDPOINTS.SCRUB}?requestType=allNumbersByJob`, data);
+export const validateScrubFile = (data) =>
+  postbackend(`${API_ENDPOINTS.SCRUB}?requestType=validateScrubFile`, data);
 
 // roles
 export const fetchRoles = (data) => postbackend(API_ENDPOINTS.ROLES, data);

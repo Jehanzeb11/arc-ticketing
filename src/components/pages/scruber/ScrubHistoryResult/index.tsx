@@ -44,7 +44,7 @@ const ScrubHistoryResult = () => {
       render: (value: string) =>
         value === "good" ? (
           <Chip
-            label="Valid"
+            label="Clean"
             sx={{
               backgroundColor: "#DBFCE7",
               color: "#16C60C",
@@ -175,7 +175,7 @@ const ScrubHistoryResult = () => {
                 value={status}
                 onChange={handleChange}
                 options={[
-                  { label: "Valid", value: "good" },
+                  { label: "Clean", value: "good" },
                   { label: "Bad", value: "Bad" },
                   { label: "TCPA Match", value: "TCPA Match" },
                 ]}

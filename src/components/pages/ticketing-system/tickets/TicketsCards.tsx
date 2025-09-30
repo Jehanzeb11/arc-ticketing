@@ -66,9 +66,9 @@ export default function TicketsCards({ ticketKpiStats }) {
     },
     {
       img: cardBg8,
-      title: "Eight Card",
-      value: "25",
-      percent: 4.6,
+      title: "Archived",
+      value: ticketKpiStats?.counts?.archived,
+      percent: parseFloat(ticketKpiStats?.percentageChange?.archived),
       vs: "vs yestarday",
     },
   ];

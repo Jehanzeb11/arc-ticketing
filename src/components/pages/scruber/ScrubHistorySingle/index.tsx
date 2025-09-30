@@ -29,11 +29,9 @@ const ScrubHistory = () => {
 
   const {
     callApi,
-    scrubHistory,
+    singleNumberHistory,
     deleteJobHistory,
     validNumbersByJob,
-    badNumbersByJob,
-    allNumbersByJob,
   }: any = useApiStore();
   const canDownloadHistory = usePermission("Download history");
   const canViewHistory = usePermission("View history");
@@ -44,8 +42,8 @@ const ScrubHistory = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: [`scrubHistory`],
-    queryFn: () => callApi(scrubHistory),
+    queryKey: [`singleNumberHistory`],
+    queryFn: () => callApi(singleNumberHistory),
   });
 
   const [status, setStatus] = useState("");
@@ -64,7 +62,7 @@ const ScrubHistory = () => {
     onSuccess: (res: any) => {
       toast.success("Job deleted successfully!");
       setDeleteModal(false);
-      queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
+      queryClient.invalidateQueries({ queryKey: ["singleNumberHistory"] });
     },
     onError: (error: any) => {
       toast.error("Failed to delete job: " + error.message);
@@ -76,35 +74,14 @@ const ScrubHistory = () => {
     onSuccess: (res: any) => {
       toast.success("Job validated successfully!");
       setDeleteModal(false);
-      queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
+      queryClient.invalidateQueries({ queryKey: ["singleNumberHistory"] });
 
+      // 🔽 Create CSV with just numbers
       if (res?.numbers && Array.isArray(res.numbers)) {
-        const headers = [
-          "number",
-          "tcpa",
-          "dnc_complainers",
-          "Federal DNC",
-          "state_dnc",
-          "Verizon Wireless",
-          "telnyx",
-          "troll",
-        ];
+        const numbers = res.numbers.map((n: any) => n.number);
 
-        // Build CSV rows
-        const rows = res.numbers.map((n: any) => [
-          n.number,
-          "clean",
-          "clean",
-          "clean",
-          "clean",
-          "clean",
-          "clean",
-          "clean",
-        ]);
-
-        // Convert to CSV string
-        const csvContent =
-          headers.join(",") + "\n" + rows.map((r) => r.join(",")).join("\n");
+        // Add header + rows
+        const csvContent = "number\n" + numbers.join("\n");
 
         // Blob & download
         const blob = new Blob([csvContent], {
@@ -120,123 +97,6 @@ const ScrubHistory = () => {
         document.body.removeChild(link);
       }
     },
-
-    onError: (error: any) => {
-      toast.error("Failed to validate job: " + error.message);
-    },
-  });
-  const BadJobMutation = useMutation({
-    mutationFn: (data) => callApi(badNumbersByJob, { jobId: data }),
-    onSuccess: (res: any) => {
-      toast.success("Job validated successfully!");
-      setDeleteModal(false);
-      queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
-
-      if (res?.numbers && Array.isArray(res.numbers)) {
-        const headers = [
-          "number",
-          "tcpa",
-          "dnc_complainers",
-          "Federal DNC",
-          "state_dnc",
-          "Verizon Wireless",
-          "telnyx",
-          "troll",
-        ];
-
-        const rows = res.numbers.map((n: any) => {
-          // Split validators into array
-          const validators = n.validator
-            ? n.validator.split(",").map((v: string) => v.trim().toLowerCase())
-            : [];
-
-          return [
-            n.number,
-            validators.includes("tcpa") ? "bad" : "clean",
-            validators.includes("dnc_complainers") ? "bad" : "clean",
-            validators.includes("federaldnc") ? "bad" : "clean", // lowercase match
-            validators.includes("state_dnc") ? "bad" : "clean",
-            validators.includes("verizon wireless") ? "bad" : "clean",
-            validators.includes("telnyx") ? "bad" : "clean",
-            validators.includes("troll") ? "bad" : "clean",
-          ];
-        });
-
-        const csvContent =
-          headers.join(",") + "\n" + rows.map((r) => r.join(",")).join("\n");
-
-        const blob = new Blob([csvContent], {
-          type: "text/csv;charset=utf-8;",
-        });
-        const url = URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "bad-numbers.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    },
-
-    onError: (error: any) => {
-      toast.error("Failed to validate job: " + error.message);
-    },
-  });
-  const AllJobMutation = useMutation({
-    mutationFn: (data) => callApi(allNumbersByJob, { jobId: data }),
-    onSuccess: (res: any) => {
-      toast.success("Job validated successfully!");
-      setDeleteModal(false);
-      queryClient.invalidateQueries({ queryKey: ["scrubHistory"] });
-
-      if (res?.numbers && Array.isArray(res.numbers)) {
-        const headers = [
-          "number",
-          "tcpa",
-          "dnc_complainers",
-          "Federal DNC",
-          "state_dnc",
-          "Verizon Wireless",
-          "telnyx",
-          "troll",
-        ];
-
-        const rows = res.numbers.map((n: any) => {
-          // Split validators into array
-          const validators = n.validator
-            ? n.validator.split(",").map((v: string) => v.trim().toLowerCase())
-            : [];
-
-          return [
-            n.number,
-            validators.includes("tcpa") ? "bad" : "clean",
-            validators.includes("dnc_complainers") ? "bad" : "clean",
-            validators.includes("federaldnc") ? "bad" : "clean", // lowercase match
-            validators.includes("state_dnc") ? "bad" : "clean",
-            validators.includes("verizon wireless") ? "bad" : "clean",
-            validators.includes("telnyx") ? "bad" : "clean",
-            validators.includes("troll") ? "bad" : "clean",
-          ];
-        });
-
-        const csvContent =
-          headers.join(",") + "\n" + rows.map((r) => r.join(",")).join("\n");
-
-        const blob = new Blob([csvContent], {
-          type: "text/csv;charset=utf-8;",
-        });
-        const url = URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "bad-numbers.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    },
-
     onError: (error: any) => {
       toast.error("Failed to validate job: " + error.message);
     },
@@ -247,12 +107,16 @@ const ScrubHistory = () => {
   };
 
   const columns = [
-    { key: "scrubHistory", label: "Scrub History", sortable: true },
-    { key: "uploadedFile", label: "Uploaded Number/File", sortable: true },
-    { key: "scrubAgainst", label: "Scrub Against", sortable: true },
-    { key: "totalNumbers", label: "Total Numbers", sortable: true },
-    { key: "badNumbers", label: "Bad Numbers", sortable: true },
-    { key: "validNums", label: "Valid Numbers", sortable: true },
+    { key: "scrubHistory", label: "Time Stamp", sortable: true },
+    { key: "number", label: "Number", sortable: true },
+    { key: "tcpa", label: "TCPA/TCPA Troll", sortable: true },
+    { key: "dns", label: "DNS Complainers", sortable: true },
+    { key: "federalDNC", label: "Federal DNC", sortable: true },
+    { key: "stateDNC", label: "State DNC", sortable: true },
+    { key: "verizon", label: "Verizon Wireless", sortable: true },
+    { key: "telnyx", label: "Telnyx OCN", sortable: true },
+    { key: "dncTroll", label: "DNC Troll", sortable: true },
+
     {
       key: "status",
       label: "Status",
@@ -325,7 +189,7 @@ const ScrubHistory = () => {
     },
   ];
 
-  const data = scrubData?.history
+  const data = scrubData?.singleNumberJobs
     ?.filter((item) => {
       // ✅ if no status filter selected, allow all
       const statusMatch =
@@ -345,11 +209,14 @@ const ScrubHistory = () => {
         item?.createdAt.split("T")[0] +
         " " +
         new Date(item?.createdAt).toTimeString().split(" ")[0],
-      uploadedFile: item.org_filename,
-      scrubAgainst: JSON.parse(item?.filters)?.join(", "),
-      totalNumbers: item.totalNumbers,
-      badNumbers: item.badNumbers,
-      validNums: item.totalNumbers - item.badNumbers,
+      number: item.number,
+      tcpa: item.validator.includes("tcpa") ? "Bad" : "Clean",
+      dns: item.validator.includes("dnc_complainers") ? "Bad" : "Clean",
+      federalDNC: item.validator.includes("federalDNC") ? "Bad" : "Clean",
+      stateDNC: item.validator.includes("state_dnc") ? "Bad" : "Clean",
+      verizon: item.validator.includes("Verizon Wireless") ? "Bad" : "Clean",
+      telnyx: item.validator.includes("telnyx") ? "Bad" : "Clean",
+      dncTroll: item.validator.includes("troll") ? "Bad" : "Clean",
       status: item.status,
     }));
 
@@ -479,61 +346,7 @@ const ScrubHistory = () => {
                         />
                       </Link>
                     )} */}
-                    {canDownloadHistory && (
-                      <>
-                        <Button
-                          sx={{
-                            p: 0,
-                            mx: 1,
-                            width: "fit-content",
-                            minWidth: "10px",
-                          }}
-                          title="All"
-                          onClick={() => AllJobMutation.mutate(row.jobId)}
-                        >
-                          <Image
-                            src={downloadIcon}
-                            width={16}
-                            height={16}
-                            alt="download"
-                          />
-                        </Button>
-                        <Button
-                          sx={{
-                            p: 0,
-                            mx: 1,
-                            width: "fit-content",
-                            minWidth: "10px",
-                          }}
-                          title="Clean"
-                          onClick={() => validJobMutation.mutate(row.jobId)}
-                        >
-                          <Image
-                            src={downloadIcon}
-                            width={16}
-                            height={16}
-                            alt="download"
-                          />
-                        </Button>
-                        <Button
-                          sx={{
-                            p: 0,
-                            mx: 1,
-                            width: "fit-content",
-                            minWidth: "10px",
-                          }}
-                          title="Bad"
-                          onClick={() => BadJobMutation.mutate(row.jobId)}
-                        >
-                          <Image
-                            src={downloadIcon}
-                            width={16}
-                            height={16}
-                            alt="download"
-                          />
-                        </Button>
-                      </>
-                    )}
+
                     {canDeleteHistory && (
                       <Button
                         sx={{
